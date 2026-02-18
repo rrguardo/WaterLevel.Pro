@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="{{ g.lang or 'en' }}">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NR4BDDPMX8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-NR4BDDPMX8');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1432664808275238"
+     crossorigin="anonymous"></script>
+
+  <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='logos/favicon.png') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/styles.min.css') }}" />
+
+  <script src="{{ url_for('static', filename='assets/libs/jquery/dist/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/sidebarmenu.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/app.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/libs/simplebar/dist/simplebar.js') }}"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" />
+
+  {% block head %}
+  {% endblock %}
+
+  <!-- Twitter conversion tracking base code -->
+  <script>
+  !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+  },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+  a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+  twq('config','p00pf');
+  </script>
+  <!-- End Twitter conversion tracking base code -->
+
+  {% if current_user.is_authenticated and current_user.is_admin and CONTACT_PENDING %}
+  <style>
+      body {
+          background-color: #ffe6e6 !important;
+      }
+  </style>
+  {% endif %}
+
+</head>
+
+<body>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar small_none">
+      <!-- Sidebar scroll-->
+      <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between small_none">
+          <a href="{{ url_with_lang('index') }}" class="text-nowrap logo-img">
+            <img src="{{ url_for('static', filename=SITE_LOGO_FILE) }}" width="180" alt="Water Level .Pro text logo" title="text logo"  />
+          </a>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer small_none" id="sidebarCollapse">
+            <i class="ti ti-x fs-8"></i>
+          </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar small_none" data-simplebar="">
+          <ul id="sidebarnav">
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ url_with_lang('devices') }}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">{% trans %}My Devices{% endtrans %}</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ url_with_lang('contact') }}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-send"></i>
+                </span>
+                <span class="hide-menu">{% trans %}Contact{% endtrans %}</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item ">
+                <ul class="navbar-nav ms-auto ">
+                  <!-- Dropdown for Language Selection -->
+                  <li class="nav-item dropdown ">
+                    <a class="sidebar-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <span>
+                        <i class="ti ti-world"></i>
+                      </span>
+                      <span class="hide-menu">{% trans %}Language{% endtrans %}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end bg-light" aria-labelledby="languageDropdown">
+                      <li>
+                        <a class="dropdown-item" href="/set_language/en">
+                          <span class="fi fi-us"></span>
+                          <span class="ms-2">English</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="/set_language/es">
+                          <span class="fi fi-es"></span>
+                          <span class="ms-2">Spanish</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="/set_language/hi">
+                          <span class="fi fi-in"></span>
+                          <span class="ms-2">Hindi</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+            </li>
+
+
+
+            {% if current_user.is_authenticated %}
+              <li class="nav-small-cap">
+                <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                <span class="hide-menu">{% trans %}Home{% endtrans %}</span>
+              </li>
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ url_with_lang('user_settings') }}" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-layout-dashboard"></i>
+                  </span>
+                  <span class="hide-menu">{% trans %}Settings{% endtrans %}</span>
+                </a>
+              </li>
+              {% if current_user.is_admin %}
+                <li class="sidebar-item">
+                  <a class="sidebar-link" href="{{ url_for('admin_dashboard') }}" aria-expanded="false">
+                    <span>
+                      <i class="ti ti-layout-dashboard"></i>
+                    </span>
+                    <span class="hide-menu">{% trans %}Admin Dashboard{% endtrans %}</span>
+                  </a>
+                </li>
+              {% endif %}
+
+            {% endif %}
+
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">{% trans %}Authentication{% endtrans %}</span>
+            </li>
+            {% if current_user.is_authenticated %}
+              <li class="sidebar-item">
+                <a class="sidebar-link"  href="{{ url_with_lang('logout') }}" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-login"></i>
+                  </span>
+                  <span class="hide-menu">{% trans %}Logout{% endtrans %}</span>
+                </a>
+              </li>
+            {% else %}
+              <li class="sidebar-item">
+                <a class="sidebar-link"  href="{{ url_with_lang('login') }}" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-login"></i>
+                  </span>
+                  <span class="hide-menu">{% trans %}Login{% endtrans %}</span>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a class="sidebar-link"  href="{{ url_with_lang('register') }}" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-user-plus"></i>
+                  </span>
+                  <span class="hide-menu">{% trans %}Register{% endtrans %}</span>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+          <div class="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">
+            <div class="d-flex">
+              <div class="unlimited-access-title me-3">
+                <h6 class="fw-semibold fs-3 mb-6 link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">WiFi Water Level S1</h6>
+                <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" target="_self" class="btn btn-sm btn-primary fs-2 fw-semibold lh-sm mt-1"><i class="ti ti-list-details"></i> {% trans %}Features{% endtrans %}</a>
+                <a href="/manuals/WiFi-Water-Level-S1" target="_self" class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mt-1"><i class="ti ti-help"></i> {% trans %}Manual{% endtrans %}</a>
+
+                <div class="text-center my-2">
+                  <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" target="_self" >
+                  <img src="{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}" class="img-thumbnail" alt="WiFi Water Level S1 Features" title="WiFi Water Level S1 Features">
+                  </a>
+                </div>
+
+                <a href="https://www.instructables.com/Build-Your-Own-DIY-WiFi-Water-Level-Sensor-S1/" target="_blank" class="btn btn-sm btn-warning fs-2 fw-semibold lh-sm mt-1">
+                  <i class="ti ti-help"></i> {% trans %}DIY Guide{% endtrans %}
+                </a>
+              </div>
+
+            </div>
+          </div>
+          <div class="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">
+            <div class="d-flex">
+              <div class="unlimited-access-title me-3">
+                <h6 class="fw-semibold fs-3 mb-6 link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ">WiFi Smart Water Pump Controller S1</h6>
+                <a href="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" class="btn btn-sm btn-primary fs-2 fw-semibold lh-sm mt-1"><i class="ti ti-list-details"></i> {% trans %}Features{% endtrans %}</a>
+                <a href="{{ url_with_lang('manuals', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mt-1"><i class="ti ti-help"></i> {% trans %}Manual{% endtrans %}</a>
+
+                <div class="text-center my-2">
+                  <a href="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" >
+                  <img src="{{ url_for('static', filename='manuals/WiFi_Smart_Pump_Controller_S1.png') }}" class="img-thumbnail" alt="WiFi Smart Water Pump Controller S1" title="WiFi Smart Water Pump Controller S1">
+                  </a>
+                </div>
+
+                <a href="https://www.instructables.com/DIY-WiFi-Smart-Water-Pump-Controller-S1-Build-Your/" target="_blank" class="btn btn-sm btn-warning fs-2 fw-semibold lh-sm mt-1">
+                  <i class="ti ti-help"></i> {% trans %}DIY Guide{% endtrans %}
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
+    </aside>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+
+      <header class="app-header small_none">
+        <nav class="navbar navbar-expand-lg navbar-light">
+
+          <ul class="navbar-nav">
+            <li class="nav-item d-block d-xl-none">
+              <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                <i class="ti ti-menu-2"></i>
+              </a>
+            </li>
+
+            {% block headmenu_left %}
+            {% endblock %}
+          </ul>
+
+
+          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+
+
+              {% block headmenu_right %}
+              {% endblock %}
+
+              {% if current_user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
+
+                  <i class="ti ti-user fs-8 rounded-circle bg-primary text-white"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                  <div class="message-body">
+
+                    {% if current_user.is_admin %}
+                      <a href="{{ url_for('admin_dashboard') }}" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-settings fs-6"></i>
+                        <p class="mb-0 fs-3">{% trans %}Admin Dashboard{% endtrans %}</p>
+                      </a>
+                    {% endif %}
+
+                      <a href="{{ url_with_lang('user_settings') }}" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-user fs-6"></i>
+                        <p class="mb-0 fs-3">{% trans %}User Settings{% endtrans %}</p>
+                      </a>
+                      <a href="{{ url_with_lang('devices') }}" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-router fs-6"></i>
+                        <p class="mb-0 fs-3">{% trans %}My Devices{% endtrans %}</p>
+                      </a>
+                      <a href="{{ url_with_lang('logout') }}" class="btn btn-outline-primary mx-3 mt-2 d-block">{% trans %}Logout{% endtrans %}</a>
+
+                  </div>
+                </div>
+              </li>
+              {% else %}
+
+              {% endif %}
+            </ul>
+          </div>
+        </nav>
+      </header>
+
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="container-fluid py-3 text-center text-muted small">
+      Open-source base project: <a href="https://waterlevel.pro" target="_blank" rel="noopener">waterlevel.pro</a> ·
+      Source: <a href="https://github.com/rrguardo/wlp" target="_blank" rel="noopener">github.com/rrguardo/wlp</a>
+    </footer>
+
+    </div>
+  </div>
+</body>
+
+</html>

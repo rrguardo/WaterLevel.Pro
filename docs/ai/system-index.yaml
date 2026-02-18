@@ -1,0 +1,53 @@
+version: 1
+project:
+  name: wlp
+  summary: Water level platform with Flask web/api, Redis cache, SQLite persistence, Docker runtime, and Nginx TLS edge.
+runtime:
+  container_orchestrator: docker-compose
+  compose_file: docker/docker-compose.yml
+  services:
+    - name: redis
+      role: cache/state
+    - name: app
+      role: flask-web-and-api
+      upstreams:
+        web: app:8000
+        api: app:8001
+    - name: nginx
+      role: tls-edge-and-host-routing
+      public_ports: [80, 443]
+    - name: cron
+      role: scheduled-alerts-and-reports
+      schedule_file: ext_conf/crontab.ini
+    - name: goaccess
+      role: live-report-generator
+entrypoints:
+  web: https://<WLP_SERVER_NAME>
+  api: https://<WLP_API_SERVER_NAME>
+source_of_truth:
+  architecture: docs/ai/ARCHITECTURE.md
+  operations: docs/ai/OPERATIONS_PLAYBOOK.md
+  change_checklist: docs/ai/CHANGE_CHECKLIST.md
+  compose: docker/docker-compose.yml
+  nginx_template: ext_conf/docker/nginx.conf.template
+  smoke_test: scripts/docker_smoke_test.sh
+env_contract:
+  required_high_signal:
+    - APP_DOMAIN
+    - API_DOMAIN
+    - WLP_SERVER_NAME
+    - WLP_API_SERVER_NAME
+    - WLP_WEB_UPSTREAM
+    - WLP_API_UPSTREAM
+    - WLP_SSL_CERT_PATH
+    - WLP_SSL_KEY_PATH
+    - REDIS_HOST
+    - REDIS_PORT
+    - DATABASE_URL
+validation:
+  primary_smoke: ./scripts/docker_smoke_test.sh
+  local_ci: gitlab-ci-local --force-shell-executor docker_smoke_test
+constraints:
+  - Keep API under subdomain of same base domain.
+  - Keep SQLite single-node assumptions unless explicitly requested.
+  - Keep ingress centralized in nginx.

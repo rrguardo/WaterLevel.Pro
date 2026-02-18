@@ -1,0 +1,72 @@
+{% extends "base2.html" %}
+
+{% block head %}
+<title>Phone Verify</title>
+
+{% endblock %}
+
+
+{% block content %}
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+<div
+  class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="d-flex align-items-center justify-content-center w-100">
+    <div class="row justify-content-center w-100">
+      <div class="col-md-8 col-lg-6 col-xxl-3">
+        <div class="card mb-0">
+          <div class="card-body">
+            <h3 class="text-center">User Phone Verification</h3>
+            <form action="{{ url_for('user_settings') }}" method="post" >
+
+              <div class="mb-3" >
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+              </div>
+
+              <input type="hidden" name="action" value="verify-phone">
+              <input type="hidden" name="auth_hash" value="{{ auth_hash }}">
+              <input type="hidden" name="phone" value="{{ phone }}">
+
+
+              <div class="mb-3">
+                <label for="InputCode" class="form-label">Verification Code:</label>
+                <input type="number" step="1" class="form-control" id="InputCode" aria-describedby="InputCodeHelp" name="code">
+                <span id="InputCodeHelp" >Use the code sent to your phone.</span>
+              </div>
+
+
+              <input type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" value="Verify"/>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<script>
+    function onSubmit(event) {
+        var response = grecaptcha.getResponse();
+        if (response.length == 0) {
+            // reCAPTCHA not verified
+            alert('Please verify that you are not a robot.');
+            event.preventDefault(); // Prevent form submission
+            return false;
+        }
+        // Form submission can proceed
+        return true;
+    }
+</script>
+{% endblock %}

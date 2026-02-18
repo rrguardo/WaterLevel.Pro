@@ -1,0 +1,548 @@
+{% extends "base2.html" %}
+
+{% block head %}
+
+<title>WiFi Smart Water Pump Controller S1 | {% trans %}Installation and Usage Guide{% endtrans %}</title>
+
+<meta name="description" content="{% trans %}Learn how to install and set up the WiFi Smart Water Pump Controller S1 with this detailed guide. Automate water control with a smart, energy-saving solution for various water systems.{% endtrans %}">
+<meta name="keywords" content="{% trans %}WiFi Water Pump manual, S1 installation guide, smart water pump setup, automatic water control, energy-saving water pump, water system integration, smart water systems{% endtrans %}">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="WiFi Smart Water Pump Controller S1 | {% trans %}Installation and Setup Guide{% endtrans %}">
+<meta property="og:description" content="{% trans %}Step-by-step installation and setup guide for the WiFi Smart Water Pump Controller S1. Automate and optimize water management with this efficient solution.{% endtrans %}">
+<meta property="og:image" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/r1_face.png') }}">
+<meta property="og:url" content="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WiFi Smart Water Pump Controller S1 | {% trans %}Installation and Setup Guide{% endtrans %}">
+<meta name="twitter:description" content="{% trans %}Discover how to install and configure the WiFi Smart Water Pump Controller S1. A reliable, energy-saving solution for automating water systems.{% endtrans %}">
+<meta name="twitter:image" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/r1_face.png') }}">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "WiFi Smart Water Pump Controller S1",
+  "image": "{{ DOMAIN }}{{ url_for('static', filename='manuals/r1_face.png') }}",
+  "description": "{% trans %}Automatic Water Pump for S1 - Smart, energy-efficient pump controller with automatic water level control, screen indicator, and durable construction for various water systems{% endtrans %}",
+  "sku": "S1",
+  "brand": {
+    "@type": "Brand",
+    "name": "Water Level Pro"
+  },
+  "additionalProperty": [
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Remote Monitoring{% endtrans %}",
+      "value": "{% trans %}Smart Automatic Water Pump for S1{% endtrans %}"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Power Options{% endtrans %}",
+      "value": "{% trans %}Runs on AC power.{% endtrans %}"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Open Source{% endtrans %}",
+      "value": "{% trans %}Community-driven hardware and software, freely available under GPL terms.{% endtrans %}"
+    }
+  ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": 4.9,
+        "reviewCount": 9
+      },
+      "positiveNotes": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "{% trans %}AC Powered{% endtrans %}"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{% trans %}Unlimited management range.{% endtrans %}"
+              }
+            ]
+      }
+}
+</script>
+
+
+<style>
+.long-img-area {
+  max-width: 650px;
+  margin: 35px auto;
+}
+
+.video-wrapper {
+  max-width: 600px; /* Maximum width of 400px */
+  margin: 0 auto;   /* Center horizontally */
+}
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-fluid">
+
+  <div class="d-flex">
+    <div class="p-2">
+        <h5 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >{% trans %}Manual:{% endtrans %} WiFi Smart Water Pump Controller S1</h5>
+    </div>
+    <div class="ms-auto">
+        <a href="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" class="btn btn-sm btn-primary mb-3">
+            <i class="ti ti-list-details"></i> {% trans %}Features{% endtrans %}
+        </a>
+    </div>
+  </div>
+
+  <div class="row" >
+
+    <div class="text-center">
+
+      <div id="carouselExampleAutoplaying1" class="carousel long-img-area" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active" data-bs-interval="7000">
+            <img src="{{ url_for('static', filename='manuals/r1_face.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1 - Product Image">
+          </div>
+          <div class="carousel-item" data-bs-interval="7000">
+            <img src="{{ url_for('static', filename='manuals/WiFi_Smart_Pump_Controller_S1.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1 - Product image" >
+          </div>
+          <div class="carousel-item" data-bs-interval="7000">
+            <img src="{{ url_for('static', filename='manuals/r1_face3.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1 - Product Image" >
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+        <div class="row  flex-row ms-auto align-items-center justify-content-center mb-3" >
+          <a class="btn btn-sm btn-success col-auto mx-1" href="/device_info?public_key=demorelay" >
+            <i class="ti ti-router"></i>
+            {% trans %}UI Demo Device{% endtrans %}
+          </a>
+
+        <a href="https://www.instructables.com/DIY-WiFi-Smart-Water-Pump-Controller-S1-Build-Your/" target="_blank" class="btn btn-warning fs-2 fw-semibold lh-sm col-auto mx-1">
+                  <i class="ti ti-help"></i> {% trans %}DIY Guide{% endtrans %}
+        </a>
+      </div>
+
+    </div>
+
+
+    <div class="alert alert-info" role="alert">
+      {% trans %}The WiFi Smart Water Pump Controller S1 automates water pump operation using data from the{% endtrans %}
+      <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" target="_blank" >WiFi Water Level S1</a> {% trans %}sensor,
+      starting and stopping the pump based on tank fill levels. This energy-efficient device requires stable internet
+      connectivity and uses this platform cloud services for optimal performance. Ideal for precise and
+      reliable water management.{% endtrans %}
+    </div>
+  </div>
+
+    <div class="row" >
+      <div class="col-lg-12 d-flex align-items-stretch">
+            <div class="card w-100 bg-light">
+              <div class="card-body px-2">
+                <div class="mb-4">
+                  <h4 class="card-title mb-3 link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >Smart Pump Controller S1 {% trans %}Parts{% endtrans %}</h4>
+
+                  <div class="ratio ratio-16x9 video-wrapper my-2">
+                        <video autoplay muted loop>
+                          <source src="https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1/raw/refs/heads/main/images/CShow1.mp4" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                  </div>
+
+                </div>
+                <div class="accordion" id="accordionPart">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne1">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartOne" aria-expanded="true" aria-controls="collapsePartOne">
+                        {% trans %}Parts Description{% endtrans %}
+                      </button>
+                    </h2>
+                    <div id="collapsePartOne" class="accordion-collapse collapse" aria-labelledby="headingOne1" >
+                      <div class="accordion-body">
+                        <div class="text-center ">
+                          <img src="{{ url_for('static', filename='manuals/SmartPumpParts1'+g.img_lang+'.png') }}" class="img-thumbnail" alt="WiFi Smart Pump Controller S1 - Parts" title="WiFi Smart Pump Controller S1 - Parts" >
+                          <img src="{{ url_for('static', filename='manuals/SmartPumpParts2'+g.img_lang+'.png') }}" class="img-thumbnail" alt="WiFi Smart Pump Controller S1 - Parts" title="WiFi Smart Pump Controller S1 - Parts" >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+  </div>
+
+
+
+    <div class="row" >
+        <div class="col-lg-12 d-flex align-items-stretch">
+              <div class="card w-100 bg-light">
+                <div class="card-body px-2">
+                  <div class="mb-4">
+                    <h4 class="card-title mb-3 link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{% trans %}Installation And Usage Guide{% endtrans %}</h4>
+
+                    <div class="text-center my-3">
+                      <img src="{{ url_for('static', filename='manuals/HowWorksS1Controller'+g.img_lang+'.png') }}" class="img-thumbnail" alt="How Works S1 Pump Controller" title="How Works S1 Pump Controller" >
+                    </div>
+
+                  </div>
+                  <div class="accordion" id="accordionExample">
+                    <div class="accordion-item ">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          {% trans %}#1 Check WiFi Coverage{% endtrans %}
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
+                        <div class="accordion-body">
+                             {% trans %}
+                          <h5>Ensure that good 2.4GHz WiFi signal will reach the device area all the time.</h5>
+
+                            <p class="alert alert-info" >
+                              Optimal Wi-Fi signal strength is crucial for device performance.
+                              Before installation, use a mobile app (WiFi Analyzer) with a 3dBm reference antenna to measure the
+                              signal at the location. Ensure it's between <b>-30 dBm</b> and <b>-78 dBm</b>.
+                              After connecting, regularly verify this on the device's webpage.
+                            </p>
+                            <p class="alert alert-warning" >
+                              If WiFi signal strength is weak consider add WiFi range extenders.
+                            </p>
+                            {% endtrans %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingPSRWQ">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePSRWQ" aria-expanded="false" aria-controls="collapsePSRWQ">
+                           {% trans %}#2 Pump and Safety Requirements {% endtrans %}
+                        </button>
+                      </h2>
+                      <div id="collapsePSRWQ" class="accordion-collapse collapse" aria-labelledby="headingPSRWQ" >
+                        <div class="accordion-body">
+                          {% trans %}
+                          <div class="ms-1 my-3 alert alert-danger" role="alert">
+                              <h5>Pump Requirements</h5>
+                              Ensure the pump's power consumption does not exceed <b>10 amps</b> to prevent potential damage or system overload.
+                              This translates to a maximum of <b>1200 W</b> for a 120 V system and <b>2200 W</b> for a 220 V system.
+                              Exceeding these limits may compromise system safety and functionality.
+                          </div>
+
+                          <div class="ms-1 my-3 alert alert-info" role="alert">
+                            <h5>Power Requirements</h5>
+                            The device requires a power input of AC 120V or 220V, 50/60 Hz, with a single-phase connection and neutral line.
+                          </div>
+
+                          <div class="ms-1 my-3 alert alert-danger" role="alert">
+                            <h5>Safety Requirements</h5>
+                              Since this is an experimental device, the user is responsible for ensuring safe installation and operation.
+                              Make sure the system has a thermal breaker for protection and avoid placing it near
+                              flammable materials. The user should also monitor the device regularly to ensure it
+                              operates correctly and safely.
+                          </div>
+                          {% endtrans %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingICWW">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseICWW" aria-expanded="false" aria-controls="collapseICWW">
+                           {% trans %}#3 Installing the Controller {% endtrans %}
+                        </button>
+                      </h2>
+                      <div id="collapseICWW" class="accordion-collapse collapse" aria-labelledby="headingICWW" >
+                        <div class="accordion-body">
+                          <div class="text-center ">
+                            <img src="{{ url_for('static', filename='manuals/ControllerS1Connection'+g.img_lang+'.png') }}" class="img-thumbnail" alt="Smart Pump S1 Connection" title="Smart Pump S1 Connection" >
+                          </div>
+
+                          <div class="list-group my-3 " >
+                              {% trans %}
+                              <h5>Device Connection Instructions</h5>
+
+                              <p class="my-2 ms-1" ><strong>1. Select Proper Cables:</strong><br>
+                                 Use cables that can handle the amperage of the pump (up to 10 amps) to ensure safe operation.
+                                 Make sure the cables are rated for the required power load.</p>
+
+                              <div class="my-3 ms-1" ><strong>2. AC Input Connections:</strong><br>
+                                 <ul class="list-group ms-1 mt-3">
+                                     <li class="list-group-item list-group-item-action list-group-item-primary" >
+                                       <strong>Identify the AC input wires:</strong> You will need to identify the <strong>Line (Live)</strong>, <strong>Neutral</strong>, and <strong>Ground</strong> wires coming from the power source.</li>
+                                     <li class="list-group-item list-group-item-action list-group-item-primary" >
+                                       <strong>Connect the wires to AC-IN:</strong>
+                                        Connect the <strong>Line</strong> (Live) wire to the <strong>Line (L)</strong> terminal,
+                                        the <strong>Neutral</strong> wire to the <strong>Neutral (N)</strong> terminal, and the <strong>Ground</strong> wire to the
+                                       <strong>Ground (G)</strong> terminal on the device's <strong>AC-IN</strong> section. Make sure each wire is properly secured
+                                       to avoid any loose connections.
+                                     </li>
+                                 </ul>
+                              </div>
+
+                              <div class="my-2 ms-1" ><strong>3. AC Output Connections:</strong><br>
+                                 <ul class="list-group ms-1 mt-3">
+                                     <li class="list-group-item list-group-item-action list-group-item-primary">
+                                       <strong>Connect to the pump:</strong> In the <strong>AC-Out</strong> section of the device, repeat the process
+                                       by connecting the <strong>Line</strong> wire to the <strong>Line (L)</strong> terminal,
+                                       the <strong>Neutral</strong> wire to the <strong>Neutral (N)</strong> terminal,
+                                       and the <strong>Ground</strong> wire to the <strong>Ground (G)</strong> terminal.</li>
+                                     <li class="list-group-item list-group-item-action list-group-item-primary">
+                                       Make sure the connections are correct, secure, and tight to ensure reliable operation of the pump.</li>
+                                 </ul>
+                              </div>
+
+                            <p class="my-2 ms-1" ><strong>4. Mount the Device:</strong><br>
+                              Use the <strong>mount points</strong> on the device to securely attach it to a wall
+                              or other stable surface. Ensure the mounting location is dry, accessible, and allows for proper ventilation around the device.
+                            </p>
+
+
+                              <p class="my-2 ms-1" ><strong>5. Verify Connections:</strong><br>
+                                 Before turning the device on, double-check all connections to ensure they are correctly placed and there are no errors. Incorrect wiring could lead to malfunctions or damage to the pump.</p>
+                           {% endtrans %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          {% trans %}#4 Configure Wi-Fi connection for the device. {% endtrans %}
+                        </button>
+                      </h2>
+                      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" >
+                        <div class="accordion-body">
+                          {% trans %}
+                          <p>In this step, configure the device to connect to your local internet WiFi network</p>
+                          <div class="alert alert-info" >
+                            To enjoy all the features of this device, you'll need to <a href="/register" target="_blank" >create a free account</a>
+                            using your email address. <br>
+                            This will allow you to link the device to your profile
+                            and personalize your settings.
+                          </div>
+                          <h5>Steps:</h5>
+                          <ul class="list-group ms-1" >
+                            <li class="list-group-item list-group-item-action">
+                                <b>1)</b> Connect the device to an AC power source and switch the <a href="#collapsePartOne" ><b>Manual/Smart Switch</b></a>
+                                to the <b>ON</b> position. This will power on the LEDs and screen, enabling the smart features
+                                of the pump controller. Ensure the WiFi antenna is securely connected to the <b>Pump Controller</b>.
+                            </li>
+                            <li class="list-group-item list-group-item-action" >
+                              <b>2)</b> Using a cellphone, search and connect to a 2.4GHz WiFi network named <b>WaterLevelProSetup</b> with credentials/password: <b>1122334455</b>
+                              <div class="alert alert-warning mt-2">
+                                If the network name doesn't show or disappears quickly, check <b>AC</b> power input or press the WiFi Reset button at <b>Pump Controller</b>.
+                                <div class="alert alert-info mt-3" >
+                                  To reset the WiFi, press the <b>WiFi Reset</b> button 5 consecutive times.
+                                </div>
+                              </div>
+
+                            </li>
+                            <li class="list-group-item list-group-item-action" >
+                              <b>3) Enter your local WiFi auth info.</b>
+                              <p class="my-2">
+                                After completing step <b>2)</b>, a Captive Portal will appear on your cellphone. This will guide you to a webpage where
+                                you can select the desired Wi-Fi network and enter its credentials. You will also be prompted to enter an
+                                email address to link the device to your existing account.
+                              </p>
+                              <p class="alert alert-warning my-2">
+                                If the Captive Portal don't load automatically use this url
+                                <a href="http://192.168.4.1/" target="_blank">http://192.168.4.1/</a> to load it manually from cellphone.
+                              </p>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                              <b>4) Check your device is online</b>
+                              <p class="my-2">
+                                Reconnect your cellphone to the internet and log in to your account. If everything
+                                  was successful, after <b>2 minute</b>, you will see the new device listed in your account with an <b>"Online"</b> status.
+                              </p>
+                              <p class="alert alert-warning my-2">
+                                If the device does not show online after <b>2 minute</b>, try reconnecting the power source or repeating
+                                the entire process after pressing the <b>WiFi Reset</b> button 5 consecutive times on the device.
+                              </p>
+                            </li>
+                          </ul>
+                          {% endtrans %}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="heading6">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                           {% trans %}#5 Smart Settings {% endtrans %}
+                        </button>
+                      </h2>
+                      <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6"  >
+                        <div class="accordion-body">
+                          {% trans %}
+                          <h5>Using Smart Functions for Automatic Pump Control</h5>
+                          <p class="my-3 ms-2">
+                              To enable the smart automatic start and stop features, a <b>Water Level S1</b> sensor
+                              must be installed in the water tank connected to the pump controlled by this device.
+                              Carefully read the <a href="{{ DOMAIN }}{{ url_with_lang('manuals', product_name='WiFi-Water-Level-S1') }}">installation and usage
+                              manual for the <b>Water Level S1</b></a> sensor
+                              and ensure it provides reliable and stable information under your specific conditions before activating the smart functions.
+                          </p>
+
+                            <h5>How Enable The Smart Features: </h5>
+                          <ul class="list-group ms-1" >
+                            <li class="list-group-item list-group-item-action">
+                              <b>1) Log in</b>
+                              <p class="my-2">
+                              Log in to your <a href="{{ DOMAIN }}{{ url_with_lang('login') }}" target="_blank" >account</a>
+                                account using the same email address provided during the device's Wi-Fi setup.
+                                Ensure both emails match for proper account synchronization.
+                              </p>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                              <b>2) Enable the "Smart Mode" in Device Settings</b>
+                              <p class="my-2">
+                                After logging in, find your new device in the <a href="{{ DOMAIN }}{{ url_with_lang('devices') }}" target="_blank" >"My Devices"</a> list.
+                                Open the device's details page and click the <b>"Device Settings"</b> button at the bottom.
+                              </p>
+                              <p class="my-2">
+                                In the settings, enable the <b>"Smart Mode"</b>. All the settings are documented at <b>"Device Settings"</b> sections.<br>
+                                  <a class="btn btn-sm btn-success mt-2" href="/device_info?public_key=demorelay" >
+                                        <i class="ti ti-router"></i>
+                                        UI Demo Device
+                                  </a>
+                              </p>
+                            </li>
+                              <li class="list-group-item list-group-item-action">
+                                  <div class="alert alert-warning" role="alert">
+                                    <a href="#collapsePartOne"><b>Manual/Smart Switch</b></a> must be set to the <b>ON</b> position to activate the smart pump controller.
+                                    This ensures the LEDs and screen turn on, allowing the smart features to function properly.
+                                  </div>
+                              </li>
+                          </ul>
+                          {% endtrans %}
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="accordion-item ">
+                      <h2 class="accordion-header" id="headingSeven">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                           {% trans %}#6 Manual Mode - <b> Manual/Smart Switch</b> {% endtrans %}
+                        </button>
+                      </h2>
+                      <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven">
+                        <div class="accordion-body">
+                             {% trans %}
+                            <h5>Using the <b>Manual/Smart Switch</b> Button</h5>
+                            <p class="ms-2 my-3" >
+                                The physical <a href="#collapsePartOne" ><b>Manual/Smart Switch</b></a> button on
+                                the pump controller allows you to operate the pump manually, functioning like a simple
+                                switch that turns the pump on without requiring internet or smart features. To enable this,
+                                move the <a href="#collapsePartOne" ><b>Manual/Smart Switch</b></a> to the OFF position.
+                                The LEDs and screen will turn off, but the pump will start running.
+                            </p>
+                            <div class="alert alert-danger" role="alert" >
+                                Before switching to <b>Manual Mode</b>, verify that the pump is not <b>ON</b> while in <b>Smart Mode</b>.
+                                Use the web UI control to check its status. Confirm that the green indicator <b>LED</b> is off before proceeding.
+                            </div>
+                            {% endtrans %}
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+    </div>
+
+    <hr class="row small_none" >
+
+<div class="row  justify-content-center" id="order_now_c1">
+    <div class="accordion my-2" id="accordionExample7">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="importantDisclaimerHeading">
+          <button
+            class="accordion-button collapsed bg-warning text-white"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#importantDisclaimerCollapse"
+            aria-expanded="false"
+            aria-controls="importantDisclaimerCollapse">
+            {% trans %}Important Disclaimer{% endtrans %}
+          </button>
+        </h2>
+        <div
+          id="importantDisclaimerCollapse"
+          class="accordion-collapse collapse"
+          aria-labelledby="importantDisclaimerHeading"
+          data-bs-parent="#accordionExample7">
+          <div class="accordion-body">
+            {% trans %}
+            <p class="my-1 alert alert-warning" role="alert">
+              This open-source electronics project/device is provided strictly for experimental, educational, and developmental purposes.
+              It is offered "as is," without any warranties, express or implied. This includes, but is not limited to, implied warranties
+              of merchantability, fitness for a particular purpose, or non-infringement.
+            </p>
+            <hr>
+            <p><strong>By using this device, you acknowledge and accept that:</strong></p>
+            <ul class="list-group list-group-numbered ms-1">
+              <li class="list-group-item list-group-item-action" >You assume all risks associated with its use, including but not limited to potential damage to property, personal injury, or any other unintended consequences.</li>
+              <li class="list-group-item list-group-item-action" >This device is not certified for commercial, industrial, or safety-critical applications. It is intended solely for developers, hobbyists, and other users with appropriate technical expertise.</li>
+              <li class="list-group-item list-group-item-action" >The creators and distributors of this project are not liable for any damages, losses, or inconveniences resulting from its use, modification, or integration into other systems.</li>
+            </ul>
+            <p class="my-3" >
+              Users are solely responsible for ensuring that the use of this device complies with local laws, regulations, and safety standards in their region.
+            </p>
+            {% endtrans %}
+
+            <!-- Donations Section at the end of the Disclaimer -->
+            <hr>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+    <hr class="row small_none" >
+
+      <div class="row my-3">
+        <h4>{% trans %}Open Source & Open Hardware{% endtrans %}</h4>
+        <p>
+          {% trans %}This project is open-source and open-hardware. Access the source code and hardware design files through the following links:{% endtrans %}
+        </p>
+            <div class="text-center my-3">
+                <p class="ms-2" >
+                    <a href="https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1" target="_blank" class="mx-2 my-2" >
+                        <img src="{{ url_for('static', filename='logos/gpl3.png') }}" class="img-thumbnail mx-2" alt="GPL3 S1" title="GPL3 S1" >
+                    </a>
+                    <a href="https://oshwlab.com/rrguardo83/automatic-water-pump-for-s1" target="_blank" class="mx-2" >
+                        <img src="{{ url_for('static', filename='logos/open-hardware.jpg') }}" class="img-thumbnail" alt="Open Hardware S1" title="Open Hardware S1" >
+                    </a>
+                    <a href="https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1" target="_blank" class="mx-2 my-2" >
+                        <img src="{{ url_for('static', filename='manuals/github.png') }}" class="img-thumbnail" alt="GiHub" title="S1" width="90px" >
+                    </a>
+                </p>
+            </div>
+
+      </div>
+
+<hr class="row small_none" >
+
+</div>
+{% endblock %}

@@ -1,0 +1,276 @@
+{% extends "base2.html" %}
+
+{% block head %}
+
+<title>Manual: Solar Power Module P1</title>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-fluid">
+
+  <div class="d-flex">
+    <div class="p-2">
+        <h5 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >Manual: Solar Power Module P1</h5>
+    </div>
+    <div class="ms-auto">
+        <a href="/products/Solar-Power-Module-P1" target="_self" class="btn btn-sm btn-primary mb-3">
+            <i class="ti ti-list-details"></i> P1 Features
+        </a>
+    </div>
+  </div>
+
+    <div class="row" >
+      <div class="col-lg-12 d-flex align-items-stretch">
+            <div class="card w-100 bg-light">
+              <div class="card-body">
+                <div class="mb-4">
+                  <h4 class="card-title mb-0">Solar Power Module P1 Parts</h4>
+                  <div class="text-center ">
+                    <img src="{{ url_for('static', filename='manuals/p1.png') }}" class="img-thumbnail" alt="Solar Power Module P1" title="Solar Power Module P1 For S1" >
+                  </div>
+                </div>
+                <div class="accordion" id="accordionPart">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne1">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartOne" aria-expanded="true" aria-controls="collapsePartOne">
+                        Solar Power Module
+                      </button>
+                    </h2>
+                    <div id="collapsePartOne" class="accordion-collapse collapse" aria-labelledby="headingOne1" >
+                      <div class="accordion-body">
+                        <div class="text-center ">
+                          <img src="{{ url_for('static', filename='manuals/p1_parts.png') }}" class="img-thumbnail" alt="P1 Parts Power Module" title="Solar Power Module P1 - Parts">
+                          <img src="{{ url_for('static', filename='manuals/p1_parts2.png') }}" class="img-thumbnail" alt="P1 Parts Power Module" title="Solar Power Module P1 - Parts">
+                          <img src="{{ url_for('static', filename='manuals/p1_parts3.png') }}" class="img-thumbnail" alt="P1 Parts Power Module" title="Solar Power Module P1 - Parts">
+                        </div>
+                        <ul class="list-group ms-3" >
+                          <li class="list-group-item list-group-item-action" >
+                            <b>A) </b> Solar Panel.
+                          </li>
+                          <li class="list-group-item list-group-item-action" >
+                            <b>B) </b> Cover to access the batteries.
+                          </li>
+                          <li class="list-group-item list-group-item-action" >
+                           <b>C) </b> USBC power output (from 3.4 to 4.2 V DC).
+                          </li>
+                          <li class="list-group-item list-group-item-action" >
+                           <b>D) </b> Grip rail to attach to Water Level S1 or other devices.
+                          </li>
+                          <li class="list-group-item list-group-item-action" >
+                           <b>E) </b> Socket to place 3x AA NiMH rechargeable batteries.
+                          </li>
+
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading3">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePart3" aria-expanded="false" aria-controls="collapsePart3">
+                        USBC Flexible Covers
+                      </button>
+                    </h2>
+                    <div id="collapsePart3" class="accordion-collapse collapse" aria-labelledby="heading3" >
+                      <div class="accordion-body">
+                        <p class="alert alert-warning" >
+                          All USBC connections should be protected from moisture and water using the red flexible
+                          USBC protectors. Especially in the case of the internal sensor of the water tank,
+                          where continuous extreme humidity is generated.
+                        </p>
+                        <div class="text-center ">
+                          <img src="{{ url_for('static', filename='manuals/usbc_covers.png') }}" class="img-thumbnail" alt="S1 Parts Internal Water Tank Sensor">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+  </div>
+
+
+
+    <div class="row" >
+        <div class="col-lg-12 d-flex align-items-stretch">
+              <div class="card w-100 bg-light">
+                <div class="card-body">
+                  <div class="mb-4">
+                    <h4 class="card-title mb-0">Installation</h4>
+
+                  <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active" data-bs-interval="3000">
+                        <img src="{{ url_for('static', filename='manuals/p1_inst_car1.png') }}" class="d-block w-100" alt="Solar Power Module P1 Installed On Water Tank" title="P1 Installed On Water Tank" >
+                      </div>
+                      <div class="carousel-item" data-bs-interval="3000">
+                        <img src="{{ url_for('static', filename='manuals/p1_inst_car2.png') }}" class="d-block w-100" alt="Solar Power Module P1 Installed On Water Tank" title="P1 Installed On Water Tank" >
+                      </div>
+                      <div class="carousel-item" data-bs-interval="3000">
+                        <img src="{{ url_for('static', filename='manuals/p1_inst_car3.png') }}" class="d-block w-100" alt="Solar Power Module P1 Installed On Water Tank" title="P1 Installed On Water Tank" >
+                      </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                  </div>
+
+
+                  </div>
+                  <div class="accordion" id="accordionExample">
+                    <div class="accordion-item ">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          #1 Check And Add Batteries
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" >
+                        <div class="accordion-body">
+                          <h5>This module requires 3x AA NiMH rechargeable batteries.</h5>
+                          <div class="text-center ">
+                            <img src="{{ url_for('static', filename='manuals/p1_parts2.png') }}" class="img-thumbnail" alt="Solar Power Module P1 - Open Cover" title="Solar Power Module P1 - Open Cover View">
+                          </div>
+                          <ul class="list-group ms-3" >
+                            <li class="list-group-item list-group-item-action list-group-item-info" >
+                              Charge the 3x AA NiMH before insert it at device.
+                            </li>
+                             <li class="list-group-item list-group-item-action list-group-item-warning" >
+                               Ensure use good brand and quality AA NiMH batteries, 2000 mA or more.
+                             </li>
+                            <li class="list-group-item list-group-item-action list-group-item-danger" >
+                               Only use AA NiMH rechargeable batteries.
+                            </li>
+                            <li class="list-group-item list-group-item-action list-group-item-info" >
+                               <p>
+                                If you are not sure which brand of rechargeable AA NiMH batteries to use. Use the Energizer brand,
+                                the product was tested with this brand with continuous use for several months without problems.
+                              </p>
+                              <div class="text-center ">
+                                <img src="{{ url_for('static', filename='manuals/energizer.jpg') }}" class="img-thumbnail" alt="Energizer">
+                              </div>
+                            </li>
+
+
+                          </ul>
+
+                          <div class="text-center my-3">
+                            <img src="{{ url_for('static', filename='manuals/p1_cover.png') }}" class="img-thumbnail" alt="Solar Power Module P1 - Open Cover Instructions" title="Solar Power Module P1 - How Open Cover">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          #2 Selection best installation area.
+                        </button>
+                      </h2>
+                      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" >
+                        <div class="accordion-body">
+                          <p>
+                            Place the device in places where direct sunlight hits for at least 3 or more hours a day.
+                            Make sure that the part of the solar panel <b>(Part A)</b> is facing the place where the direct sun
+                            hits the most.
+                          </p>
+                          <p class="alert alert-danger" >
+                            If it is placed where the sun does not shine regularly and for enough hours to keep the
+                            battery charge stable, it could damage the sensor device. Check that
+                            as the days go by, the device remains on and working with enough energy.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                         #3 Attach To Sensor Device
+                        </button>
+                      </h2>
+                      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" >
+                        <div class="accordion-body">
+                          Attach the energy module by the grip rail <b>(Part D)</b> to Water Level S1 grip rail connector.
+                          Ensure it enter completely until the end of the grip rail.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="heading4">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false"  aria-controls="collapse4">
+                          #4 Connect Power Output
+                        </button>
+                      </h2>
+                      <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" >
+                        <div class="accordion-body">
+                            <p class="my-2">
+                              Finally, connect the power output cable to the <b>Water Level S1</b> power input at <b>Control Unit</b>.
+                            </p>
+
+                          <div class="text-center ">
+                            <img src="{{ url_for('static', filename='manuals/p1.png') }}" class="img-thumbnail" alt="Solar Power Module P1" title="Solar Power Module P1 For S1">
+                          </div>
+
+                          <p class="alert alert-danger my-2" >
+                                  Be sure to place the red cover on the sensor's USBC connector
+                                  and position it firmly to reduce moisture penetration into the joint.
+                          </p>
+                          <div class="text-center ">
+                            <img src="{{ url_for('static', filename='manuals/usbc_covers.png') }}" class="img-thumbnail" alt="USB-C protection covers" title="USB-C cover">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+    </div>
+
+
+      <hr class="row small_none" >
+
+<div class="row d-flex justify-content-center mb-3 small_none">
+
+    <div class="card bg-light col-auto" >
+        <div class="card-body" >
+            <h3 class="card-title fw-semibold mb-4 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-3" >Important Note:</h3>
+
+            <ul class="list-group ms-3 fs-2" >
+                <li class="list-group-item list-group-item-action list-group-item-secondary ">
+                    <b>Experimental Prototype:</b><br> This device is an experimental prototype intended solely for testing and development.
+                    It is not certified for commercial use or for inclusion in consumer-ready products.
+                </li>
+                <li class="list-group-item list-group-item-action ">
+                    <b>Controlled Use:</b><br> We recommend using this device in controlled environments, such as laboratories or for development purposes, not in critical or sensitive applications.
+                </li>
+                <li class="list-group-item list-group-item-action list-group-item-secondary">
+                    <b>Limitations:</b><br> As a prototype, this device may have limitations in terms of performance, functionality, and reliability compared to a finished commercial product.
+                </li>
+                <li class="list-group-item list-group-item-action" >
+                    <b>Potential Risks:</b><br> Use this device at your own risk. We are not responsible for any damage or loss resulting from the use of this prototype.
+                </li>
+                <li class="list-group-item list-group-item-action list-group-item-secondary" >
+                    <b>Not for Children:</b><br> This device is not a toy and should not be used by children without adult supervision.
+                </li>
+                <li class="list-group-item list-group-item-action " >
+                    <b>Feedback:</b><br> We welcome any feedback on the device for future improvements and developments.
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,237 @@
+{% extends "base2.html" %}
+
+{% block head %}
+<title>{% trans %}My Devices{% endtrans %}</title>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid" >
+
+    <div class="row" >
+        <h4>{% trans %}Devices List{% endtrans %} </h4>
+        <ul class="list-group list-group-full" id="devices_list">
+        </ul>
+
+        <div class="col-auto my-3" >
+            <a class="btn btn-sm btn-success ms-4" href="{{ url_with_lang('device_info') }}?public_key=demo" >{% trans %}S1 Demo Device{% endtrans %}</a>
+            <a class="btn btn-sm btn-info ms-4" href="{{ url_with_lang('device_info') }}?public_key=demorelay" >{% trans %}Smart Pump Demo{% endtrans %}</a>
+        </div>
+    </div>
+
+    <div class="row" >
+        <button class="btn btn-info" id="scanQR">{% trans %}Add Device QR{% endtrans %}</button>
+    </div>
+
+
+</div>
+
+<script src="{{ url_for('static', filename='assets/js/jsQR.min.js') }}"></script>
+
+<script>
+
+$(document).ready(function() {
+    $('#scanQR').on('click', function() {
+        abrirLectorQR();
+    });
+});
+
+function abrirLectorQR() {
+    // Check if the browser supports getUserMedia
+    if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+        // Open camera to scan the QR code
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then(function(stream) {
+            // Render video stream in a <video> element
+            var video = document.createElement('video');
+            document.body.appendChild(video);
+            video.srcObject = stream;
+            video.play();
+
+            // Use jsQR to scan QR codes from the video stream
+            var canvasElement = document.createElement('canvas');
+            var canvas = canvasElement.getContext('2d');
+            tick();
+
+            function tick() {
+                if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    canvasElement.width = video.videoWidth;
+                    canvasElement.height = video.videoHeight;
+                    canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+                    var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                    var code = jsQR(imageData.data, imageData.width, imageData.height, {
+                        inversionAttempts: 'dontInvert',
+                    });
+                    if (code && code.data && code.data.indexOf('{{ DOMAIN.rstrip('/') }}/') == 0)  {
+                        // If a QR code is detected, stop video playback and process the result
+                        video.pause();
+                        stream.getTracks().forEach(track => track.stop());
+                        window.location.href = code.data;
+
+                    } else {
+                        // If no QR code is detected, keep scanning
+                        requestAnimationFrame(tick);
+                    }
+                } else {
+                    requestAnimationFrame(tick);
+                }
+            }
+        })
+        .catch(function(error) {
+            alert('{% trans %}Error accessing the camera. Please make sure you give permission to access the camera.{% endtrans %}');
+        });
+    } else {
+        alert('{% trans %}This browser does not support the functionality necessary to scan QR codes.{% endtrans %}');
+    }
+}
+
+    </script>
+
+
+<script>
+
+function GetStorageDevices() {
+    var devices = localStorage.getItem('devices');
+    if(!devices){
+        return [];
+    }else{
+        return devices.split('|');
+    }
+}
+
+var user_devices = {};
+var auth_user = false;
+
+{% if current_user.is_authenticated %}
+    auth_user = true;
+    {% for row in current_user.get_devices() %}
+        user_devices['{{ row.public_key }}'] = ['{{ row.name }}', {{ row.can_admin }}, {{ row.type }}, '{{ row.long_name }}'];
+    {% endfor %}
+{% else %}
+{% endif %}
+
+$(document).ready(function() {
+
+    function UpdateLocalStorage() {
+        var devices = localStorage.getItem('devices');
+
+        Object.keys(user_devices).forEach(function(key) {
+
+            if(!devices){
+                devices = key;
+            }else if(devices.indexOf(key) == -1){
+                devices += '|' + key;
+            }
+            localStorage.setItem('devices', devices);
+            localStorage.setItem('info-'+key, user_devices[key][3]);
+        });
+    }
+
+    UpdateLocalStorage();
+
+    $.each(GetStorageDevices(), function(index, value) {
+        // Append a new li element with the array value
+        let device_type_color = 'bg-warning';
+        let device_type_icon = 'ti-router';
+
+        if(localStorage.getItem('info-'+value).indexOf('Switch') != -1){
+            device_type_color = 'bg-dark rounded-pill'
+            device_type_icon = 'ti-settings-automation';
+        }
+
+        let device_type = '<span class="badge d-flex align-items-center '+device_type_color+' ms-auto text-truncate d-none d-sm-block">'+localStorage.getItem('info-'+value)+'</span>';
+
+        let add_to_user = '<span class="badge btn d-flex btn-primary ms-3 add_to_user" user-device="'+value+'"><i class="ti ti-circle-plus fs-5 me-1"></i> <span class="d-none d-sm-block" user-device="'+value+'" >{% trans %}Add To User{% endtrans %}</span> </span>';
+        if(!auth_user){
+            add_to_user = '';
+        }
+
+        let remove_device = '<span device="'+value+'" class="remove_device badge btn d-flex btn-primary ms-3 bg-danger"><i class="ti ti-circle-minus fs-5 me-1"></i> <span class="d-none d-sm-block">{% trans %}Remove{% endtrans %}</span> </span>';
+
+        let bg_color = index % 2 ==0 ? "bg-secondary text-white" : "bg-light";
+
+        let link_value = '<a href="{{ url_with_lang('device_info') }}?public_key='+value+'" class="text-decoration-underline text-truncate" >'+value+'</a>';
+        let name_value_local = localStorage.getItem('name-' + value);
+
+        if(user_devices[value]){
+            add_to_user = '';
+            let name_to_use = user_devices[value][0];
+            if(user_devices[value][0] == '' && name_value_local){
+                name_to_use = name_value_local;
+            }
+            let btn_name = '<button class="btn '+device_type_color+' btn-sm mx-1">'+name_to_use+'</button>';
+            link_value = '<a href="{{ url_with_lang('device_info') }}?public_key='+value+'" class="text-decoration-underline text-truncate" >'+ btn_name +' ['+ value +']</a>';
+        }else if(name_value_local){
+
+            let btn_name = '<button class="btn '+device_type_color+' btn-sm mx-1">'+name_value_local+'</button>';
+            link_value = '<a href="{{ url_with_lang('device_info') }}?public_key='+value+'" class="text-decoration-underline text-truncate" >'+ btn_name +' ['+ value +']</a>';
+        }
+
+        $('#devices_list').append('<li device="'+value+'" class="list-group-item d-flex '+bg_color+'"> <i class="ti '+device_type_icon+' fs-5 me-2"></i> ' + link_value +add_to_user+remove_device+ device_type+'</li>');
+    });
+
+
+
+     $('.remove_device').click(function() {
+        var pub_key = $(this).attr("device");
+        alert('Removing: '+pub_key);
+
+        var devices = localStorage.getItem('devices');
+
+        {% if current_user.is_authenticated %}
+            let name_value = localStorage.getItem('name-' + pub_key) || '';
+            $.post( "{{ url_for('devices') }}", { action: "remove", public_key: pub_key, name: name_value })
+              .done(function( data ) {
+                if(data.status == 'success'){
+
+                }else{
+                    alert('{% trans %}Device remove fails!{% endtrans %}');
+                }
+            });
+        {% endif %}
+
+        $('[device="'+pub_key+'"]').remove();
+        let loc_devices = GetStorageDevices().filter(function(item) {
+            return item !== pub_key;
+        });
+        localStorage.setItem('devices', loc_devices.join("|"));
+
+    });
+
+    $('.add_to_user').click(function() {
+
+        let device_key = $(this).attr("user-device");
+        let name_value = localStorage.getItem('name-' + device_key) || '';
+        $.post( "{{ url_for('devices') }}", { action: "add", public_key: device_key, name: name_value})
+          .done(function( data ) {
+            $('[user-device="'+device_key+'"].badge').addClass('d-none');
+        });
+
+        $('#toast-info-head').html('<strong class="me-auto">{% trans %}Device Add Success{% endtrans %}</strong>');
+        $('#toast-info-body').html('<div class="toast-body">{% trans %}Device is now linked to your account.{% endtrans %}</div>');
+
+        var myToastEl = document.getElementById('liveToast')
+        var myToast = bootstrap.Toast.getOrCreateInstance(myToastEl) // Returns a Bootstrap toast instance
+        myToast.show();
+    });
+
+});
+</script>
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast fw-bold hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+        <div class="toast-header"> <svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                <rect width="100%" height="100%" fill="#007aff"></rect>
+            </svg>
+            <div id="toast-info-head" >
+                -
+            </div>
+
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> </div>
+        <div id="toast-info-body" >
+            <div class="toast-body"> - </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

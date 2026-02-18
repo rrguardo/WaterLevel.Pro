@@ -1,0 +1,182 @@
+{% extends "base2.html" %}
+
+{% block head %}
+<title>WLP | {% trans %}Smart Pump and Wireless Water Level Monitoring{% endtrans %}</title>
+<meta name="description" content="{% trans %}Discover reliable smart pump systems and advanced wireless water level monitoring solutions for tanks and reservoirs. Explore our products including the Smart Pump Module and WiFi Water Level S1.{% endtrans %}">
+<meta name="keywords" content="{% trans %}smart pump system, wireless water level monitoring, WiFi Water Level S1, Smart Pump Module, water tank sensor, remote water level monitoring{% endtrans %}">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="WLP | {% trans %}Smart Pump and Wireless Water Level Monitoring{% endtrans %}">
+<meta property="og:description" content="{% trans %}Discover reliable smart pump systems and advanced wireless water level monitoring solutions for tanks and reservoirs. Explore our products including the Smart Pump Module and WiFi Water Level S1.{% endtrans %}">
+<meta property="og:image" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}">
+<meta property="og:url" content="{{ DOMAIN }}/">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WLP | {% trans %}Smart Pump and Wireless Water Level Monitoring{% endtrans %}">
+<meta name="twitter:description" content="{% trans %}Discover reliable smart pump systems and advanced wireless water level monitoring solutions for tanks and reservoirs. Explore our products including the Smart Pump Module and WiFi Water Level S1.{% endtrans %}">
+<meta name="twitter:image" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "WLP",
+  "description": "{% trans %}Discover reliable smart pump systems and advanced wireless water level monitoring solutions for tanks and reservoirs. Explore our products including the Smart Pump Module and WiFi Water Level S1.{% endtrans %}",
+  "url": "{{ DOMAIN }}/",
+  "image": "{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face2'+g.img_lang+'.png') }}",
+  "mainEntity": [
+    {
+      "@type": "Product",
+      "name": "WiFi Water Level S1",
+      "image": "{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}",
+      "description": "{% trans %}Remotely and wirelessly measures the water level in tanks up to 8 meters deep.{% endtrans %}",
+      "brand": {
+        "@type": "Brand",
+        "name": "Water Level .Pro"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": 4.9,
+        "reviewCount": 9
+      },
+      "positiveNotes": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "{% trans %}Solar Powered{% endtrans %}"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{% trans %}Unlimited monitoring range.{% endtrans %}"
+              }
+            ]
+      }
+    },
+    {
+      "@type": "Product",
+      "name": "Smart Pump Module",
+      "image": "{{ DOMAIN }}{{ url_for('static', filename='manuals/r1_face.png') }}",
+      "description": "{% trans %}Automatic water pump for S1 - Smart, energy-efficient pump controller with automatic water level control, screen indicator, and durable construction for various water systems.{% endtrans %}",
+      "brand": {
+        "@type": "Brand",
+        "name": "Water Level .Pro"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": 4.8,
+        "reviewCount": 3
+      }
+    }
+  ]
+}
+</script>
+
+
+
+<style>
+.long-img-area {
+  max-width: 650px;
+  margin: 35px auto;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+
+
+  <div class="row mb-4">
+      <div class="unlimited-access-title me-3 text-center">
+        <h3 class="fw-semibold mb-6 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >WiFi Water Level S1</h3>
+        <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" target="_self" class="btn btn-sm btn-primary fs-2 fw-semibold lh-sm mb-2"><i class="ti ti-list-details"></i>{% trans %}Features{% endtrans %}</a>
+        <a href="/manuals/WiFi-Water-Level-S1" target="_self" class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mb-2"><i class="ti ti-help"></i> {% trans %}Manual{% endtrans %}</a>
+        <a class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mb-2 d-none" href="https://www.paypal.com/ncp/payment/6UTKDZ88UVF9G" target="_blank" ><i class="ti ti-shopping-cart"></i>
+          Buy
+        </a>
+
+        <div class="text-center">
+
+          <div id="carouselExampleAutoplaying" class="carousel slide long-img-area" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" >
+              <div class="carousel-item active" data-bs-interval="7000">
+
+                <img src="{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 Features" title="WiFi Water Level S1 Features">
+
+              </div>
+              <div class="carousel-item" data-bs-interval="7000">
+                <img src="{{ url_for('static', filename='manuals/s1_face2'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - How It Works" title="How WiFi Water Level S1 Works" >
+
+              </div>
+                </a>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+
+            <a class="btn btn-sm btn-success ms-4 mt-2" href="/device_info?public_key=demo" >
+                <i class="ti ti-router"></i>
+                {% trans %}UI Demo Device{% endtrans %}
+            </a>
+            <a href="https://www.instructables.com/Build-Your-Own-DIY-WiFi-Water-Level-Sensor-S1/" target="_blank" class="btn btn-warning fs-2 fw-semibold lh-sm ms-1 mt-2">
+                  <i class="ti ti-help"></i> {% trans %}DIY Guide{% endtrans %}
+            </a>
+          </div>
+
+
+          <p class="my-3">
+            {% trans %}Remotely and wirelessly measures water levels in tanks with centimeter precision. <br>
+            Access water tank or reservoir level data on your cell phone from anywhere, without needing to be near the device.{% endtrans %}
+          </p>
+        </div>
+      </div>
+  </div>
+
+  <hr>
+
+    <div class="row">
+
+      <div class="unlimited-access-title me-3 text-center">
+        <h3 class="fw-semibold mb-6 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">WiFi Smart Water Pump Controller S1</h3>
+        <a href="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" class="btn btn-sm btn-primary fs-2 fw-semibold lh-sm mb-2"><i class="ti ti-list-details"></i> {% trans %}Features{% endtrans %}</a>
+        <a href="{{ url_with_lang('manuals', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mb-2"><i class="ti ti-help"></i> {% trans %}Manual{% endtrans %}</a>
+
+        <div class="text-center ">
+          <a href="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" >
+            <img src="{{ url_for('static', filename='manuals/Smart_Pump_Controller_S1'+g.img_lang+'.png') }}" class="img-thumbnail" alt="WiFi Smart Water Pump Controller S1" title="WiFi Smart Water Pump Controller S1" >
+          </a>
+          <a class="btn btn-sm btn-success ms-4 mt-2" href="/device_info?public_key=demorelay" >
+                <i class="ti ti-router"></i>
+                {% trans %}UI Demo Device{% endtrans %}
+          </a>
+          <a href="https://www.instructables.com/DIY-WiFi-Smart-Water-Pump-Controller-S1-Build-Your/" target="_blank" class="btn btn-warning fs-2 fw-semibold lh-sm ms-1 mt-2">
+                  <i class="ti ti-help"></i> {% trans %}DIY Guide{% endtrans %}
+          </a>
+          <p class="mt-3 mb-5">
+            {% trans %}This smart water pump controller integrates with the <b>WiFi Water Level S1</b> sensor,
+            allowing automated pump operation based on water level data. Designed for remote management
+            via a web app, it offers customizable settings for efficient and hands-free water control.
+            Ideal for residential, agricultural, and industrial applications, it promotes sustainable water
+            management and easy system integration.{% endtrans %}
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  <hr>
+
+
+</div>
+
+{% endblock %}

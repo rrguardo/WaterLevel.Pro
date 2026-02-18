@@ -1,0 +1,36 @@
+name: Docker Smoke Tests
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  docker-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare environment file
+        run: chmod +x scripts/docker_smoke_test.sh
+
+      - name: Run docker smoke tests
+        run: ./scripts/docker_smoke_test.sh
+
+      - name: Show compose status
+        if: always()
+        run: docker compose -f docker/docker-compose.yml ps
+
+      - name: Show compose logs on failure
+        if: failure()
+        run: docker compose -f docker/docker-compose.yml logs --no-color
+
+      - name: Stop stack
+        if: always()
+        run: docker compose -f docker/docker-compose.yml down -v

@@ -1,0 +1,103 @@
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      WEB_REDIS_DB: 0
+      API_REDIS_DB: 3
+      APP_DOMAIN: ${APP_DOMAIN:-https://localhost}
+      API_DOMAIN: ${API_DOMAIN:-https://api.localhost}
+      API_CACHE_REDIS_HOST: redis
+      WEB_CACHE_REDIS_HOST: redis
+      DATABASE_URL: sqlite:////app/data/database.db?journal_mode=WAL2
+    depends_on:
+      - redis
+    volumes:
+      - wlp_data:/app/data
+      - wlp_reports:/app/reports
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "gunicorn --workers 2 --bind 0.0.0.0:8000 app:app & gunicorn --workers 2 --bind 0.0.0.0:8001 api:app & wait"
+      ]
+
+  cron:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      WEB_REDIS_DB: 0
+      API_REDIS_DB: 3
+      APP_DOMAIN: ${APP_DOMAIN:-https://localhost}
+      API_DOMAIN: ${API_DOMAIN:-https://api.localhost}
+      API_CACHE_REDIS_HOST: redis
+      WEB_CACHE_REDIS_HOST: redis
+      DATABASE_URL: sqlite:////app/data/database.db?journal_mode=WAL2
+    depends_on:
+      - redis
+      - app
+      - nginx
+    volumes:
+      - wlp_data:/app/data
+      - wlp_reports:/app/reports
+      - wlp_nginx_logs:/var/log/nginx
+    command: ["/bin/sh", "/app/docker/cron-entrypoint.sh"]
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    environment:
+      WLP_SERVER_NAME: ${WLP_SERVER_NAME:-localhost}
+      WLP_API_SERVER_NAME: ${WLP_API_SERVER_NAME:-api.localhost}
+      WLP_WEB_UPSTREAM: ${WLP_WEB_UPSTREAM:-app:8000}
+      WLP_API_UPSTREAM: ${WLP_API_UPSTREAM:-app:8001}
+      WLP_SSL_CERT_PATH: ${WLP_SSL_CERT_PATH:-/etc/nginx/certs/localhost.crt}
+      WLP_SSL_KEY_PATH: ${WLP_SSL_KEY_PATH:-/etc/nginx/certs/localhost.key}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../ext_conf/docker/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
+      - ../ext_conf/docker/nginx-entrypoint.sh:/docker-entrypoint.sh:ro
+      - ../ext_conf/docker/certs:/etc/nginx/certs:ro
+      - ../static:/app/static:ro
+      - wlp_nginx_logs:/var/log/nginx
+    command: ["/bin/sh", "/docker-entrypoint.sh"]
+
+  goaccess:
+    image: allinurl/goaccess:latest
+    restart: unless-stopped
+    depends_on:
+      - nginx
+    environment:
+      GOACCESS_REFRESH_SECONDS: ${GOACCESS_REFRESH_SECONDS:-600}
+    volumes:
+      - ../ext_conf/docker/goaccess-runner.sh:/goaccess-runner.sh:ro
+      - wlp_nginx_logs:/var/log/nginx:ro
+      - wlp_reports:/reports
+    entrypoint: ["/bin/sh", "/goaccess-runner.sh"]
+
+volumes:
+  wlp_data:
+  wlp_reports:
+  wlp_nginx_logs:

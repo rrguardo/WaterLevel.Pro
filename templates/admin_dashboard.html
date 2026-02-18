@@ -1,0 +1,388 @@
+{% extends "base2.html" %}
+
+{% block head %}
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"  ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"  ></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css" />
+<script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"  ></script>
+
+
+<title>Admin Dashboard</title>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row" >
+
+
+        <div class="row mb-3" >
+                <h1>Admin Dashboard</h1>
+        </div>
+        <div class="mb-3" >
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message | safe }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="row mb-3" >
+            <form action="{{ url_for('device_admin') }}" method="post" >
+                <input type="hidden" name="action" value="cache-clear">
+                <button type="submit" class="btn btn-danger" >CLEAR REDIS CACHE</button>
+            </form>
+        </div>
+
+        <div class="row card align-items-center justify-content-center bg-light" >
+            <div class="d-flex align-items-center justify-content-center">
+                <h4>Registered Sensors</h4>
+                <a class="btn btn-sm btn-primary ms-4 mb-2" href="{{ url_for('add_sensor') }}">
+                    <i class="ti ti-circle-plus fs-4 me-1"></i>
+                    Add Sensor
+                </a>
+            </div>
+            <table id="sensors_table" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Private Key</th>
+                    <th>Public Key</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            </table>
+        </div>
+
+
+        <div class="row card align-items-center justify-content-center bg-light" >
+            <div class="d-flex align-items-center justify-content-center">
+                <h4>Registered Relays</h4>
+                <a class="btn btn-sm btn-primary ms-4 mb-2" href="{{ url_for('add_relay') }}">
+                    <i class="ti ti-circle-plus fs-4 me-1"></i>
+                    Add Relay
+                </a>
+            </div>
+            <table id="relays_table" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Private Key</th>
+                    <th>Public Key</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            </table>
+        </div>
+
+
+        <div class="row card align-items-center justify-content-center bg-light" >
+            <div class="d-flex align-items-center justify-content-center">
+                <h4>Registered Users</h4>
+            </div>
+            <table id="users_table" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Confirmed</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="row" >
+        <div class="card bg-light col-auto" >
+            <div class="card-body" >
+                <h5 class="mb-3" >Add SMS Credits</h5>
+                <form action="{{ url_for('admin_dashboard') }}" method="post" >
+                    <input type="hidden" name="action" value="add-sms-credits">
+
+                    <div class="mb-3">
+                    <label class="form-label">User ID:</label>
+                    <input type="number" name="user_id"  step="1" min="1" class="form-control" >
+                    </div>
+
+                    <div class="mb-3">
+                    <label class="form-label">Credits Amount:</label>
+                    <input type="number" name="credits" value="0.5" step="0.1" min="0.1"  class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn btn-danger" >Add Credits</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+<hr>
+        <div class="row my-3">
+
+            <div class="card w-50">
+              <div class="card-body">
+                <h3 class="card-title">Direct Support Reply</h3>
+                <form action="{{ url_for('device_admin') }}" method="post" >
+                    <input type="hidden" name="action" value="admin-support">
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">User Email:</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message:</label>
+                        <textarea id="message" name="message" class="form-control" rows="4" required placeholder="Enter your message here..."></textarea>
+                        <p>support html content</p>
+                    </div>
+                    <button type="submit" class="btn btn-danger" >Send</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="row my-3">
+                <form action="{{ url_for('device_admin') }}" method="post" >
+                    <input type="hidden" name="action" value="read-support">
+                    <button type="submit" class="btn btn-danger" >READ SUPPORT EMAILS</button>
+                </form>
+            </div>
+
+            <div class="row card align-items-center justify-content-center bg-light" >
+            <div class="d-flex align-items-center justify-content-center">
+                <h4>Users Support</h4>
+            </div>
+            <table id="users_support" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>created_at</th>
+                    <th>support_type</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            </table>
+        </div>
+
+        </div>
+
+
+
+<hr>
+        <div class="row my-3">
+
+            <div class="row card align-items-center justify-content-center bg-light" >
+                <div class="d-flex align-items-center justify-content-center">
+                    <h4>Users Support</h4>
+                </div>
+                <table id="users_support" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>created_at</th>
+                        <th>support_type</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                </table>
+            </div>
+
+        </div>
+
+<hr>
+    <div class="row my-3" >
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">Nginx Reports</h2>
+              <hr>
+              <div class="row" >
+                  <div class="col-md-6" >
+                      <h3>Web App Reports</h3>
+                      <ul class="list-group ms-1 my-3" >
+                        {% for file in web_report_files %}
+                          <li class="list-group-item list-group-item-action list-group-item-primary" ><a href="{{ url_for('view_report', filename=file) }}">{{ file }}</a></li>
+                        {% endfor %}
+                      </ul>
+                  </div>
+                  <div class="col-md-6" >
+                      <h3>HTTP API Reports</h3>
+                      <ul class="list-group ms-1 my-3" >
+                        {% for file in api_report_files %}
+                          <li class="list-group-item list-group-item-action list-group-item-primary" ><a href="{{ url_for('view_report', filename=file) }}">{{ file }}</a></li>
+                        {% endfor %}
+                      </ul>
+                  </div>
+              </div>
+
+          </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+
+// sensors table js
+
+$(document).ready(function() {
+
+    new DataTable('#sensors_table', {
+    layout: {
+        bottomEnd: {
+            paging: {
+                boundaryNumbers: false
+            }
+        }
+    },
+    ajax: {
+        url: '{{ url_for('admin_dashboard') }}',
+        dataSrc: '',
+        "type": "POST",
+        data: { 'action': 'list-sensor'}
+    },
+    columns: [
+        { data: 'id' },
+        { data: 'private_key' },
+        { data: 'public_key',
+            render: function (data, type) {
+                if (type === 'display') {
+                    let link = '{{ url_for('device_info') }}?public_key='+data;
+                    return '<a href="' + link + '">' + data + '</a>';
+                }
+
+                return data;
+            }
+         },
+         { data: 'note' },
+    ]
+    });
+
+});
+</script>
+
+
+
+<script>
+
+// relay table js
+
+$(document).ready(function() {
+
+    new DataTable('#relays_table', {
+    layout: {
+        bottomEnd: {
+            paging: {
+                boundaryNumbers: false
+            }
+        }
+    },
+    ajax: {
+        url: '{{ url_for('admin_dashboard') }}',
+        dataSrc: '',
+        "type": "POST",
+        data: { 'action': 'list-relay'}
+    },
+    columns: [
+        { data: 'id' },
+        { data: 'private_key' },
+        { data: 'public_key',
+            render: function (data, type) {
+                if (type === 'display') {
+                    let link = '{{ url_for('device_info') }}?public_key='+data;
+                    return '<a href="' + link + '">' + data + '</a>';
+                }
+
+                return data;
+            }
+         },
+         { data: 'note' },
+    ]
+    });
+
+});
+</script>
+
+
+
+<script>
+
+// users table js
+
+$(document).ready(function() {
+
+    new DataTable('#users_table', {
+    layout: {
+        bottomEnd: {
+            paging: {
+                boundaryNumbers: false
+            }
+        }
+    },
+    ajax: {
+        url: '{{ url_for('admin_dashboard') }}',
+        dataSrc: '',
+        "type": "POST",
+        data: { 'action': 'list-users'}
+    },
+    columns: [
+        { data: 'id' },
+        { data: 'email' },
+        { data: 'phone'},
+        { data: 'confirmed' },
+    ]
+    });
+
+});
+</script>
+
+
+
+<script>
+
+// users_support table js
+
+$(document).ready(function() {
+
+    new DataTable('#users_support', {
+    layout: {
+        bottomEnd: {
+            paging: {
+                boundaryNumbers: false
+            }
+        }
+    },
+    ajax: {
+        url: '{{ url_for('admin_dashboard') }}',
+        dataSrc: '',
+        "type": "POST",
+        data: { 'action': 'list-users-support'}
+    },
+    columns: [
+        { data: 'id' },
+        { data: 'email' },
+        { data: 'message'},
+        { data: 'created_at' },
+        { data: 'support_type' },
+    ]
+    });
+
+});
+</script>
+{% endblock %}

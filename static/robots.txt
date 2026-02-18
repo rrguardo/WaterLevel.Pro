@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /static/assets/
+
+Sitemap: https://waterlevel.pro/sitemap.xml
+Sitemap: https://waterlevel.pro/image-sitemap.xml

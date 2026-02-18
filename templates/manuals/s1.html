@@ -1,0 +1,919 @@
+{% extends "base2.html" %}
+
+{% block head %}
+
+<title>WiFi Water Level S1 {% trans %}Manual | Installation and Setup Guide{% endtrans %}</title>
+
+<meta name="description" content="{% trans %}Learn how to install and set up the WiFi Water Level S1 with this comprehensive manual. Get detailed instructions for optimal use.{% endtrans %}">
+<meta name="keywords" content="{% trans %}WiFi Water Level S1 Manual, Water Level Sensor Installation, WiFi Water Sensor Setup, Water Level S1 Guide, WiFi Water Level Instructions{% endtrans %}">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="WiFi Water Level S1 {% trans %}Manual | Installation and Setup Guide{% endtrans %}">
+<meta property="og:description" content="{% trans %}Learn how to install and set up the WiFi Water Level S1 with this comprehensive manual. Get detailed instructions for optimal use.{% endtrans %}">
+<meta property="og:image" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}">
+<meta property="og:url" content="{{ DOMAIN }}{{ url_with_lang('manuals', product_name='WiFi-Water-Level-S1') }}">
+
+<meta name="twitter:card" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}">
+<meta name="twitter:title" content="WiFi Water Level S1 {% trans %}Manual | Installation and Setup Guide{% endtrans %}">
+<meta name="twitter:description" content="{% trans %}Learn how to install and set up the WiFi Water Level S1 with this comprehensive manual. Get detailed instructions for optimal use.{% endtrans %}">
+<meta name="twitter:image" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "WiFi Water Level S1 Manual",
+  "image": "{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}",
+  "description": "{% trans %}Learn how to install and set up the WiFi Water Level S1 with this comprehensive manual. Get detailed instructions for optimal use.{% endtrans %}",
+  "sku": "S1-Manual",
+  "brand": {
+    "@type": "Brand",
+    "name": "Water Level .Pro"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ DOMAIN }}{{ url_with_lang('manuals', product_name='WiFi-Water-Level-S1') }}"
+  },
+  "additionalProperty": [
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Control Unit{% endtrans %}",
+      "value": "{% trans %}Contains WiFi antenna, setup/reset button, and power inputs.{% endtrans %}"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Internal Water Tank Sensor{% endtrans %}",
+      "value": "{% trans %}Measures water level and must be placed inside the water tank.{% endtrans %}"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Installation Steps{% endtrans %}",
+      "value": "{% trans %}Includes WiFi coverage check, power supply options, and setup instructions.{% endtrans %}"
+    }
+  ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": 4.9,
+        "reviewCount": 9
+      },
+      "positiveNotes": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "{% trans %}Solar Powered{% endtrans %}"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{% trans %}Unlimited monitoring range.{% endtrans %}"
+              }
+            ]
+      }
+}
+</script>
+
+
+<style>
+.long-img-area {
+  max-width: 650px;
+  margin: 35px auto;
+}
+
+.video-wrapper {
+  max-width: 600px; /* Maximum width of 400px */
+  margin: 0 auto;   /* Center horizontally */
+}
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-fluid">
+
+  <div class="d-flex">
+    <div class="p-2">
+        <h5 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >{% trans %}Manual:{% endtrans %} WiFi Water Level S1</h5>
+    </div>
+    <div class="ms-auto">
+        <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" target="_self" class="btn btn-sm btn-primary mb-3">
+            <i class="ti ti-list-details"></i> S1 {% trans %}Features{% endtrans %}
+        </a>
+    </div>
+  </div>
+
+  <div class="row" >
+    <div class="text-center">
+      <div id="carouselExampleAutoplaying1" class="carousel long-img-area" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active" data-bs-interval="7000">
+            <img src="{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 Features" title="WiFi Water Level S1 Features">
+          </div>
+          <div class="carousel-item" data-bs-interval="7000">
+            <img src="{{ url_for('static', filename='manuals/s1_face2'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - How It Works" title="How WiFi Water Level S1 Works" >
+          </div>
+          <div class="carousel-item" data-bs-interval="7000">
+            <img src="{{ url_for('static', filename='manuals/wifi_water_level_s1.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - Product Image" title="WiFi Water Level S1 - Product Image" >
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+
+      <div class="row  flex-row ms-auto align-items-center justify-content-center mb-3" >
+          <a class="btn btn-sm btn-success col-auto mx-1" href="/device_info?public_key=demo" >
+              <i class="ti ti-router"></i>
+              {% trans %}UI Demo Device{% endtrans %}
+          </a>
+        <a href="https://www.instructables.com/Build-Your-Own-DIY-WiFi-Water-Level-Sensor-S1/" target="_blank" class="btn btn-warning fs-2 fw-semibold lh-sm ms-1 col-auto">
+                  <i class="ti ti-help"></i> {% trans %}DIY Guide{% endtrans %}
+            </a>
+      </div>
+
+    </div>
+    <div class="alert alert-info" role="alert">
+      {% trans %}
+      The <b>WiFi Water Level S1</b> device connects to your Wi-Fi network and enables remote water level monitoring via the
+      this web platform. It also integrates with the{% endtrans %} <a href="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_blank" >Wi-Fi Smart Water Pump Controller S1</a>,
+      {% trans %}allowing automatic control of water pumps based on the water level readings. An internet connection is required for
+      cloud synchronization, enabling real-time tracking and control.{% endtrans %}
+    </div>
+
+  </div>
+
+    <div class="row" >
+      <div class="col-lg-12 d-flex align-items-stretch">
+            <div class="card w-100 bg-light">
+              <div class="card-body px-2">
+                <div class="mb-4">
+                  <h4 class="card-title mb-2 link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >WiFi Water Level S1 {% trans %}Parts{% endtrans %}</h4>
+                </div>
+
+                <div class="ratio ratio-16x9 video-wrapper my-2">
+                  <video autoplay muted loop>
+                    <source src="https://github.com/rrguardo/WiFi-Water-Level-S1/raw/refs/heads/main/images/S1Show.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+
+                <div class="accordion" id="accordionPart">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne1">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartOne" aria-expanded="true" aria-controls="collapsePartOne">
+                        {% trans %}Control Unit{% endtrans %}
+                      </button>
+                    </h2>
+                    <div id="collapsePartOne" class="accordion-collapse collapse" aria-labelledby="headingOne1" >
+                      <div class="accordion-body">
+                        <h5>{% trans %}The <strong>Control Unit</strong> is placed on the outside of the water tank.{% endtrans %}</h5>
+                        <div class="text-center ">
+                          <img src="{{ url_for('static', filename='manuals/s1_v2_parts1'+g.img_lang+'.png') }}" class="img-thumbnail" alt="S1 Parts - Control Unit" title="WiFi Water Level S1 - Control Unit Parts" >
+                          <img src="{{ url_for('static', filename='manuals/s1_v2_parts2'+g.img_lang+'.png') }}" class="img-thumbnail" alt="S1 Parts - Control Unit" title="WiFi Water Level S1 - Control Unit Parts" >
+                          <img id="power_control" src="{{ url_for('static', filename='manuals/s1_v2_parts3'+g.img_lang+'.png') }}" class="img-thumbnail" alt="S1 Parts - Control Unit" title="WiFi Water Level S1 - Control Unit Parts" >
+                          <img src="{{ url_for('static', filename='manuals/s1_v2_parts4'+g.img_lang+'.png') }}" class="img-thumbnail" alt="S1 Parts - Control Unit" title="WiFi Water Level S1 - Control Unit Parts" >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingIWTS">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartIWTS" aria-expanded="false" aria-controls="collapsePartIWTS">
+                        {% trans %}Internal Water Tank Sensor{% endtrans %}
+                      </button>
+                    </h2>
+                    <div id="collapsePartIWTS" class="accordion-collapse collapse" aria-labelledby="headingIWTS" >
+                      <div class="accordion-body">
+                        <h5>
+                         {% trans %} Use any from <b>HCSR04</b> sensors family, that can work with <b>3.3V</b>{% endtrans %}
+                        </h5>
+                        <div class="text-center ">
+                          <hr>
+                          <h4>AJ-SR04M ({% trans %}recommended{% endtrans %})</h4>
+                          <img src="{{ url_for('static', filename='manuals/AJ-SR04M.jpg') }}" class="img-thumbnail" alt="S1 Parts - Internal Water Tank Sensor AJ-SR04M" title="WiFi Water Level S1 - Internal Water Tank Sensor Parts AJ-SR04M">
+                          <hr>
+                          <h4>RCWL-1670 ({% trans %}could require special case and waterproof treatment{% endtrans %})</h4>
+                          <img src="{{ url_for('static', filename='manuals/RCWL-1670.jpg') }}" class="img-thumbnail" alt="S1 Parts - Internal Water Tank Sensor RCWL-1670" title="WiFi Water Level S1 - Internal Water Tank Sensor Parts RCWL-1670">
+
+                        </div>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+  </div>
+
+
+
+    <div class="row" >
+        <div class="col-lg-12 d-flex align-items-stretch">
+              <div class="card w-100 bg-light">
+                <div class="card-body px-2" >
+                  <div class="mb-4">
+                    <h4 class="card-title mb-3 link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{% trans %}Installation And Usage Guide{% endtrans %}</h4>
+
+                  <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active" data-bs-interval="3000">
+                        <img src="{{ url_for('static', filename='manuals/install_1.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - Installed at watter tank." title="S1 on water tank">
+                      </div>
+                      <div class="carousel-item" data-bs-interval="3000">
+                        <img src="{{ url_for('static', filename='manuals/install_2.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - Installed at watter tank." title="S1 on water tank" >
+                      </div>
+                      <div class="carousel-item" data-bs-interval="3000">
+                        <img src="{{ url_for('static', filename='manuals/install_3.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - On tank cover" title="S1 on tank cover">
+                      </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                  </div>
+
+
+                  </div>
+                  <div class="accordion" id="accordionExample">
+                    <div class="accordion-item ">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          #1 {% trans %}Check WiFi Coverage{% endtrans %}
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
+                        <div class="accordion-body">
+                          {% trans %}
+                          <h5>Ensure that good 2.4GHz WiFi signal will reach the device area all the time.</h5>
+
+                            <p class="alert alert-info" >
+                              Optimal Wi-Fi signal strength is crucial for device performance.
+                              Before installation, use a mobile app (WiFi Analyzer) with a 3dBm reference antenna to measure the
+                              signal at the location. Ensure it's between <b>-30 dBm</b> and <b>-78 dBm</b>.
+                              After connecting, regularly verify this on the device's webpage.
+                            </p>
+                            <p class="alert alert-warning" >
+                              If WiFi signal strength is weak consider add WiFi range extenders.
+                            </p>
+                            {% endtrans %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          #2 {% trans %}Choose Power Supply{% endtrans %}
+                        </button>
+                      </h2>
+                      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" >
+                        <div class="accordion-body">
+                          <h5>{% trans %}Input Power Options:{% endtrans %}</h5>
+                          <ul class="list-group ms-1" >
+                            <li class="list-group-item list-group-item-action" >
+                              <button class="btn btn-info btn-sm my-2" >
+                                <img src="{{ url_for('static', filename='manuals/solar-panel.png') }}" class="img-thumbnail mx-2" width="50px" alt="Solar Power Module P1" title="Solar Power Module P1 For S1" >
+                                <b>{% trans %}Solar Panel Lid{% endtrans %}</b>
+                              </button>
+                              <h6 class="ms-1" >
+                                {% trans %}
+                                In locations receiving direct sunlight for at least 3 hours per day, the solar
+                                panel lid can be utilized.
+                                {% endtrans %}
+                              </h6>
+                               <ul class="list-group ms-1" >
+                                 {% trans %}
+                                 <li class="list-group-item list-group-item-action" >
+                                   Completely wireless and capable of operating autonomously through solar power,
+                                   provided the area receives sufficient sunlight.
+                                 </li>
+                                 <li class="list-group-item list-group-item-action" >
+                                   Designed and tested for outdoor use, resistant to rain, sunlight, and typical outdoor weather conditions.
+                                 </li>
+                                 <li class="list-group-item list-group-item-action" >
+                                     Powered by 3 AA NiMH rechargeable batteries, the device offers easy maintenance
+                                      and provides backup power during periods of low sunlight.
+                                 </li>
+                                 <li class="list-group-item list-group-item-action" >
+                                   Ensure use good brand and quality AA NiMH batteries, 2000 mA or more.
+                                 </li>
+                                 <li class="list-group-item list-group-item-action list-group-item-danger" >
+                                    Only use AA NiMH rechargeable batteries.
+                                 </li>
+                                 <li class="list-group-item list-group-item-action list-group-item-danger" >
+                                   To prevent damage to the device, please remove batteries if they are depleted, damaged, or
+                                     if the device will be stored for an extended period without exposure to sunlight.
+                                 </li>
+                                 {% endtrans %}
+                                 <li class="list-group-item list-group-item-action list-group-item-warning" >
+                                   {% trans %}
+                                   When using solar power as the input, ensure the <b>USB-C</b> port is sealed to
+                                   prevent damage from rain or moisture. Use the provided <b>USB-C cap</b> and optionally
+                                   seal it with silicone for added protection.
+                                   {% endtrans %}
+
+                                   <div class="row my-2" >
+                                    <div class="text-center">
+                                      <img src="{{ url_for('static', filename='manuals/usbc_cap.png') }}" class="img-thumbnail mx-2" width="250px" alt="USB" title="USB-C Cap For S1" >
+                                    </div>
+                                   </div>
+                                 </li>
+                               </ul>
+                            </li>
+                            <li class="list-group-item list-group-item-action" >
+                              <button class="btn btn-info btn-sm" >
+                                <img src="{{ url_for('static', filename='manuals/usb.png') }}" class="img-thumbnail mx-2" width="50px" alt="USB" title="USB For S1" >
+                                <b>{% trans %}USBC Power{% endtrans %}</b>
+                              </button>
+                              {% trans %}
+                              <h6 class="ms-1 my-2" >
+                                To operate in indoor environments or areas with limited sunlight, simply connect the device to a power source using the <b>USB-C</b> port.
+                              </h6>
+
+                              <p class="ms-1 alert alert-warning" role="alert"  >
+                                <b>Note:</b> When using the USB-C port for power, please ensure that batteries are removed to prevent damage to the device.
+                              </p>
+
+                            <p class="ms-1 alert alert-warning" role="alert" >
+                                <b>Note:</b> Using the AC/DC power adapter outdoors or near water requires special safety
+                                precautions. Consult a qualified electrician if necessary. Ensure all cables are
+                                properly insulated to protect them from water and unpredictable weather conditions.
+                            </p>
+
+                            <li class="list-group-item list-group-item-action" >
+                              <p class="ms-1" >
+                                Depending on the water level measurement frequency configured for the device, it could consume up to
+                                70 mA for approximately 6 seconds at 3.3V, each cycle.
+                              </p>
+                            </li>
+                            <li class="list-group-item list-group-item-action" >
+                              <p class="ms-1 alert alert-info" role="alert"   >
+                                <b>Power Selection:</b>
+                                To select your preferred power source (Solar, USB-C), locate the <a href="#power_control" >Power Selector</a> switch
+                                on the device. Toggle the switch to the desired setting.
+                              </p>
+                            </li>
+                            {% endtrans %}
+                          </li>
+
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      {% trans %}
+                      <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                         #3 Configure Wi-Fi connection for the device.
+                        </button>
+                      </h2>
+                      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" >
+                        <div class="accordion-body">
+                          <p>In this step, configure the device to connect to your local internet WiFi network</p>
+                          <div class="alert alert-info" >
+                            To enjoy all the features of this device, you'll need to <a href="/register" target="_blank" >create a free account</a>
+                            using your email address. <br>
+                            This will allow you to link the device to your profile
+                            and personalize your settings.
+                          </div>
+                          <h5>Steps:</h5>
+                          <ul class="list-group ms-1" >
+                            <li class="list-group-item list-group-item-action">
+                              <b>1)</b> Connect the device to a power source. Ensure WiFi antenna is connected at <b>Control Unit</b>.
+                            </li>
+                            <li class="list-group-item list-group-item-action" >
+                              <b>2)</b> Using a cellphone, search and connect to a 2.4GHz WiFi network named <b>WaterLevelProSetup</b> with credentials/password: <b>1122334455</b>
+                              <div class="alert alert-warning mt-2">
+                                If the network name doesn't show or disappears quickly, check <b>USBC</b> power input or press the WiFi Reset button at <b>Control Unit</b>.
+                                <div class="alert alert-info mt-3" >
+                                  To reset the Wi-Fi, power on the device using either the <b>USBC</b> cable or solar power.
+                                  Immediately after powering on, quickly press the Wi-Fi Reset button 2-3 times.
+                                </div>
+                              </div>
+
+                            </li>
+                            <li class="list-group-item list-group-item-action" >
+                              <b>3) Enter your local WiFi auth info.</b>
+                              <p class="my-2">
+                                After completing step <b>2)</b>, a Captive Portal will appear on your cellphone. This will guide you to a webpage where
+                                you can select the desired Wi-Fi network and enter its credentials. You will also be prompted to enter an
+                                email address to link the device to your existing account.
+                              </p>
+                              <p class="alert alert-warning my-2">
+                                If the Captive Portal don't load automatically use this url
+                                <a href="http://192.168.4.1/" target="_blank">http://192.168.4.1/</a> to load it manually from cellphone.
+                              </p>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                              <b>4) Check your device is online</b>
+                              <p class="my-2">
+                                Reconnect your cellphone to the internet and log in to your account. If everything
+                                was successful, you will see the new device listed in your account with an <b>"Online"</b> status.
+                              </p>
+                              <p class="alert alert-warning my-2">
+                                If the device does not show online, try reconnecting the power source or repeating
+                                the entire process after pressing the <b>Wi-Fi Reset</b> button on the device.
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      {% endtrans %}
+                    </div>
+
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="heading4">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false"  aria-controls="collapse4">
+                          #4 {% trans %}Placing the device on the water tank.{% endtrans %}
+                        </button>
+                      </h2>
+                      <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" >
+                        <div class="accordion-body">
+                          <ul class="list-group ms-1" >
+                            <li class="list-group-item list-group-item-action">
+                              <p class="alert alert-danger my-2">
+                                {% trans %}
+                                Place the device sensor as far as possible from the main water inlet of the water tank,
+                                without reaching to much closer to the water tank internal wall, to avoid erroneous
+                                measurements when filling the water tank.
+                                {% endtrans %}
+                              </p>
+                              <div class="text-center row">
+                                <div class="col-6" >
+                                  <img src="{{ url_for('static', filename='manuals/inletKO'+g.img_lang+'.png') }}" class="img-thumbnail" alt="S1 incorrect sensor installation sample" title="S1 incorrect installation location">
+                                </div>
+                                <div class="col-6" >
+                                  <img src="{{ url_for('static', filename='manuals/inletOK'+g.img_lang+'.png') }}" class="img-thumbnail" alt="S1 correct sensor installation sample" title="S1 correct installation location">
+                                </div>
+
+                              </div>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                                <p class="alert alert-danger my-2" >
+                                  {% trans %}
+                                  Keep in mind that the internal sensor that is placed inside the water tank must have a minimum margin of <b>20 centimeters (AJ-SR04M Sensor)</b>
+                                  from its bottom location to the maximum distance that the water in the tank can reach.
+                                  {% endtrans %}
+                                </p>
+                                <div class="text-center ">
+                                  <img src="{{ url_for('static', filename='manuals/margin_s1'+g.img_lang+'.png') }}" class="img-thumbnail w-55" alt="S1 required installation margin sample" title="S1 margin installation sample">
+                                </div>
+                              {% trans %}
+                                <p class="alert alert-danger my-2" >
+                                   If the tank cannot preserve that minimum distance margin, the sensor blind area is
+                                  reached and erroneous random measurements will be reported.
+                                  Use the <b>RCWL-1670 Sensor</b> if require smaller blind area (2 CM).
+                                </p>
+                              <p class="alert alert-warning my-2" >
+                                The installation location may vary depending on the shape of your water tank, how
+                                the lid closes, and its resistance to local conditions. Please choose an installation
+                                method that ensures the device is securely mounted and protected. As this is an experimental device,
+                                the user is responsible for ensuring proper and safe installation.
+                              </p>
+                              {% endtrans %}
+                            </li>
+
+                            <li class="list-group-item list-group-item-action" >
+                              {% trans %}
+                              <h4>Placement of the upper Control Unit.</h4>
+
+                              <p class="my-3" >
+                                The control unit can be installed using two main methods, depending on your
+                                specific setup and preferences. Please ensure that the chosen method provides a
+                                secure and stable mounting for optimal performance.
+                              </p>
+
+                              <h5>Screw Mounting Method: </h5>
+                              {% endtrans %}
+                              <div class="row" >
+                                <div class="text-center">
+                                  <img src="{{ url_for('static', filename='manuals/install_2.png') }}" class="img-thumbnail" alt="S1 Screw Mounting">
+                                </div>
+                              </div>
+                              <ul class="list-group ms-1 list-group-numbered" >
+                                {% trans %}
+                                <li class="list-group-item list-group-item-action" >
+                                  Locate the designated mounting points on the control unit.
+                                </li>
+                                <li class="list-group-item list-group-item-action" >
+                                  Use appropriate screws to securely fasten the unit to a flat surface, such as a wall or a sturdy panel near the water tank.
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                  Ensure the screws are tight and the unit is firmly fixed to avoid movement or detachment over time.
+                                </li>
+                                {% endtrans %}
+                              </ul>
+
+                              <hr>
+                              <h5 class="mt-2" >{% trans %}Pipe Mounting Method:{% endtrans %} </h5>
+                              <div class="row" >
+                                <div class="text-center">
+                                  <img src="{{ url_for('static', filename='manuals/pipe_mount.png') }}" class="img-thumbnail" alt="S1 Pipe Mounting Method">
+                                </div>
+                              </div>
+                              <ul class="list-group ms-1 list-group-numbered" >
+                                <li class="list-group-item list-group-item-action" >
+                                  {% trans %}This method is ideal for installations over a pipe or cylindrical structure with a diameter of approximately 27mm.{% endtrans %}
+
+                                  <div class="row" >
+                                    <div class="text-center">
+                                      <img src="{{ url_for('static', filename='manuals/s1_v2_parts4'+g.img_lang+'.png') }}" class="img-thumbnail" alt="S1 Pipe Mounting Method">
+                                    </div>
+                                  </div>
+                                </li>
+                                {% trans %}
+                                <li class="list-group-item list-group-item-action" >
+                                  Use the screws, nuts, and mounting accessories provided with the model to securely
+                                  attach the control unit to a pipe of approximately 27mm in diameter.
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                  Ensure the unit is tightly secured and aligned properly to prevent shifting or tilting during operation.
+                                </li>
+                                <li class="list-group-item list-group-item-action" >
+                                  For the pipe mounting option, inspect the quality of the 3D-printed screws, as they
+                                  may break depending on the print quality, material, or other factors.
+                                </li>
+                                {% endtrans %}
+                              </ul>
+
+                              <p class="alert alert-warning my-3" >
+                                {% trans %}
+                                Regardless of the installation method, always verify that the control unit is
+                                mounted in a location that is safe, stable, and well-protected from adverse
+                                environmental conditions.
+                                {% endtrans %}
+                              </p>
+                            </li>
+                            <li class="list-group-item list-group-item-action" >
+                              {% trans %}
+                              <h4>Positioning the Control Unit for Solar Power</h4>
+                              <p>
+                                If you are using solar power to operate the control unit, it is crucial to position
+                                the device to maximize its exposure to sunlight. Follow these guidelines for
+                                optimal solar performance:
+                              </p>
+                              <ul class="list-group ms-1 list-group-numbered" >
+                                <li class="list-group-item list-group-item-action"><b>Orientation:</b> Ensure the solar panel is facing the direction that receives the most
+                                  sunlight during the day. In most regions, this means orienting the panel toward
+                                  the south in the northern hemisphere or toward the north in the southern hemisphere.
+                                </li>
+                                <li class="list-group-item list-group-item-action" ><b>Avoid Obstructions: </b>  Place the control unit in an area free from shadows
+                                  caused by trees, buildings, or other objects that could block sunlight during the day.
+                                </li>
+                                <li class="list-group-item list-group-item-action" ><b>Regular Maintenance: </b>
+                                  Clean the solar panel periodically with mild soap and water,
+                                  avoiding alcohol or harsh chemicals. Use a soft cloth and rinse thoroughly to remove
+                                  any soap residue, ensuring the panel stays efficient and protected.
+                                </li>
+                              </ul>
+                              {% endtrans %}
+                            </li>
+                             <li class="list-group-item list-group-item-action" >
+                              <h4>{% trans %}Mount the AJ-SR04M Internal Sensor{% endtrans %}</h4>
+
+                               <div class="ratio ratio-16x9 video-wrapper my-2">
+                                  <video autoplay muted loop>
+                                    <source src="https://github.com/rrguardo/WiFi-Water-Level-S1/raw/refs/heads/main/images/S1_Lid_Mount.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                  </video>
+                               </div>
+
+                               <ul class="list-group ms-1 list-group-numbered" >
+                                 <li  class="list-group-item list-group-item-action" >
+                                   {% trans %}Drill a 12mm hole in the tank lid, far from the water inlet and wall.{% endtrans %}
+                                 </li>
+                                 <li  class="list-group-item list-group-item-action" >
+                                   {% trans %}Thread the sensor cable through, pointing the sensor toward the water.{% endtrans %}
+
+                                   <div class="row my-2" >
+                                    <div class="text-center">
+                                      <img src="{{ url_for('static', filename='manuals/sensor_mount1'+g.img_lang+'.png') }}" class="img-thumbnail" alt="S1 Sensor Mount">
+                                    </div>
+                                  </div>
+                                 </li>
+                                 <li  class="list-group-item list-group-item-action" >
+                                   {% trans %}Open the S1 lid and connect the sensor cable to the module inside.{% endtrans %}
+
+                                   <div class="row my-2" >
+                                    <div class="text-center">
+                                      <img src="{{ url_for('static', filename='manuals/sensor_mount3'+g.img_lang+'.png') }}" class="img-thumbnail" alt="S1 Sensor Mount">
+                                    </div>
+                                  </div>
+                                 </li>
+                                 <li  class="list-group-item list-group-item-action" >
+                                   {% trans %}Close the lid, sealing it to prevent moisture, ensuring proper cable exit.{% endtrans %}
+                                 </li>
+                                 <li  class="list-group-item list-group-item-action" >
+                                   {% trans %}
+                                   Attach the sensor with the supplied mounting cap, tightening it near the top of
+                                   the tank. If needed, enlarge the hole and use silicone for a better seal.
+                                   {% endtrans %}
+
+                                   <div class="row" >
+                                    <div class="text-center">
+
+                                      <img src="{{ url_for('static', filename='manuals/SensorHoldingCap'+g.img_lang+'.png') }}" class="img-thumbnail my-3" alt="S1 Sensor Holding Cap">
+                                      <img src="{{ url_for('static', filename='manuals/sensor_mount2'+g.img_lang+'.png') }}" class="img-thumbnail" alt="S1 Sensor Mount">
+                                    </div>
+                                  </div>
+                                 </li>
+                                 <li  class="list-group-item list-group-item-action" >
+                                   {% trans %}Secure the remaining sensor cable to prevent movement and damage.{% endtrans %}
+                                 </li>
+                               </ul>
+                             </li>
+
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="accordion-item">
+                      {% trans %}
+                      <h2 class="accordion-header" id="heading6">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                          #5 Adjust Device Settings
+                        </button>
+                      </h2>
+                      <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6"  >
+                        <div class="accordion-body">
+                          <p class="my-2">
+                            To accurately measure the water level in the tank, you need to set the device to
+                            recognize the point where the tank is considered empty. In summary, this ensures the
+                            device calculates the tank's total capacity correctly.
+                          </p>
+                          <ul class="list-group ms-1" >
+                            <li class="list-group-item list-group-item-action">
+                              <b>1) Log in</b>
+                              <p class="my-2">
+                              Log in to your <a href="{{ DOMAIN }}{{ url_with_lang('login') }}" target="_blank" >account</a>
+                                account using the same email address provided during the device's Wi-Fi setup.
+                                Ensure both emails match for proper account synchronization.
+                              </p>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                              <b>2) Update the "Empty Level" in Settings</b>
+                              <p class="my-2">
+                                After logging in, find your new device in the <a href="{{ DOMAIN }}{{ url_with_lang('devices') }}" target="_blank" >"My Devices"</a> list.
+                                Open the device's details page and click the <b>"Device Settings"</b> button at the bottom.
+                              </p>
+                              <p class="my-2">
+                                In the settings, adjust the <b>"Empty Level"</b> by entering the
+                                distance (in centimeters) from the internal sensor to the bottom of the tank,
+                                representing the point at which you consider the tank to be empty.
+                              </p>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                              <b>3) Update the "Top Margin" in Settings</b>
+                              <p class="my-2 alert alert-info">
+                                The <b>Top Margin</b> property specifies the unused space at the top of the water tank. Typically,
+                                tanks have at least 20 cm of empty space at the top to prevent overflows, controlled by a float valve or
+                                similar mechanism. Setting this value ensures more accurate readings, indicating when the tank
+                                is truly at 100&#37; capacity.
+                              </p>
+                              <p class="my-2">
+                                In the settings, adjust the <b>Top Margin</b> to define the distance (in centimeters) from the sensor to
+                                the maximum water level. This ensures the system accounts for the unused space at the top of
+                                the tank, providing more accurate measurements of full capacity.
+                              </p>
+                              <hr>
+                              <ul class="list-group ms-1" >
+                                <h6>Depending on the sensor model, it may have a blind spot where it cannot detect accurately.
+                                  If the water level enters this blind area, the sensor might report random or unreliable measurements.</h6>
+                                <li class="list-group-item list-group-item-action">
+                                  <b>AJ-SR04M: </b>
+                                    The <b>AJ-SR04M</b> sensor has a blind area of <b>20 cm</b>, meaning it cannot measure
+                                    distances within this range. To ensure accurate readings, a Top Margin of at
+                                    least 20 cm is required.
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                  <b>RCWL-1670: </b>
+                                  The <b>RCWL-1670</b> sensor has a blind area of <b>2 cm</b>, meaning it cannot measure
+                                  accurately within this range. To ensure proper functionality, set a Top Margin of at least 2 cm.
+                                </li>
+                              </ul>
+                            </li>
+
+                          </ul>
+                        </div>
+                      </div>
+                      {% endtrans %}
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+    </div>
+
+
+      <div class="row my-3">
+        <h4>{% trans %}Open Source & Open Hardware{% endtrans %}</h4>
+        <p>
+          {% trans %}This project is fully open-source and open-hardware. You can access the source code and hardware design files through the following links:{% endtrans %}
+        </p>
+            <div class="text-center my-3">
+                <p class="ms-2" >
+                    <a href="https://github.com/rrguardo/WiFi-Water-Level-S1" target="_blank" class="mx-2 my-2" >
+                        <img src="{{ url_for('static', filename='logos/gpl3.png') }}" class="img-thumbnail mx-2" alt="GPL3 S1" title="GPL3 S1" >
+                    </a>
+                    <a href="https://oshwlab.com/rrguardo83/water-level-.pro-s1-v2" target="_blank" class="mx-2" >
+                        <img src="{{ url_for('static', filename='logos/open-hardware.jpg') }}" class="img-thumbnail" alt="Open Hardware S1" title="Open Hardware S1" >
+                    </a>
+                    <a href="https://github.com/rrguardo/WiFi-Water-Level-S1" target="_blank" class="mx-2 my-2" >
+                        <img src="{{ url_for('static', filename='manuals/github.png') }}" class="img-thumbnail" alt="GiHub" title="S1" width="90px" >
+                    </a>
+                </p>
+            </div>
+
+            <div class="ratio ratio-16x9 video-wrapper my-2">
+                  <video autoplay muted loop>
+                    <source src="https://github.com/rrguardo/WiFi-Water-Level-S1/raw/refs/heads/main/images/S1Show2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+            </div>
+      </div>
+
+<hr class="row small_none" >
+
+<div class="row  justify-content-center" id="order_now_c1">
+    <div class="accordion my-2" id="accordionExample7">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="importantDisclaimerHeading">
+          <button
+            class="accordion-button collapsed bg-warning text-white"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#importantDisclaimerCollapse"
+            aria-expanded="false"
+            aria-controls="importantDisclaimerCollapse">
+            {% trans %}Important Disclaimer{% endtrans %}
+          </button>
+        </h2>
+        <div
+          id="importantDisclaimerCollapse"
+          class="accordion-collapse collapse"
+          aria-labelledby="importantDisclaimerHeading"
+          data-bs-parent="#accordionExample7">
+          <div class="accordion-body">
+            {% trans %}
+            <p class="my-1 alert alert-warning" role="alert">
+              This open-source electronics project/device is provided strictly for experimental, educational, and developmental purposes.
+              It is offered "as is," without any warranties, express or implied. This includes, but is not limited to, implied warranties
+              of merchantability, fitness for a particular purpose, or non-infringement.
+            </p>
+            <hr>
+            <p><strong>By using this device, you acknowledge and accept that:</strong></p>
+            <ul class="list-group list-group-numbered ms-1">
+              <li class="list-group-item list-group-item-action" >You assume all risks associated with its use, including but not limited to potential damage to property, personal injury, or any other unintended consequences.</li>
+              <li class="list-group-item list-group-item-action" >This device is not certified for commercial, industrial, or safety-critical applications. It is intended solely for developers, hobbyists, and other users with appropriate technical expertise.</li>
+              <li class="list-group-item list-group-item-action" >The creators and distributors of this project are not liable for any damages, losses, or inconveniences resulting from its use, modification, or integration into other systems.</li>
+            </ul>
+            <p class="my-3" >
+              Users are solely responsible for ensuring that the use of this device complies with local laws, regulations, and safety standards in their region.
+            </p>
+            {% endtrans %}
+
+            <!-- Donations Section at the end of the Disclaimer -->
+            <hr>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+
+<hr class="row small_none" >
+
+<div class="row d-flex justify-content-center mb-3 small_none d-none">
+
+    <div class="card bg-light col-auto" >
+        <div class="card-body" >
+            <h5 class="card-title fw-semibold mb-4 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >{% trans %}S1 Device Subscriptions{% endtrans %}</h5>
+            <ul class="list-group ">
+
+                {% for type in [2 , 1] %}
+                    <li class="list-group-item list-group-item-action list-group-item-light d-flex justify-content-between">
+
+                        {% if type == 1 %}
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="item_name" value="Fast Updates">
+                            <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
+
+                            <div class="row" >
+                                <div class="col-auto" >
+                                    <button class="btn3d btn btn-success mx-2 btn-sm fs-5" type="submit" >
+                                        <i class="ti ti-shopping-cart fs-7 mx-1"></i>
+                                        {% trans %}Fast Updates{% endtrans %} <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} {% trans %}USD/Month{% endtrans %}</span>
+                                    </button>
+
+                                    {% trans %}
+                                    <p class="mx-2 mt-2" >Buy this monthly subscription to enable faster frequency updates up to 30 seconds.
+                                        <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
+                                        <br>
+                                        <span class="fs-1" >Minimum frequency updates 30 seconds.</span>
+                                    </p>
+                                    {% endtrans %}
+                                </div>
+                            </div>
+                        {% elif type == 2 %}
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="item_name" value="Basic Plan">
+                            <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
+
+                            <div class="row" >
+                                {% trans %}
+                                <div class="col-auto" >
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                                        <i class="ti ti-shopping-cart fs-7 mx-1"></i>
+                                        Free Plan <span class="badge bg-warning rounded-pill mx-2 fs-3">0 USD/Month</span>
+                                    </button>
+
+                                    <p class="mx-2 mt-2" >
+                                        Basic free plan to use the device without costs.
+                                        <br>
+                                        <span class="fs-1" >Minimum frequency updates 120 seconds.</span>
+                                    </p>
+                                </div>
+                                {% endtrans %}
+                            </div>
+
+
+                        {% elif type == 3 %}
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="item_name" value="Fast Premium">
+                            <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
+
+                            <div class="row" >
+                                <div class="col-auto" >
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                                        <i class="ti ti-shopping-cart fs-7 mx-1"></i>
+                                        Fast Premium <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} USD/Month</span>
+                                    </button>
+
+                                    <p class="mx-2 mt-2" >
+                                        Premium monthly subscription required to use the device that include faster frequency updates up to 30 seconds.
+                                        <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
+                                        <br>
+                                        <span class="fs-1" >Minimum frequency updates 30 seconds.</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                    </li>
+                {% endfor %}
+
+                {% if active_subs %}
+                <li class="list-group-item list-group-item-action">
+                    {% trans %}
+                    <h6>Manage Your Active Subscription</h6>
+                    <p class="fs-2" >If you wish to manage or cancel your subscription, please click the button below:</p>
+                    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_manage-paylist" target="_blank">
+                        <button class="btn3d  btn btn-secondary btn-sm fs-2" >
+                            <i class="ti ti-settings fs-7 mx-1"></i>
+                            Manage Subscriptions
+                        </button>
+                    </a>
+                    {% endtrans %}
+                </li>
+                {% endif %}
+            </ul>
+
+            <div class="row my-2 alert alert-info" >
+                <span class="fs-3" >
+                    <i class="ti ti-info-circle fs-6 mx-1"></i>
+                    {% trans %}To buy or manage a subscription a user account is not required{% endtrans %}
+                </span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<hr class="row small_none" >
+
+
+
+
+</div>
+{% endblock %}

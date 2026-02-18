@@ -1,0 +1,29 @@
+{% extends "base2.html" %}
+
+{% block head %}
+<title>{% trans %}Register Processed{% endtrans %}</title>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row" >
+        <div class="mb-3" >
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="mb-3" >
+            <h5>{% trans %}Account register processed successfully.{% endtrans %}</h5>
+            <p>{% trans %}Check your inbox to confirm your account email.{% endtrans %}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

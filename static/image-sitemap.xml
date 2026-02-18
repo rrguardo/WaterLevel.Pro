@@ -1,0 +1,93 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+		
+  <url>
+    <loc>https://waterlevel.pro</loc>
+    <image:image>
+      <image:loc>https://waterlevel.pro/static/logos/waterlevel.pro.png</image:loc>
+      <image:caption>Water Level .Pro text logo</image:caption>
+      <image:title>text logo</image:title>
+    </image:image>
+	<image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/s1_face.png</image:loc>
+      <image:caption>WiFi Water Level S1 Features</image:caption>
+      <image:title>WiFi Water Level S1 Features</image:title>
+    </image:image>
+	<image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/s1_face2.png</image:loc>
+      <image:caption>WiFi Water Level S1 - How It Works</image:caption>
+      <image:title>How WiFi Water Level S1 Works</image:title>
+    </image:image>
+	<image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/p1.png</image:loc>
+      <image:caption>Solar Power Module P1</image:caption>
+      <image:title>Solar Power Module P1 For S1</image:title>
+    </image:image>
+  </url>
+ 
+  <url>
+  <loc>https://waterlevel.pro/products/WiFi-Water-Level-S1</loc>
+  	<image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/s1_face.png</image:loc>
+      <image:caption>WiFi Water Level S1 Features</image:caption>
+      <image:title>WiFi Water Level S1 Features</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/wifi_water_level_s1.png</image:loc>
+      <image:caption>WiFi Water Level S1 Product</image:caption>
+      <image:title>WiFi Water Level S1 Product</image:title>
+    </image:image>
+	<image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/s1_face2.png</image:loc>
+      <image:caption>WiFi Water Level S1 - How It Works</image:caption>
+      <image:title>How WiFi Water Level S1 Works</image:title>
+    </image:image>
+	<image:image>
+      <image:loc>https://waterlevel.pro/static/prod_img/cel.png</image:loc>
+      <image:caption>Web app cellphone view for S1</image:caption>
+      <image:title>WiFi Water Level S1 - Smartphone Web App</image:title>
+    </image:image>
+	<image:image>
+      <image:loc>https://waterlevel.pro/static/prod_img/tab.png</image:loc>
+      <image:caption>Web app tablet view for S1</image:caption>
+      <image:title>WiFi Water Level S1 - Tablet Web App</image:title>
+    </image:image>
+  </url>
+  
+  <url>
+  <loc>https://waterlevel.pro/manuals/WiFi-Water-Level-S1</loc>
+    <image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/wifi_water_level_s1.png</image:loc>
+      <image:caption>WiFi Water Level S1 Product</image:caption>
+      <image:title>WiFi Water Level S1 Product</image:title>
+    </image:image>
+  	<image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/s1_face.png</image:loc>
+      <image:caption>WiFi Water Level S1 Features</image:caption>
+      <image:title>WiFi Water Level S1 Features</image:title>
+    </image:image>
+	<image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/s1_face2.png</image:loc>
+      <image:caption>WiFi Water Level S1 - How It Works</image:caption>
+      <image:title>How WiFi Water Level S1 Works</image:title>
+    </image:image>
+  </url>
+  
+  <url>
+  <loc>https://waterlevel.pro/products/Solar-Power-Module-P1</loc>
+  <image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/p1.png</image:loc>
+      <image:caption>Solar Power Module P1</image:caption>
+      <image:title>Solar Power Module P1 For S1</image:title>
+    </image:image>
+  </url>
+  
+  <url>
+  <loc>https://waterlevel.pro/manuals/Solar-Power-Module-P1</loc>
+  <image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/p1.png</image:loc>
+      <image:caption>Solar Power Module P1</image:caption>
+      <image:title>Solar Power Module P1 For S1</image:title>
+    </image:image>
+  </url>
+</urlset>

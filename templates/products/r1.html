@@ -1,0 +1,335 @@
+{% extends "base2.html" %}
+
+{% block head %}
+<title>WiFi Smart Water Pump Controller S1 | {% trans %}Smart Pump Controller{% endtrans %}</title>
+
+<meta name="description" content="{% trans %}Automatic Water Pump for S1 is a smart, efficient, and reliable water pumping solution, featuring automatic control, energy-saving functionality, and easy integration with various water systems.{% endtrans %}">
+<meta name="keywords" content="{% trans %}Automatic Water Pump, water pump controller, smart water pump, energy-saving water pump, water system integration, smart water systems, automatic water control, S1 water pump{% endtrans %}">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="WiFi Smart Water Pump Controller S1 | {% trans %}Smart Pump Controller{% endtrans %}">
+<meta property="og:description" content="{% trans %}Automatic Water Pump for S1 is a smart, efficient, and reliable water pumping solution, featuring automatic control, energy-saving functionality, and easy integration with various water systems.{% endtrans %}">
+<meta property="og:image" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/r1_face.png') }}">
+<meta property="og:url" content="{{ DOMAIN }}{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}">
+
+<meta name="twitter:card" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/r1_face.png') }}">
+<meta name="twitter:title" content="WiFi Smart Water Pump Controller S1 | {% trans %}Smart Pump Controller{% endtrans %}">
+<meta name="twitter:description" content="{% trans %}The Automatic Water Pump for S1 is a smart, energy-efficient solution for automating water distribution. Ideal for home, agricultural, and industrial water systems.{% endtrans %}">
+<meta name="twitter:image" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/r1_face.png') }}">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "WiFi Smart Water Pump Controller S1",
+  "image": "{{ DOMAIN }}{{ url_for('static', filename='manuals/WiFi_Smart_Pump_Controller_S1.png') }}",
+  "description": "{% trans %}Automatic Water Pump for S1 - Smart, energy-efficient pump controller with automatic water level control, screen indicator, and durable construction for various water systems{% endtrans %}",
+  "sku": "S1",
+  "brand": {
+    "@type": "Brand",
+    "name": "Water Level Pro"
+  },
+  "additionalProperty": [
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Remote Monitoring{% endtrans %}",
+      "value": "{% trans %}Smart Automatic Water Pump for S1{% endtrans %}"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Power Options{% endtrans %}",
+      "value": "{% trans %}Runs on AC power.{% endtrans %}"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Open Source{% endtrans %}",
+      "value": "{% trans %}Community-driven hardware and software, freely available under GPL terms.{% endtrans %}"
+    }
+  ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": 4.9,
+        "reviewCount": 9
+      },
+      "positiveNotes": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "{% trans %}AC Powered{% endtrans %}"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{% trans %}Unlimited management range.{% endtrans %}"
+              }
+            ]
+      }
+}
+</script>
+
+
+<style>
+.long-img-area {
+  max-width: 850px;
+  margin: 35px auto;
+}
+
+.carousel-inner-ratio img {
+  width: 100%; /* Ensure image fills full width */
+  height: auto; /* Keep image aspect ratio */
+  aspect-ratio: 16 / 9; /* Adjust this to the desired ratio */
+  object-fit: cover; /* Optional: control how image fits the box */
+}
+
+.carousel-fit img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  max-width: 700px; /* Adjust this value to your desired limit */
+  margin: 0 auto; /* Center image if it does not take full width */
+}
+
+</style>
+
+<!-- Google tag (gtag.js) event -->
+<script>
+  gtag('event', 'conversion_event_page_view', {
+    // <event_parameters>
+  });
+</script>
+
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-fluid">
+
+  <div class="d-flex">
+    <div class="p-2">
+        <h1 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5 mb-3" >WiFi Smart Water Pump Controller S1 - {% trans %}Features{% endtrans %}</h1>
+    </div>
+
+      <div class="ms-auto">
+        <a href="{{ url_with_lang('manuals', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" class="btn btn-info btn-sm  mt-1">
+            <i class="ti ti-help"></i> {% trans %}Manual{% endtrans %}
+        </a>
+    </div>
+
+
+  </div>
+
+    <div class="text-center">
+
+        <div id="carouselExampleAutoplaying1" class="carousel long-img-area" data-bs-ride="carousel">
+          <div class="carousel-inner carousel-inner-ratio">
+            <div class="carousel-item active" data-bs-interval="7000">
+              <img src="{{ url_for('static', filename='manuals/Smart_Pump_Controller_S1'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1">
+            </div>
+            <div class="carousel-item" data-bs-interval="7000">
+              <img src="{{ url_for('static', filename='manuals/WiFi_Smart_Pump_Controller_S1.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1" >
+            </div>
+            <div class="carousel-item" data-bs-interval="7000">
+              <img src="{{ url_for('static', filename='manuals/r1_face.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1" >
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
+        <a class="btn btn-sm btn-success mb-2" href="/device_info?public_key=demorelay" >
+            <i class="ti ti-router"></i>
+            {% trans %}UI Demo Device{% endtrans %}
+       </a>
+        <a href="https://www.instructables.com/DIY-WiFi-Smart-Water-Pump-Controller-S1-Build-Your/" target="_blank" class="btn btn-warning fs-2 fw-semibold lh-sm ms-1 mb-2">
+                  <i class="ti ti-help"></i> {% trans %}DIY Guide{% endtrans %}
+        </a>
+
+        <p class="my-4"  id="description">
+            {% trans %}
+            The <b>WiFi Smart Water Pump Controller S1</b> is a reliable solution for managing water pump motors manually
+            or automatically. Using data from the <b>{% endtrans %}<a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" target="_blank">WiFi Water Level S1</a></b> {% trans %}sensor,
+            it automates motor activation to optimize water and energy usage. The controller starts the pump when the
+            tank needs refilling based on its fill level and stops it automatically once the tank is full.
+            By improving efficiency, it helps reduce water waste and electricity bills. Designed for ease of
+            installation and maintenance, it’s an ideal choice for modern water management.
+            {% endtrans %}
+        </p>
+
+      </div>
+
+    <h2 class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" >{% trans %}Features List{% endtrans %} </h2>
+    <ul class="list-group">
+
+        <li class="list-group-item list-group-item-action list-group-item-success active">
+            {% trans %}
+            <b>Remote Pump Control</b><br>
+            <p>The <strong>WiFi Smart Water Pump Controller S1</strong> allows users to remotely manage and operate water pumps using a smartphone or computer.
+                It connects to your existing WiFi network, providing full control and monitoring through an intuitive responsive web app interface from anywhere in the world.
+            </p>
+            {% endtrans %}
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-primary" >
+            <b>{% trans %}Integration with S1 Sensor{% endtrans %}</b><br>
+
+            <div class="text-center my-3">
+              <img src="{{ url_for('static', filename='manuals/HowWorksS1Controller'+g.img_lang+'.png') }}" class="img-thumbnail" alt="How Works S1 Pump Controller" title="How Works S1 Pump Controller" >
+            </div>
+
+            {% trans %}
+            <p>Designed to seamlessly integrate with the <strong>WiFi Water Level S1</strong>, the controller automatically
+                receives real-time water level data and adjusts pump operations for optimal water management. This ensures
+                efficient automation without the need for manual intervention.</p>
+            {% endtrans %}
+        </li>
+
+        {% trans %}
+        <li class="list-group-item list-group-item-action list-group-item-success active">
+            <b>Automated Operation</b><br>
+            <p>Equipped with advanced algorithms, the controller automates pump operations based on water
+                level sensor data. Users can configure thresholds and parameters, dictating when the pump should activate
+                or shut off, enhancing efficiency and minimizing manual supervision.</p>
+        </li>
+
+        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <b>Customizable Settings</b><br>
+            <p>Users can define precise thresholds for pump operation, specifying when to start the pump if the
+                water level falls below a set percentage and when to stop it once the tank reaches a defined fill level.
+                Additionally, scheduling and mode adjustments provide flexibility to tailor the system to specific water
+                management needs and conditions, ensuring optimal performance and adaptability.
+            </p>
+        </li>
+
+        <li class="list-group-item list-group-item-action list-group-item-primary active">
+            <b>No Incoming Flow Detection</b><br>
+            <p>
+                As part of its automated operations, the pump can automatically stop if no incoming water flow is detected.
+                This feature is particularly useful for users relying on unstable water sources to fill their tanks,
+                helping to prevent unnecessary motor operation and potential damage.
+            </p>
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-primary">
+            <b>Pump Compatibility</b><br>
+            <p>
+                Supports pumps rated for <b>AC 120V or 220V</b>, <b>50/60 Hz</b>, with <b>single-phase connection and neutral line</b>.
+                Compatible with pumps up to a <b>maximum of 10 amps</b>. Optional <b>ground connection</b> for added safety.
+            </p>
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-primary active" >
+            <b>External 2.4GHz WiFi Antenna (3dBi or 5dBi)</b><br>
+            <p>
+                Offers outdoor ranges of <b>100-150 meters</b> with a <b>3dBi</b> antenna and up to <b>200 meters</b> with a <b>5dBi</b> antenna, depending on line-of-sight.<br>
+                Indoors, the range typically spans <b>30-70 meters</b>, influenced by obstacles and antenna choice.
+                Compatible with <b>2.4GHz WiFi</b> range extenders.
+            </p>
+        </li>
+
+        <li class="list-group-item list-group-item-action list-group-item-primary">
+        <b>Eco-Friendly Design</b><br>
+        <p>The <strong>WiFi Smart Water Pump Controller S1</strong> promotes sustainable water usage by reducing
+            unnecessary pump operation. When paired with the solar-powered <b>WiFi Water Level S1</b>,
+            it creates an eco-friendly water management system that conserves both water and energy.</p>
+        </li>
+
+        <li class="list-group-item list-group-item-action list-group-item-success active" >
+            <b>Easy-to-Manufacture Design</b>
+            <p>
+               The energy module is integrated into a single PCB. The sensor connects easily via a plug-in,
+                with no soldering required when you purchase the pre-assembled PCB, making it easy for anyone or
+                any factory to manufacture in small batches.
+            </p>
+        </li>
+
+        <li class="list-group-item list-group-item-action list-group-item-secondary" >
+        <b>Open Hardware and Software</b><br>
+        <p>With open hardware and software, the controller embraces transparency and innovation.
+            Users have access to its schematics, firmware, and software, allowing for customization and
+            future enhancements. It also integrates with a free version of the cloud service
+            for cost-effective data management.</p>
+
+            <div class="ratio ratio-16x9 video-wrapper my-2">
+              <video autoplay muted loop>
+                <source src="https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1/raw/refs/heads/main/images/CShow1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            {% endtrans %}
+
+            <div class="text-center my-3">
+              <img src="{{ url_for('static', filename='logos/open-hardware.jpg') }}" class="img-thumbnail" alt="Solar Power Module P1" title="Solar Power Module P1 For S1" >
+              <img src="{{ url_for('static', filename='logos/gpl3.png') }}" class="img-thumbnail" alt="Solar Power Module P1" title="Solar Power Module P1 For S1" >
+                <div class="ms-2" >
+                    <hr>
+                    | <a href="https://oshwlab.com/rrguardo83/automatic-water-pump-for-s1" target="_blank" >Schematic PCB</a> |
+                    <a href="https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1" target="_blank" >GitHub (3D Case, ...)</a> |
+                    <hr>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+
+    <hr class="row small_none" >
+
+
+<div class="row  justify-content-center" id="order_now_c1">
+    <div class="accordion my-2" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="importantDisclaimerHeading">
+          <button
+            class="accordion-button collapsed bg-warning text-white"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#importantDisclaimerCollapse"
+            aria-expanded="false"
+            aria-controls="importantDisclaimerCollapse">
+            {% trans %}Important Disclaimer{% endtrans %}
+          </button>
+        </h2>
+        <div
+          id="importantDisclaimerCollapse"
+          class="accordion-collapse collapse"
+          aria-labelledby="importantDisclaimerHeading"
+          data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            {% trans %}
+            <p class="my-1 alert alert-warning" role="alert">
+              This open-source electronics project/device is provided strictly for experimental, educational, and developmental purposes.
+              It is offered "as is," without any warranties, express or implied. This includes, but is not limited to, implied warranties
+              of merchantability, fitness for a particular purpose, or non-infringement.
+            </p>
+            <hr>
+            <p><strong>By using this device, you acknowledge and accept that:</strong></p>
+            <ul class="list-group list-group-numbered ms-1">
+              <li class="list-group-item list-group-item-action" >You assume all risks associated with its use, including but not limited to potential damage to property, personal injury, or any other unintended consequences.</li>
+              <li class="list-group-item list-group-item-action" >This device is not certified for commercial, industrial, or safety-critical applications. It is intended solely for developers, hobbyists, and other users with appropriate technical expertise.</li>
+              <li class="list-group-item list-group-item-action" >The creators and distributors of this project are not liable for any damages, losses, or inconveniences resulting from its use, modification, or integration into other systems.</li>
+            </ul>
+            <p class="my-3" >
+              Users are solely responsible for ensuring that the use of this device complies with local laws, regulations, and safety standards in their region.
+            </p>
+            {% endtrans %}
+
+            <!-- Donations Section at the end of the Disclaimer -->
+            <hr>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+<hr class="row small_none" >
+
+</div>
+
+{% endblock %}

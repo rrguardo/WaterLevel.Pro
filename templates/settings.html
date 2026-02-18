@@ -1,0 +1,96 @@
+{% extends "base2.html" %}
+
+{% block head %}
+<title>{% trans %}User Dashboard{% endtrans %}</title>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row" >
+        <div class="mb-3" >
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message | safe }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="mb-3" >
+                <h2>{% trans %}User Settings{% endtrans %} <span class="fs-6" >({{ current_user.username }})</span> </h2>
+        </div>
+    </div>
+
+    <div class="row" >
+        <div class="card bg-light col-md-4">
+        <div class="card-body">
+          <form method="post" action="{{ url_with_lang('user_settings') }}">
+
+            <input type="hidden" name="action" value="update-alert-settings">
+
+            <div class="mb-3">
+                <label  class="form-label"><b>WiFi Water Level S1</b> {% trans %}Alerts{% endtrans %} </label>
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="EMLCheck1" name="email" {% if user_settings.get('email-alert') == 'on' %} checked {% endif %}>
+              <label class="form-check-label" for="EMLCheck1">{% trans %}Email Alerts{% endtrans %}</label>
+            </div>
+            <div class="mb-3 mt-4">
+              <label class="form-label" for="FrequencyInput">{% trans %}Alerts Frequency:{% endtrans %}</label>
+
+                <div class="d-flex align-items-center">
+                  <label for="FrequencyInput" class="me-2">{% trans %}Hours:{% endtrans %}</label>
+                  <input type="number" class="form-control" id="FrequencyInput" name="frequency" value="{{ user_settings.get('frequency-alert', 6) }}" step="1" min="1" max="48">
+                </div>
+
+            </div>
+            <button type="submit" class="btn btn-success mt-3">{% trans %}Update{% endtrans %}</button>
+          </form>
+        </div>
+      </div>
+
+
+        <div class="card bg-light mx-3 col-md-4 ps-2" >
+
+            <div class="card-body " >
+                <div class="mb-3">
+                  <h5 class="form-label">{% trans %}Developer Zone{% endtrans %}</h5>
+                </div>
+                <div class=" mt-1" >
+                    <p>
+                        {% trans %}Use this feature to register a new hardware. It will allow to generate a new public and private keys, that could be flashed inside the hardware controller.{% endtrans %}
+                    </p>
+                    <a href="{{ url_for('add_sensor') }}" target="_self" class="btn btn-success my-2" >{% trans %}Register S1 Sensor{% endtrans %}</a>
+                    <a href="{{ url_for('add_relay') }}" target="_self" class="btn btn-info" >{% trans %}Register Pump Controller{% endtrans %}</a>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="card bg-light mx-3 col-md-4 d-none" >
+            <div class="card-body " >
+                <form method="post" action="{{ url_with_lang('user_settings') }}">
+                    <input type="hidden" name="action" value="update-phone">
+
+                <div class="mb-3">
+                  <h5 for="PhoneInput" class="form-label">{% trans %}Phone:{% endtrans %}</h5>
+                  <input type="number" name="phone" class="form-control" id="PhoneInput" aria-describedby="emailHelp" value="{{ user.phone }}" step="1">
+                  <div id="PhoneInputHelp" class="form-text">{% trans %}Phone used to send SMS notifications.{% endtrans %}</div>
+                    <button type="submit" class="btn btn-success mt-3">{% trans %}Update{% endtrans %}</button>
+                </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

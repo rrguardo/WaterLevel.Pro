@@ -1,0 +1,13 @@
+stages:
+  - test
+
+docker_smoke_test:
+  stage: test
+  before_script:
+    - chmod +x scripts/docker_smoke_test.sh
+  script:
+    - ./scripts/docker_smoke_test.sh
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'

@@ -1,0 +1,1643 @@
+{% extends "base2.html" %}
+
+{% block head %}
+
+
+<style>
+
+.btn3d {
+	position: relative;
+	top: -6px;
+	border: 0;
+	transition: all 40ms linear;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+.btn3d:active:focus,
+.btn3d:focus:hover,
+.btn3d:focus {
+	-moz-outline-style: none;
+	outline: medium none;
+}
+
+.btn3d:active,
+.btn3d.active {
+	top: 2px;
+}
+
+.btn3d.btn-white {
+	color: #666666;
+	box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 2px rgba(255, 255, 255, 0.10) inset, 0 8px 0 0 #f5f5f5, 0 8px 8px 1px rgba(0, 0, 0, .2);
+	background-color: #fff;
+}
+
+.btn3d.btn-white:active,
+.btn3d.btn-white.active {
+	color: #666666;
+	box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, .1);
+	background-color: #fff;
+}
+
+.btn3d.btn-default {
+	color: #666666;
+	box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 2px rgba(255, 255, 255, 0.10) inset, 0 8px 0 0 #BEBEBE, 0 8px 8px 1px rgba(0, 0, 0, .2);
+	background-color: #f9f9f9;
+}
+
+.btn3d.btn-default:active,
+.btn3d.btn-default.active {
+	color: #666666;
+	box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, .1);
+	background-color: #f9f9f9;
+}
+
+.btn3d.btn-primary {
+	box-shadow: 0 0 0 1px #417fbd inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #4D5BBE, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #4274D7;
+}
+
+.btn3d.btn-primary:active,
+.btn3d.btn-primary.active {
+	box-shadow: 0 0 0 1px #417fbd inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #4274D7;
+}
+
+.btn3d.btn-secondary {
+	box-shadow: 0 0 0 1px #417fbd inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #4784d9, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #539BFF;
+}
+
+.btn3d.btn-secondary:active,
+.btn3d.btn-secondary.active {
+	box-shadow: 0 0 0 1px #417fbd inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #539BFF;
+}
+
+.btn3d.btn-success {
+	box-shadow: 0 0 0 1px #31c300 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #5eb924, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #78d739;
+}
+
+.btn3d.btn-success:active,
+.btn3d.btn-success.active {
+	box-shadow: 0 0 0 1px #30cd00 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #78d739;
+}
+
+.btn3d.btn-info {
+	box-shadow: 0 0 0 1px #00a5c3 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #348FD2, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #39B3D7;
+}
+
+.btn3d.btn-info:active,
+.btn3d.btn-info.active {
+	box-shadow: 0 0 0 1px #00a5c3 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #39B3D7;
+}
+
+.btn3d.btn-warning {
+	box-shadow: 0 0 0 1px #d79a47 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #D79A34, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #FEAF20;
+}
+
+.btn3d.btn-warning:active,
+.btn3d.btn-warning.active {
+	box-shadow: 0 0 0 1px #d79a47 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #FEAF20;
+}
+
+.btn3d.btn-danger {
+	box-shadow: 0 0 0 1px #b93802 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #AA0000, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #D73814;
+}
+
+.btn3d.btn-danger:active,
+.btn3d.btn-danger.active {
+	box-shadow: 0 0 0 1px #b93802 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #D73814;
+}
+
+.btn3d.btn-magick {
+	color: #fff;
+	box-shadow: 0 0 0 1px #9a00cd inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #9823d5, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #bb39d7;
+}
+
+.btn3d.btn-magick:active,
+.btn3d.btn-magick.active {
+	box-shadow: 0 0 0 1px #9a00cd inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #bb39d7;
+}
+</style>
+
+
+<style>
+
+#water-chart {
+  max-width: 650px;
+  margin: 35px auto;
+}
+
+.blink {
+  opacity: 0; /* Initially hidden */
+}
+
+.sett-input {
+     max-width: 4em;
+}
+
+</style>
+
+<script src="{{ url_for('static', filename='assets/js/qrcode.min.js') }}"></script>
+
+<script>
+    var check_offline = false;
+    var greater_alerts = [];
+    var lower_alerts = [];
+</script>
+
+{% endblock %}
+
+
+{% block headmenu_left %}
+<li class="nav-item small_none">
+  <a class="navbar-brand " >
+  </a>
+</li>
+
+{% endblock %}
+
+{% block headmenu_right %}
+<div class="d-none d-md-block" >
+    <button class="btn3d btn btn-primary btn-sm small_none add_device" >
+        <i class="ti ti-circle-plus fs-5"></i> {% trans %}Save Device{% endtrans %}
+    </button>
+
+    <button class="btn3d btn btn-secondary btn-sm ms-2 small_none bookmarkBtn">
+        <i class="ti ti-bookmark fs-5"></i>
+        {% trans %}Bookmark Device{% endtrans %}
+    </button>
+</div>
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="container-fluid small_pad0" >
+
+  <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4 small_none">
+    <div class="card-body px-4 py-3">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <h4 class="fw-semibold mb-8">{{ model_info.long_name }}</h4>
+            <button  class="btn3d btn btn-secondary fs-2" id="device_name" data-bs-toggle="modal" data-bs-target="#ChangeNameModal" >
+                <i class="ti ti-edit fs-6"></i>
+            </button>
+            <button type="button" class="btn3d btn btn-primary fs-2" data-bs-toggle="modal" data-bs-target="#ChangeNameModal"  >
+                <strong>{% trans %}key{% endtrans %}:</strong>
+                <span class="text-decoration-underline" >{{ key_used }}
+
+                </span>
+            </button>
+
+        </div>
+
+          <div class="my-3 row small_none" >
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message|safe }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+          </div>
+
+      <div id="ChangeNameModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title" id="myModalLabel"> {% trans %}Set Name Device{% endtrans %} </h4> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="card-body">
+                      <div class="mb-4 row align-items-center">
+                        <label for="set_name_input" class="form-label col-sm-3 col-form-label">{% trans %}Name{% endtrans %}</label>
+                        <div class="col-sm-9">
+                          <div class="input-group border rounded-1">
+                            <span class="input-group-text bg-transparent px-6 border-0" id="basic-addon1">
+                              <i class="ti ti-router fs-6"></i>
+                            </span>
+                            <input type="text" class="form-control border-0 ps-2" id="set_name_input" placeholder="{% trans %}New name here{% endtrans %}">
+                          </div>
+                        </div>
+                      </div>
+                  <div class="modal-footer"> <button type="button" class="btn3d btn btn-danger" data-bs-dismiss="modal"> {% trans %}Close{% endtrans %} </button>
+                  <button type="button" class="btn3d btn btn-primary ms-2" id="set_name_btn" > {% trans %}Save{% endtrans %} </button> </div>
+              </div> <!-- /.modal-content -->
+          </div> <!-- /.modal-dialog -->
+      </div> <!-- /.modal -->
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+    {% if return_reason and return_reason == 'buyreturn' %}
+        <!-- Modal -->
+        <div class="modal fade" id="BuyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog card">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title alert alert-success" id="exampleBuyModalLabel"><i class="ti ti-alert-triangle fs-6"></i> {% trans %}Order Received{% endtrans %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+                <div class="modal-body">
+
+                    <div class="alert alert-success fs-4" >
+                        <h5>{% trans %}Thanks For Your Purchase{% endtrans %}</h5>
+                        {% trans %}It could take some minutes to complete the order processing.{% endtrans %}
+                    </div>
+                </div>
+              <div class="modal-footer">
+                <button type="button" class="btn3d btn btn-secondary" data-bs-dismiss="modal">{% trans %}Close{% endtrans %}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                var myBuyModal = document.querySelector('#BuyModal');
+                var modalB = bootstrap.Modal.getOrCreateInstance(myBuyModal);
+                modalB.show();
+            });
+        </script>
+    {% endif %}
+
+    {% if disabled_device and device_info.type == 1 and not return_reason %}
+        <!-- Modal -->
+        <div class="modal fade" id="DisModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog card">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title alert alert-danger" id="exampleDisModalLabel"><i class="ti ti-alert-triangle fs-6"></i> {% trans %}Disabled Device{% endtrans %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger fs-4" >
+                        {% trans %}This device is disabled, because don't have a valid subscription or unlock.
+                        Check subscription options at the end of this page.{% endtrans %}
+                    </div>
+                </div>
+              <div class="modal-footer">
+                <button type="button" class="btn3d btn btn-secondary" data-bs-dismiss="modal">{% trans %}Close{% endtrans %}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                var myDisModal = document.querySelector('#DisModal');
+                var modalD = bootstrap.Modal.getOrCreateInstance(myDisModal);
+                modalD.show();
+            });
+        </script>
+    {% endif %}
+
+    {% if device_alerts %}
+        <!-- Modal -->
+        <div class="modal fade" id="SoundModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{% trans %}Enable Alert Sounds{% endtrans %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+                <div class="modal-body">
+                    <span class="alert alert-info fs-2" >
+                        {% trans %}This notification shows because your user have active alerts for this device{% endtrans %}
+                    </span>
+                </div>
+              <div class="modal-footer">
+                <button type="button" class="btn3d btn btn-secondary" data-bs-dismiss="modal">{% trans %}No{% endtrans %}</button>
+                <button type="button" class="btn3d btn btn-primary" data-bs-dismiss="modal" onclick="playSound()">{% trans %}Yes{% endtrans %}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <script>
+        var context;
+        var source;
+        var gainNode;
+        var Silence = false;
+
+        function playSound() {
+
+            context = new (window.AudioContext || window.webkitAudioContext)();
+            gainNode = context.createGain();
+            Silence = false;
+
+
+            source = context.createBufferSource();
+
+            var request = new XMLHttpRequest();
+            request.open('GET', '{{ url_for('static', filename='alarm/alarm.mp3') }}', true);
+            request.responseType = 'arraybuffer';
+
+            request.onload = function() {
+                context.decodeAudioData(request.response, function(buffer) {
+                    source.buffer = buffer;
+                    source.loop = true;
+                    source.connect(gainNode);
+                    gainNode.connect(context.destination);
+                    gainNode.gain.value = 0;
+                    source.start(0);
+
+                    fetchData();
+                }, function(e) {
+                    console.log("Error with decoding audio data", e);
+                });
+            };
+
+            request.send();
+        }
+
+        function setVolume(volume) {
+            if(!gainNode){
+                return;
+            }
+            if(Silence){
+                volume = 0;
+            }
+            gainNode.gain.value = volume;  // Set gain (volume) to a value between 0.0 and 1.0
+        }
+
+        function SilenceAlarm(){
+            Silence = true;
+            setVolume(0);
+        }
+
+        $(document).ready(function() {
+            var mySoundModal = document.querySelector('#SoundModal');
+            var modal = bootstrap.Modal.getOrCreateInstance(SoundModal);
+            modal.show();
+        });
+    </script>
+
+    <div class="row d-flex justify-content-center mb-3 alarm-area d-none">
+        <div class="col-lg-9 d-flex align-items-strech">
+        <div class="card w-100" >
+            <div class="card-body" >
+                <div class="row text-center alert alert-warning" role="alert">
+                    <div class="col-auto" >
+                        <img src="{{ url_for('static', filename='alarm/alarm.gif') }}" class="img-fluid" alt="alarm">
+                    </div>
+                    <div class="col-auto mt-5 ms-3" id="alarm-area-text" >
+
+                    </div>
+
+                </div>
+                <div class="row text-center" >
+                    <button class="col-auto btn btn-sm btn-info" onclick="SilenceAlarm()">
+                        <i class="ti ti-volume-3"></i>
+                        {% trans %}Mute{% endtrans %}
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    {% else %}
+    <script>
+        function setVolume(volume) {
+        }
+    </script>
+    {% endif %}
+
+
+
+
+<div class="row d-flex justify-content-center mb-3">
+
+    <div class="col-lg-9 d-flex align-items-strech">
+        <div class="card w-100" >
+            <div class="card-body" >
+                <div class="d-sm-flex d-block align-items-center justify-content-center mb-0">
+                  <div class="mb-0 mb-sm-0">
+                    <h5 class="fw-semibold alert-info alert">
+                      <a class="nav-link" >
+                        <i class="ti ti-droplet fs-7"> </i>
+                        <span class="percent_cap" ></span>% {% trans %}Water Available{% endtrans %}
+                        <button type="button" class="btn btn-sm rounded-pill bg-danger text-white d-none disabled offline ms-2" >
+                              {% trans %}OFLLINE{% endtrans %} <i class="ti ti-wifi-off"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm rounded-pill btn-success text-white d-none disabled online ms-2">
+                              {% trans %}ONLINE{% endtrans %} <i class="ti ti-wifi"></i>
+                        </button>
+                      </a>
+                    </h5>
+                  </div>
+                </div>
+            <div id="water-chart" class="my-0 bg-light" ></div>
+            <div class="col-auto" >
+                <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                  <div id="update-progress" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%">0%</div>
+                </div>
+            </div>
+            <div class="col-auto" >
+                <div class="d-flex justify-content-center align-items-center">
+                <p class="my-3 fs-2">Uptime: {{ working_hours }} hours ({{ working_hours_nice }})</p>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+            <div class="row">
+
+              <div class="col-lg-12 card small_none">
+                <div id="battery-chart"></div>
+              </div>
+
+
+              <div class="col-lg-12 card d-flex justify-content-center align-items-center small_none" >
+                <h5 class="mt-4 fw-bolder" >{% trans %}WiFi Signal Strength{% endtrans %} </h5>
+
+                  <div class="row mt-2 online ms-4" >
+
+                    <div class="waveStrength-3" id="rssi-symbol">
+                      <div class="wv4 wave" style="">
+                        <div class="wv3 wave" style="">
+                          <div class="wv2 wave" style="">
+                            <div class="wv1 wave">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="ms-4 mt-n4 mb-2 fw-bolder">
+                      <span class="rssi">{{ rssi }}</span> dBm
+                    </div>
+                  </div>
+
+                  <button type="button" class="btn btn-sm rounded-pill bg-danger text-white d-none disabled offline mb-3" >
+                      {% trans %}OFLLINE{% endtrans %} <i class="ti ti-wifi-off"></i>
+                  </button>
+                  <div class="offline ms-4 mb-3 " >
+                      <span class="fs-2 fw-bolder" >{% trans %}offline time:{% endtrans %} </span> <span class="fs-2" id="diff_time"></span>
+                  </div>
+
+              </div>
+
+
+
+                <div class="col-lg-12 card d-flex justify-content-center align-items-center small_none" >
+                <h5 class="mt-4 fw-bolder" >{% trans %}Public QR (Read-Only){% endtrans %}</h5>
+
+                  <div class="row mt-2  d-flex justify-content-center align-items-center" >
+                      <button class="btn3d btn btn-danger" id="show_qr" >{% trans %}Show QR{% endtrans %}</button>
+                        <div id="qrcode" class="card" >
+                        </div>
+                  </div>
+              </div>
+
+
+            <div class="col-lg-12 card d-flex justify-content-center align-items-center small_none d-block d-md-none" >
+                <button class="btn3d btn btn-primary btn-sm small_none mb-3 add_device" >
+                    <i class="ti ti-circle-plus fs-5"></i> {% trans %}Save Device{% endtrans %}
+                </button>
+
+                <button class="btn3d btn btn-secondary btn-sm ms-2 small_none mb-3 bookmarkBtn">
+                    <i class="ti ti-bookmark fs-5"></i>
+                    {% trans %}Bookmark Device{% endtrans %}
+                </button>
+            </div>
+
+
+            </div>
+          </div>
+
+
+</div>
+
+
+<hr class="row small_none" >
+
+<div class="row d-flex justify-content-center mb-3 small_none">
+
+    <div class="card bg-light" >
+        <div class="card-body" >
+            <h5 class="card-title fw-semibold mb-4" >{% trans %}Add Alert{% endtrans %}</h5>
+
+            {% if current_user.is_authenticated %}
+
+                <form method="post" action="{{ url_for('device_admin') }}">
+
+                    <input type="hidden" name="action" value="add-alert">
+                    <input type="hidden" name="public_key" value="{{ key_used }}">
+
+                    <div class="mb-3">
+                      <label for="InputLevel1" class="form-label d-flex">
+                          <span class="col-auto  pt-1" >{% trans %}Water Level{% endtrans %} %</span>
+                          <span class="col-auto mx-2" >
+                              <select name="condition" class="form-select" >
+                                <option value="1" > >= </option>
+                                <option value="-1" > <= </option>
+                            </select>
+                          </span>
+                          <span class="col-3 mx-2">
+                            <input type="number" class="form-control" id="InputLevel1" aria-describedby="levelHelp" step="1" value="50" name="level" min="0" max="100">
+                          </span>
+                          <span class="col-auto mx-2">
+                              <button type="submit" class="btn3d btn btn-sm btn-info" > <i class="ti ti-circle-plus fs-5"></i>
+                              </button>
+                          </span>
+                      </label>
+                    </div>
+
+                </form>
+
+            <hr>
+            <form method="post" action="{{ url_for('device_admin') }}">
+
+                    <input type="hidden" name="action" value="add-alert">
+                    <input type="hidden" name="public_key" value="{{ key_used }}">
+                    <input type="hidden" name="condition" value="2">
+                    <input type="hidden" name="level" value="1">
+
+                    <div class="mb-3">
+                      <label for="InputLevel1" class="form-label d-flex">
+                          <span class="mt-2" >
+                              {% trans %}Add Sensor Offline Alert:{% endtrans %}
+                          </span>
+
+
+                          <span class="col-auto mx-2 ">
+                              <button type="submit" class="btn3d btn btn-sm btn-info" >
+                                   <i class="ti ti-circle-plus fs-5 "></i>
+                              </button>
+                          </span>
+                      </label>
+                    </div>
+
+                </form>
+
+            {% else %}
+                <div class="alert alert-info" role="alert" >
+                     {% trans %}To add alerts{% endtrans %}
+                    <a href="{{ url_with_lang('login') }}" >{% trans %}Login{% endtrans %}</a> {% trans %}or{% endtrans %}
+                    <a href="{{ url_with_lang('register') }}" >{% trans %}Register{% endtrans %}</a> {% trans %}a user account{% endtrans %}
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+
+
+{% if current_user.is_authenticated and device_alerts %}
+    <div class="row d-flex justify-content-center mb-3 small_none">
+
+        <div class="card bg-light" >
+        <div class="card-body" >
+            <h5 class="card-title fw-semibold mb-4" >{% trans %}Alerts List{% endtrans %}</h5>
+
+        <ul class="list-group">
+            {% for condition, level in device_alerts %}
+                <li class="list-group-item list-group-item-action ">
+                    <form method="post" action="{{ url_for('device_admin') }}">
+
+                    <input type="hidden" name="action" value="del-alert">
+                    <input type="hidden" name="public_key" value="{{ key_used }}">
+                    <input type="hidden" name="condition" value="{{ condition }}">
+                    <input type="hidden" name="level" value="{{ level }}">
+
+                    {% if condition == 2 %}
+                        <button class="btn3d btn btn-sm btn-danger ms-5" type="submit">
+                            <i class="ti ti-circle-minus fs-5"></i>
+                            <span class="mx-1">{% trans %}Offline Alert{% endtrans %}</span>
+                        </button>
+                        <script>
+                            check_offline = true;
+                        </script>
+                    {% else %}
+
+                            <b>Water Level:</b>
+                             {% if condition == 1 %}
+                                <button class="btn btn-sm btn-info" >
+                                    <i class="ti ti-math-equal-greater fs-5"></i>
+                                </button>
+                                <script>
+                                    greater_alerts.push({{ level }});
+                                </script>
+                             {% else %}
+                                <button class="btn btn-sm btn-info" >
+                                    <i class="ti ti-math-equal-lower fs-5"></i>
+                                </button>
+                                <script>
+                                    lower_alerts.push({{ level }});
+                                </script>
+                             {% endif %}
+                            <b>{{ level }} %</b>
+                            <button class="btn3d btn btn-sm btn-danger ms-5" type="submit">
+                                <i class="ti ti-circle-minus fs-5"></i>
+                            </button>
+                    {% endif %}
+
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+        </div>
+        </div>
+    </div>
+{% endif %}
+
+
+<hr>
+
+<div class="row small_none" >
+
+<p>
+  <a class="btn3d btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+      <i class="ti ti-settings fs-6 mx-1"></i>
+   {% trans %}Device Settings:{% endtrans %}
+  </a>
+</p>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+ {% if device_setting %}
+        <ul class="list-group ">
+            <form method="post" action="{{ url_for('device_admin') }}">
+                <input type="hidden" name="action" value="sensor-setting">
+                <input type="hidden" name="public_key" value="{{ key_used }}">
+            <li class="list-group-item list-group-item-action" >
+                <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Empty Level:{% endtrans %}</button>
+                <input class="sett-input" type="number" step="1" max="450" min="11" name="EMPTY_LEVEL" value="{{ device_setting.EMPTY_LEVEL }}" disabled > CM
+                <p class="ms-4" >
+                    {% trans %}Set here how many centimeters of deep have the water tank, from sensor to the water tank bottom.{% endtrans %}
+                </p>
+            </li>
+            <li class="list-group-item list-group-item-action" >
+                <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Top Margin:{% endtrans %}</button>
+                <input class="sett-input"  type="number" step="1" max="440" min="0" name="TOP_MARGIN" value="{{ device_setting.TOP_MARGIN }}" disabled > CM
+                <p class="ms-4" >
+                    {% trans %}Set centimeters of margin from sensor location to maximum water tank level.{% endtrans %}
+                </p>
+            </li>
+            <li class="list-group-item list-group-item-action" >
+                <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Measurement Frequency:{% endtrans %}</button>
+                <input class="sett-input" type="number" step="1" max="3600" min="5" name="WIFI_POOL_TIME" value="{{ device_setting.WIFI_POOL_TIME }}" disabled > s
+                <p class="ms-4" >
+                    {% trans %}How many seconds wait/delay to send updated fluid storage levels by WiFi.<br>
+                    Note lower values will increase battery/power usage at sensor device.<br>
+                    Default: 120 seconds{% endtrans %}
+                </p>
+            </li>
+                <li class="d-none" id="can_edit_btn" >
+                    <button class="btn3d btn btn-danger ms-3 my-2" >{% trans %}Send{% endtrans %}</button>
+                </li>
+
+            </form>
+            
+            {% if not current_user.is_authenticated %}
+            <div class="alert alert-info" role="alert" >{% trans %}To edit settings{% endtrans %}
+                <a href="{{ url_with_lang('login') }}" >{% trans %}Login{% endtrans %}</a> {% trans %}or{% endtrans %}
+                <a href="{{ url_with_lang('register') }}" >{% trans %}Register{% endtrans %}</a> {% trans %}a user account{% endtrans %}</div>
+            {% else %}
+                <div class="alert alert-info my-4 cant_edit" role="alert" >
+                    {% trans %}To edit settings, scan the QR code belonging to the device's private key.{% endtrans %}
+                    <button class="btn3d btn btn-secondary mx-3" id="qr_scan_prv" >{% trans %}Scan Private Key QR{% endtrans %}</button>
+                    <div id="resultado"></div>
+                </div>
+            {% endif %}
+        </ul>
+
+      {% if current_user.is_authenticated and (current_user.is_admin or can_admin) %}
+      <hr>
+         <div class="row card" >
+
+                <div class="col-auto card d-flex justify-content-center align-items-center small_none" >
+                  <h5 class="mt-4 fw-bolder" >{% trans %}Private Key QR (Admin Device){% endtrans %}</h5>
+
+                  <div class="row mt-2  d-flex justify-content-center align-items-center" >
+                      <button class="btn3d btn btn-danger" id="show_qr_prv" pk="{{ device_info.private_key }}" >{% trans %}Show QR{% endtrans %}</button>
+                        <div id="qrcode_prv" class="card" >
+                        </div>
+                  </div>
+                    <div class=" d-none alert alert-info" id="pk_text" role="alert">
+                        {% trans %}Private Key:{% endtrans %} <b>{{ device_info.private_key }}</b>
+                    </div>
+                </div>
+         </div>
+      {% endif %}
+
+    {% else %}
+        <b>None</b>
+    {% endif %}
+  </div>
+</div>
+
+</div>
+
+{% if current_user.is_authenticated and False %}
+<hr class="row small_none" >
+
+<div class="row d-flex justify-content-center mb-3 small_none  {% if key_used == 'demo' or True %} d-none {% endif %} ">
+
+    <div class="card bg-light col-auto" >
+        <div class="card-body" >
+            <h5 class="card-title fw-semibold mb-4" >{% trans %}Device Subscriptions{% endtrans %}</h5>
+            <ul class="list-group ">
+                {% for subs1 in active_subs %}
+                    <li class="list-group-item list-group-item-action">
+                        {% if subs1.type == 1 %}
+                            <button class="btn btn-success btn-sm fs-5" >
+                                <i class="ti ti-circle-check fs-6 mx-1"></i>
+                                {% trans %}Fast Update{% endtrans %}
+                                <span class="badge bg-primary rounded-pill mx-2 fs-3">{% trans %}Active{% endtrans %}</span>
+                            </button>
+                            <p class="mx-2 mt-2" >{% trans %}Subscription to enable faster frequency updates up to 30 seconds.{% endtrans %}
+                                <br>{% trans %}Price:{% endtrans %}<span class="badge bg-info rounded-pill mx-2 fs-2">{{ SUBS_PRICES[subs1.type] }} {% trans %}USD/Month{% endtrans %}</span>
+                                <br>
+                                <span class="fs-1" >{% trans %}Minimum frequency updates 30 seconds. Requires the <b>Basic Plan</b> or <b>Unlock Device</b>{% endtrans %}</span>
+                            </p>
+                        {% elif subs1.type == 2 and False %}
+                            <button class="btn btn-success btn-sm fs-5" >
+                                <i class="ti ti-circle-check fs-6 mx-1"></i>
+                                {% trans %}Basic Plan{% endtrans %}
+                                <span class="badge bg-primary rounded-pill mx-2 fs-3">{% trans %}Active{% endtrans %}</span>
+                            </button>
+                            <p class="mx-2 mt-2" >
+                                {% trans %}Basic monthly subscription required to use the device.{% endtrans %}
+                                <br>{% trans %}Price:{% endtrans %}<span class="badge bg-info rounded-pill mx-2 fs-2">{{ SUBS_PRICES[subs1.type] }} {% trans %}USD/Month{% endtrans %}</span>
+                                <br>
+                                <span class="fs-1" >{% trans %}Minimum frequency updates 120 seconds.{% endtrans %}</span>
+                            </p>
+                        {% elif subs1.type == 3 and False %}
+                            <button class="btn btn-success btn-sm fs-5" >
+                                <i class="ti ti-circle-check fs-6 mx-1"></i>
+                                {% trans %}Fast Premium{% endtrans %}
+                                <span class="badge bg-primary rounded-pill mx-2 fs-3">{% trans %}Active{% endtrans %}</span>
+                            </button>
+                            <p class="mx-2 mt-2" >
+                                {% trans %}Premium monthly subscription required to use the device that include faster frequency updates up to 30 seconds.{% endtrans %}
+                                <br>{% trans %}Price:{% endtrans %}<span class="badge bg-info rounded-pill mx-2 fs-2">{{ SUBS_PRICES[subs1.type] }} {% trans %}USD/Month{% endtrans %}</span>
+                                <br>
+                                <span class="fs-1" >{% trans %}Minimum frequency updates 30 seconds.{% endtrans %}</span>
+                            </p>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+
+                {% if  is_unlocked  and False %}
+                    <li class="list-group-item list-group-item-action list-group-item-primary d-flex justify-content-between">
+                        <button class="btn btn-success btn-sm fs-5" >
+                            <i class="ti ti-lock-open fs-6 mx-1"></i>
+                            {% trans %}Unlocked Device{% endtrans %}
+                        </button>
+                        <p class="mx-2 mt-2" >{% trans %}This device is unlocked and can be used without subscriptions.{% endtrans %}</p>
+                    </li>
+                {% endif %}
+
+                {% for type in buy_options %}
+                {% if type == 1 %}
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                    <li class="list-group-item list-group-item-action list-group-item-light d-flex justify-content-between">
+
+                          <!-- Identify your business so that you can collect the payments. -->
+                          <input type="hidden" name="business" value="DGAL926QW4D2U">
+                          <input type="hidden" name="no_shipping" value="1">
+
+                          <input TYPE="hidden" NAME="return" value="{{ DOMAIN }}{{ url_with_lang('device_info', public_key=key_used) }}&return=buyreturn">
+                          <input TYPE="hidden" NAME="cancel_return" value="{{ DOMAIN }}{{ url_with_lang('device_info', public_key=key_used) }}&return=buycancel">
+
+                          <input TYPE="hidden" NAME="image_url" value="{{ DOMAIN }}{{ url_for('static', filename='logos/ppal_log.png') }}">
+                          <input type="hidden" name="currency_code" value="USD">
+                          <!-- Pass custom user ID -->
+                          <input type="hidden" name="custom" value="{{ device_info.id }}">
+
+                        {% if type > 0 and type < 4 %}
+                             <!-- Subscription details -->
+
+                            <input type="hidden" name="p3" value="1"> <!-- Recurrence period duration -->
+                            <input type="hidden" name="t3" value="M"> <!-- Recurrence period unit (D=Daily, W=Weekly, M=Monthly, Y=Yearly) -->
+
+                            <!-- Optional fields -->
+                            <input type="hidden" name="src" value="1"> <!-- Recurring: 1=true -->
+                            <input type="hidden" name="sra" value="1"> <!-- Retry payment on failure: 1=true -->
+                            <input type="hidden" name="no_note" value="1"> <!-- Do not allow buyer notes -->
+
+                            <input type="hidden" name="a1" value="0.00"> <!-- Trial period amount -->
+                            <input type="hidden" name="p1" value="1"> <!-- Trial period duration -->
+                            <input type="hidden" name="t1" value="W"> <!-- Trial period unit (D=Daily, W=Weekly, M=Monthly, Y=Yearly) -->
+
+                        {% endif %}
+
+
+                        {% if type == 0 %}
+                            <input type="hidden" name="cmd" value="_xclick">
+                            <input type="hidden" name="item_name" value="Unlock Device">
+                            <input type="hidden" name="amount" value="{{ UNLOCK_PRICE }}" >
+
+                            <div class="row" >
+                                <div class="col-auto" >
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                                        <i class="ti ti-shopping-cart fs-7 mx-1"></i>
+                                        Unlock Device <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ UNLOCK_PRICE }} USD</span>
+                                    </button>
+
+                                    <p class="mx-2 mt-2" >
+                                        Unlock this device to use it without subscriptions.
+                                        <br>
+                                        <span class="fs-1" >Minimum frequency updates 120 seconds.</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        {% elif type == 1 %}
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="item_name" value="Fast Updates">
+                            <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
+
+                            <div class="row" >
+                                <div class="col-auto" >
+                                    <button class="btn3d btn btn-success mx-2 btn-sm fs-5" type="submit" >
+                                        <i class="ti ti-shopping-cart fs-7 mx-1"></i>
+                                        {% trans %}Fast Updates{% endtrans %} <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} {% trans %}USD/Month{% endtrans %}</span>
+                                    </button>
+
+                                    <p class="mx-2 mt-2" >{% trans %}Buy this monthly subscription to enable faster frequency updates up to 30 seconds.{% endtrans %}
+                                        <span class="badge bg-info rounded-pill fs-1 ms-1">{% trans %}1-Week Free Trial{% endtrans %}</span>
+                                        <br>
+                                        <span class="fs-1" >{% trans %}Minimum frequency updates 30 seconds.{% endtrans %}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+
+                        {% elif type == 2 %}
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="item_name" value="Basic Plan">
+                            <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
+
+                            <div class="row" >
+                                <div class="col-auto" >
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                                        <i class="ti ti-shopping-cart fs-7 mx-1"></i>
+                                        Basic Plan <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} USD/Month</span>
+                                    </button>
+
+                                    <p class="mx-2 mt-2" >
+                                        Basic monthly subscription required to use the device.
+                                        <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
+                                        <br>
+                                        <span class="fs-1" >Minimum frequency updates 120 seconds.</span>
+                                    </p>
+                                </div>
+                            </div>
+
+
+                        {% elif type == 3 %}
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="item_name" value="Fast Premium">
+                            <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
+
+                            <div class="row" >
+                                <div class="col-auto" >
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                                        <i class="ti ti-shopping-cart fs-7 mx-1"></i>
+                                        Fast Premium <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} USD/Month</span>
+                                    </button>
+
+                                    <p class="mx-2 mt-2" >
+                                        Premium monthly subscription required to use the device that include faster frequency updates up to 30 seconds.
+                                        <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
+                                        <br>
+                                        <span class="fs-1" >Minimum frequency updates 30 seconds.</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                    </li>
+                    </form>
+                {% endif %}
+                {% endfor %}
+
+                {% if active_subs %}
+                <li class="list-group-item list-group-item-action">
+                    <h6>{% trans %}Manage Your Active Subscription{% endtrans %}</h6>
+                    <p class="fs-2" >{% trans %}If you wish to manage or cancel your subscription, please click the button below:{% endtrans %}</p>
+                    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_manage-paylist" target="_blank">
+                        <button class="btn3d  btn btn-secondary btn-sm fs-2" >
+                            <i class="ti ti-settings fs-7 mx-1"></i>
+                            {% trans %}Manage Subscriptions{% endtrans %}
+                        </button>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <div class="row my-2 alert alert-info" >
+                <span class="fs-3" >
+                    <i class="ti ti-info-circle fs-6 mx-1"></i>
+                    {% trans %}To buy or manage a subscription a user account is not required{% endtrans %}
+                </span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast fw-bold hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+        <div class="toast-header"> <svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                <rect width="100%" height="100%" fill="#007aff"></rect>
+            </svg>
+            <div id="toast-info-head" >
+                -
+            </div>
+
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> </div>
+        <div id="toast-info-body" >
+            <div class="toast-body"> - </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+
+
+<script>
+
+var time_past = 0;
+var device_diff_time = 0;
+var last_fetch = 0;
+
+function formatDuration(durationInSeconds) {
+  const seconds = durationInSeconds % 60;
+  const minutes = Math.floor((durationInSeconds / 60) % 60);
+  const hours = Math.floor(durationInSeconds / 3600);
+
+  // Format the output string
+  const formattedDuration = `${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m ` : ''}${seconds}s`;
+
+  return formattedDuration;
+}
+
+
+function calcUpdate(){
+
+   let wait_secs = 0;
+   let device_pool_time = parseInt({{ device_setting.WIFI_POOL_TIME }});
+   let percent = 0;
+   let REQ_WAIT = 15; //15 sec req delay
+
+   if(device_diff_time > 0){
+     let diff_past = parseInt((performance.now() - time_past)/1000);
+     wait_secs = device_pool_time + REQ_WAIT - (device_diff_time + diff_past);
+     if(wait_secs < 0 ){
+        wait_secs = 0;
+     }
+     percent = parseInt(wait_secs*100/(device_pool_time+REQ_WAIT));
+     percent = 100 - percent;
+
+     if(percent < 33){
+        $('#update-progress').removeClass('bg-danger');
+        $('#update-progress').removeClass('bg-warning');
+        $('#update-progress').addClass('bg-success');
+
+     }else if(percent < 67){
+        $('#update-progress').removeClass('bg-danger');
+        $('#update-progress').removeClass('bg-success');
+        $('#update-progress').addClass('bg-warning');
+     }else{
+        $('#update-progress').removeClass('bg-warning');
+        $('#update-progress').removeClass('bg-success');
+        $('#update-progress').addClass('bg-danger');
+
+     }
+
+     if(percent < 15){
+        percent = 15;
+     }
+
+   }
+
+   $("#update-progress").css("width", percent+"%");
+   $("#update-progress").text("Update in: "+wait_secs+" seconds");
+
+    let past_fetch_time = (performance.now() - last_fetch)/1000;
+   if(wait_secs == 0 && past_fetch_time > REQ_WAIT){
+
+    $('#water-chart').addClass('blink');
+
+    last_fetch = performance.now();
+    fetchData();
+
+   }
+
+}
+
+
+function fetchData() {
+    $.get("{{API_URL}}/sensor_view_api?public_key={{ key_used }}", function(data) {
+
+        $('#water-chart').removeClass('blink');
+
+         $('.distance').text(data.distance);
+         if(data.diff_time != 0){
+            $('#diff_time').text( formatDuration(data.diff_time));
+         }else{
+            $('#diff_time').text('unknown');
+         }
+
+         time_past = performance.now();
+         device_diff_time = parseInt(data.diff_time);
+
+         $('.voltage').text(data.voltage);
+         $('.rssi').text(data.rssi);
+
+         let percent_cap = mapDistanceToPercentage(parseFloat(data.distance));
+         $('.percent_cap').text(percent_cap);
+
+
+         let rssi_val = parseInt(data.rssi);
+         $('#rssi-symbol').removeAttr("class");
+         if(rssi_val <= -80){
+            $('#rssi-symbol').addClass("waveStrength-1");
+         }else if(rssi_val <= -70){
+            $('#rssi-symbol').addClass("waveStrength-2");
+         }else if(rssi_val <= -60){
+            $('#rssi-symbol').addClass("waveStrength-3");
+         }else if(rssi_val > -60){
+            $('#rssi-symbol').addClass("waveStrength-4");
+         }
+
+        let device_pool_time = parseInt({{ device_setting.WIFI_POOL_TIME }});
+
+        let alarm_on = false;
+        $('#alarm-area-text').empty();
+
+         if(parseInt(data.diff_time) > (device_pool_time*2 + 20) || parseInt(data.rtime) == 0){
+            $('.offline').removeClass('d-none');
+            $('.online').addClass('d-none');
+
+            if(check_offline){
+                //alert('Offline Alert!');
+
+                $('.alarm-area').removeClass('d-none');
+                $('#alarm-area-text').append("<h2><i class='ti ti-alert-triangle text-danger'></i> {% trans %}Alert: Offline Sensor!{% endtrans %} <i class='ti ti-alert-triangle text-danger'></i></h2>");
+                setVolume(1);
+                alarm_on = true;
+            }
+         }else{
+            $('.online').removeClass('d-none');
+            $('.offline').addClass('d-none');
+
+            if(check_offline){
+                $('.alarm-area').addClass('d-none');
+                $('#alarm-area-text').empty();
+                setVolume(0);
+            }
+
+            for (const value_ck of lower_alerts) {
+                if(parseInt(value_ck) >= parseInt(percent_cap)){
+                    //alert("Alert level under: "+value_ck+ " %");
+                    alarm_on = true;
+                    $('#alarm-area-text').append("<h2><i class='ti ti-alert-triangle text-danger'></i> {% trans %}Alert: Water Level Under{% endtrans %} "+value_ck+" %! <i class='ti ti-alert-triangle text-danger'></i></h2>");
+                }
+            }
+
+            for (const value_ck of greater_alerts) {
+                if(parseInt(value_ck) <= parseInt(percent_cap)){
+                    //alert("Alert level greater than: "+value_ck+ " %");
+                    alarm_on = true;
+                    $('#alarm-area-text').append("<h3><i class='ti ti-alert-triangle text-danger'></i> {% trans %}Alert: Water Level Over{% endtrans %} "+value_ck+" %! <i class='ti ti-alert-triangle text-danger'></i></h3>");
+                }
+            }
+
+            if(alarm_on){
+                $('.alarm-area').removeClass('d-none');
+                setVolume(1);
+            }else{
+                $('.alarm-area').addClass('d-none');
+                $('#alarm-area-text').empty();
+                setVolume(0);
+            }
+
+         }
+
+         updateCapacityChart(data.distance);
+         updateBatteryChart(data.voltage);
+    });
+}
+
+$(document).ready(function() {
+
+    last_fetch = performance.now();
+    fetchData();
+
+    calcUpdate();
+    setInterval(calcUpdate, 3000); // Update every 3 seconds
+});
+</script>
+
+<script>
+
+
+function mapDistanceToPercentage(distance) {
+
+    let EMPTY_LEVEL = parseFloat({{ device_setting.EMPTY_LEVEL }});
+    let TOP_MARGIN = parseFloat({{ device_setting.TOP_MARGIN }});
+
+    if(EMPTY_LEVEL >0  && EMPTY_LEVEL <= distance){
+        return 0;
+    }
+  //last_distance + EMPTY_LEVEL
+  if(EMPTY_LEVEL == 0 )
+  {
+    EMPTY_LEVEL = 1
+  }
+  let percent = Math.min(100, 100 - Math.min(100, parseInt((parseFloat(distance-TOP_MARGIN)*100.0)/(parseFloat(EMPTY_LEVEL-TOP_MARGIN)))));
+  return percent;
+}
+
+var chart_water;
+
+var options_water = {
+  series: [],
+  chart: {
+  type: 'bar',
+  height: 350,
+  stacked: true,
+  stackType: '100%'
+},
+colors: ['rgba(0, 191, 255, 0.5)', 'gray'],
+responsive: [{
+  breakpoint: 480,
+  options: {
+    legend: {
+      position: 'bottom',
+      offsetX: -10,
+      offsetY: 0
+    }
+  }
+}],
+xaxis: {
+  categories: ['Level'],
+},
+fill: {
+  opacity: 0.6
+},
+legend: {
+  position: 'right',
+  offsetX: 0,
+  offsetY: 50
+},
+noData: {
+    text: 'Loading...'
+  },
+tooltip: {
+        y: {
+            formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+              return value + '%';
+            }
+          }
+    },
+};
+
+chart_water = new ApexCharts(document.querySelector("#water-chart"), options_water);
+chart_water.render();
+
+function updateCapacityChart(distance) {
+
+    let org_distance = distance;
+    distance = mapDistanceToPercentage(parseFloat(distance));
+
+    chart_water.updateSeries([], true);
+    chart_water.updateSeries([{
+                  name: 'Water',
+                  data: [distance]
+                }, {
+                  name: 'Empty',
+                  data: [100 - distance]
+                }]
+      );
+
+  chart_water.updateOptions({
+        xaxis: {
+            categories: ["{% trans %}Empty distance:{% endtrans %} " + org_distance+ " CM"]
+        }
+    });
+
+}
+</script>
+
+<script>
+    var chart_battery;
+
+    var options_battery = {
+          series: [],
+          chart: {
+          type: 'bar',
+          height: 120,
+          stacked: true,
+          stackType: '100%'
+        },
+        colors: ['#008000', '#ff0000'],
+        plotOptions: {
+          bar: {
+            horizontal: true,
+          },
+        },
+        stroke: {
+          width: 1,
+          colors: ['#fff']
+        },
+        grid: {
+            show: false,
+        },
+        xaxis: {
+            show: false,
+          categories: ['{% trans %}Charge{% endtrans %}'],
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false,
+          },
+          crosshairs: {
+            show: false,
+          },
+          labels: {
+              show: false
+            }
+        },
+        yaxis: {
+            show: false,
+            labels: {
+              show: false
+            },
+            axisBorder: {
+            show: false
+            },
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + "%"
+            }
+          }
+        },
+        fill: {
+          opacity: 0.5
+        },
+        legend: {
+           show: false
+        },
+        title: {
+            text: '{% trans %}Battery{% endtrans %}',
+            align: 'center',
+            offsetY: 20,
+        },
+        noData: {
+            text: '{% trans %}Loading...{% endtrans %}'
+          },
+        };
+
+    chart_battery = new ApexCharts(document.querySelector("#battery-chart"), options_battery);
+    chart_battery.render();
+
+
+
+    // Function to map battery voltage to percentage
+    function mapVoltageToPercentage(voltage) {
+        var minVoltage = 3.4;
+        var maxVoltage = 3.9;
+
+        var percentage = 100;
+
+        // Ensure the voltage is within the valid range
+        if (voltage <= minVoltage) {
+            percentage = 0;
+        } else if (voltage <= 3.54) {
+            percentage = 10;
+        } else if (voltage <= 3.58) {
+            percentage = 20;
+        } else if (voltage <= 3.62) {
+            percentage = 30;
+        } else if (voltage <= 3.66) {
+            percentage = 40;
+        } else if (voltage <= 3.70) {
+            percentage = 50;
+        } else if (voltage <= 3.74) {
+            percentage = 60;
+        } else if (voltage <= 3.78) {
+            percentage = 70;
+        } else if (voltage <= 3.82) {
+            percentage = 80;
+        } else if (voltage <= 3.86) {
+            percentage = 90;
+        } else {
+            percentage = 100;
+        }
+
+        return percentage;
+    }
+
+    function updateBatteryChart(batteryPercent) {
+        batteryPercent = mapVoltageToPercentage(parseFloat(batteryPercent));
+
+        chart_battery.updateSeries([], true);
+        chart_battery.updateSeries([{
+                      name: '{% trans %}Charge{% endtrans %}',
+                      data: [batteryPercent]
+                    }, {
+                      name: 'Empty',
+                      data: [100 - batteryPercent]
+                    }]
+          );
+
+        chart_battery.updateOptions({
+            title: {
+                text: '{% trans %}Battery Charge:{% endtrans %} ' + batteryPercent + '%'
+            }
+        });
+    }
+</script>
+
+<style>
+    /* CSS used here will be applied after bootstrap.css */
+    .wave {
+        display: inline-block;
+        border: 7px solid transparent;
+        border-top-color: currentColor;
+        border-radius: 50%;
+        border-style: solid;
+        margin: 3px;
+    }
+
+    .waveStrength-3 .wv4.wave,
+    .waveStrength-2 .wv4.wave,
+    .waveStrength-2 .wv3.wave,
+    .waveStrength-1 .wv4.wave,
+    .waveStrength-1 .wv3.wave,
+    .waveStrength-1 .wv2.wave {
+        border-top-color: #eee;
+    }
+
+.apexcharts-toolbar {
+  display: none;
+}
+</style>
+
+
+<script>
+$(document).ready(function() {
+
+    var device_key = '{{ key_used }}';
+
+    {% if small_version %}
+        $('.small_none').addClass('d-none');
+        $('.small_pad0').addClass('pt-0');
+    {% endif %}
+
+    function GetNameToDisplay() {
+        var local_name = localStorage.getItem('name-' + device_key);
+        var user_dev_name = false;
+        {% if current_user.is_authenticated %}
+            user_dev_name = "{{ current_user.get_device_name(key_used) }}";
+        {% endif %}
+        if(local_name || user_dev_name){
+            console.log("case 1");
+            return user_dev_name || local_name;
+        }
+        console.log("case 2");
+        return '';
+    }
+
+    function load_device_name(){
+        let name_to_use = GetNameToDisplay();
+        $('#device_name').html(name_to_use+'<i class="ti ti-edit fs-4 ms-2"></i>');
+    }
+
+    load_device_name();
+
+    $('#set_name_btn').click(function() {
+        var inputValue = $('#set_name_input').val();
+        localStorage.setItem('name-'+device_key, inputValue);
+
+        {% if current_user.is_authenticated %}
+            $.post( "{{ url_with_lang('devices') }}", { action: "add", public_key: device_key, name: inputValue})
+              .done(function( data ) {
+            });
+        {% endif %}
+
+        $('#ChangeNameModal').modal('hide');
+        $('#device_name').text(inputValue);
+    });
+
+    $('.add_device').click(function() {
+        var devices = localStorage.getItem('devices');
+        let new_device = '{{ key_used }}';
+
+        if(!devices){
+            devices = '{{ key_used }}';
+        }else if(devices.indexOf(new_device) == -1){
+            devices += '|{{ key_used }}';
+        }
+        localStorage.setItem('devices', devices);
+        localStorage.setItem('info-'+new_device, '{{ model_info.long_name }}');
+
+        CheckCurrentDevice();
+
+        {% if current_user.is_authenticated %}
+            let name_value = localStorage.getItem('name-' + device_key) || '';
+            $.post( "{{ url_with_lang('devices') }}", { action: "add", public_key: new_device, name: name_value})
+              .done(function( data ) {
+            });
+        {% endif %}
+
+        $('#toast-info-head').html('<strong class="me-auto">{% trans %}Device Add Success{% endtrans %}</strong>');
+        $('#toast-info-body').html('<div class="toast-body">{% trans %}If not user logged, device will be stored only at your local browser.{% endtrans %}</div>');
+
+        var myToastEl = document.getElementById('liveToast')
+        var myToast = bootstrap.Toast.getOrCreateInstance(myToastEl) // Returns a Bootstrap toast instance
+        myToast.show();
+    });
+
+    function GetStorageDevices() {
+        var devices = localStorage.getItem('devices');
+        if(!devices){
+            return [];
+        }else{
+            return devices.split('|');
+        }
+    }
+
+    function CheckCurrentDevice() {
+        let current_device = '{{ key_used }}';
+        var devices = localStorage.getItem('devices');
+        // device was added
+        if(devices && devices.indexOf(current_device) != -1){
+            $('.add_device').addClass('d-none');
+        }else{
+            $('.add_device').removeClass('d-none');
+        }
+    }
+
+    CheckCurrentDevice();
+
+    $('.bookmarkBtn').click(function() {
+        var pageTitle = document.title;
+        var pageUrl = window.location.href;
+
+        if (window.sidebar && window.sidebar.addPanel) { // Mozilla Firefox Bookmark
+          window.sidebar.addPanel(pageTitle, pageUrl, '');
+        } else if (window.external && ('AddFavorite' in window.external)) { // IE Favorite
+          window.external.AddFavorite(pageUrl, pageTitle);
+        } else { // Other browsers (prompt the user)
+          alert('Press ' + (navigator.userAgent.toLowerCase().indexOf('mac') != -1 ? 'Cmd' : 'Ctrl') + '+D {% trans %}to bookmark this page.{% endtrans %}');
+        }
+    });
+
+});
+</script>
+
+<script>
+    // ADMIN SETTING CODE
+
+$(document).ready(function() {
+
+{% if current_user.is_admin or can_admin %}
+     $('input').prop('disabled', false);
+     $('#can_edit_btn').removeClass('d-none');
+     $('.cant_edit').addClass('d-none');
+{% endif %}
+
+});
+</script>
+
+
+<script type="text/javascript">
+// QR JS code
+
+$(document).ready(function() {
+
+    $('#show_qr').click(function() {
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: '{{ DOMAIN }}{{ url_with_lang('device_info') }}?public_key={{ key_used }}',
+            width: 256,
+            height: 256,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+        $(this).hide();
+    });
+
+    $('#show_qr_prv').click(function() {
+
+        let pk = $(this).attr('pk');
+
+        var qrcode = new QRCode(document.getElementById("qrcode_prv"), {
+            text: '{{ DOMAIN }}{{ url_with_lang('device_info') }}?private_key='+pk,
+            width: 256,
+            height: 256,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+        $(this).hide();
+        $('#pk_text').removeClass('d-none');
+
+    });
+
+
+
+});
+</script>
+
+<script src="{{ url_for('static', filename='assets/js/jsQR.min.js') }}"></script>
+<script>
+// PRIVATE QR SCANNER
+
+$(document).ready(function() {
+    $('#qr_scan_prv').on('click', function() {
+        abrirLectorQR();
+    });
+});
+
+function abrirLectorQR() {
+    // Check if the browser supports getUserMedia
+    if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+        // Open camera to scan QR code
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then(function(stream) {
+            // Render video stream in a <video> element
+            var video = document.createElement('video');
+            document.body.appendChild(video);
+            video.srcObject = stream;
+            video.play();
+
+            // Use jsQR to scan QR codes from the video stream
+            var canvasElement = document.createElement('canvas');
+            var canvas = canvasElement.getContext('2d');
+            tick();
+
+            function tick() {
+                if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    canvasElement.width = video.videoWidth;
+                    canvasElement.height = video.videoHeight;
+                    canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+                    var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                    var code = jsQR(imageData.data, imageData.width, imageData.height, {
+                        inversionAttempts: 'dontInvert',
+                    });
+                    if (code && code.data && code.data.indexOf('{{ DOMAIN.rstrip('/') }}/') == 0) {
+                        // If a QR code is detected, stop video playback and process the result
+                        video.pause();
+                        stream.getTracks().forEach(track => track.stop());
+                        $('#resultado').text('QR Result : ' + code.data);
+                        if(code.data.indexOf('private_key=') == -1){
+                            alert("QR don't contains a private key");
+                        }
+                        window.location.href = code.data;
+                    } else {
+                        // If no QR code is detected, keep scanning
+                        requestAnimationFrame(tick);
+                    }
+                } else {
+                    requestAnimationFrame(tick);
+                }
+            }
+        })
+        .catch(function(error) {
+            alert('{% trans %}Error accessing the camera. Please make sure you give permission to access the camera.{% endtrans %}');
+        });
+    } else {
+        alert('{% trans %}This browser does not support the functionality necessary to scan QR codes.{% endtrans %}');
+    }
+}
+
+</script>
+{% endblock %}

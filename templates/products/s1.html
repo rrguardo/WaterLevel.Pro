@@ -1,0 +1,487 @@
+{% extends "base2.html" %}
+
+{% block head %}
+<title>WiFi Water Level S1 | {% trans %}Wireless Water Level Sensor for Tanks{% endtrans %}</title>
+
+<meta name="description" content="{% trans %}Monitor your tank's water level remotely with the WiFi Water Level S1. Get alerts, easy installation, and flexible power options. Perfect for indoor and outdoor use.{% endtrans %}">
+<meta name="keywords" content="{% trans %}WiFi Water Level Sensor, Water Level Monitoring, Remote Water Level, Wireless Water Level, Tank Water Level, S1 Water Sensor, Home Automation, Water Alerts{% endtrans %}">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="WiFi Water Level S1 | {% trans %}Wireless Water Level Sensor for Tanks{% endtrans %}">
+<meta property="og:description" content="{% trans %}Monitor your tank's water level remotely with the WiFi Water Level S1. Get alerts, easy installation, and flexible power options. Perfect for indoor and outdoor use.{% endtrans %}">
+<meta property="og:image" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}">
+<meta property="og:url" content="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}">
+
+<meta name="twitter:card" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}">
+<meta name="twitter:title" content="WiFi Water Level S1 | {% trans %}Wireless Water Level Sensor for Tanks{% endtrans %}">
+<meta name="twitter:description" content="{% trans %}Monitor your tank's water level remotely with the WiFi Water Level S1. Get alerts, easy installation, and flexible power options. Perfect for indoor and outdoor use.{% endtrans %}">
+<meta name="twitter:image" content="{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "WiFi Water Level S1",
+  "image": "{{ DOMAIN }}{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}",
+  "description": "{% trans %}Monitor your tank's water level remotely with the WiFi Water Level S1. Get alerts, easy installation, and flexible power options. Perfect for indoor and outdoor use.{% endtrans %}",
+  "sku": "S1",
+  "brand": {
+    "@type": "Brand",
+    "name": "Water Level Pro"
+  },
+  "additionalProperty": [
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Remote Monitoring{% endtrans %}",
+      "value": "{% trans %}Monitor water levels remotely via WiFi.{% endtrans %}"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Power Options{% endtrans %}",
+      "value": "{% trans %}Runs on battery or AC power.{% endtrans %}"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "{% trans %}Open Source{% endtrans %}",
+      "value": "{% trans %}Community-driven hardware and software, freely available under GPL terms.{% endtrans %}"
+    }
+  ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": 4.9,
+        "reviewCount": 9
+      },
+      "positiveNotes": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "{% trans %}Solar Powered{% endtrans %}"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{% trans %}Unlimited monitoring range.{% endtrans %}"
+              }
+            ]
+      }
+}
+</script>
+
+
+<style>
+.long-img-area {
+  max-width: 650px;
+  margin: 35px auto;
+}
+
+.video-wrapper {
+  max-width: 600px; /* Maximum width of 400px */
+  margin: 0 auto;   /* Center horizontally */
+}
+
+.carousel-item img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  max-width: 700px; /* Adjust this value to your desired limit */
+  margin: 0 auto; /* Center image if it does not take full width */
+}
+
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-fluid">
+
+  <div class="d-flex">
+    <div class="p-2">
+        <h1 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" >WiFi Water Level S1 - {% trans %}Features{% endtrans %}</h1>
+    </div>
+    <div class="ms-auto">
+        <a href="/manuals/WiFi-Water-Level-S1" target="_self" class="btn btn-info btn-sm  mt-1">
+            <i class="ti ti-help"></i> {% trans %}Manual{% endtrans %}
+        </a>
+    </div>
+
+  </div>
+
+    <div class="text-center">
+
+        <div id="carouselExampleAutoplaying1" class="carousel long-img-area" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="7000">
+              <img src="{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 Features" title="WiFi Water Level S1 Features">
+            </div>
+            <div class="carousel-item" data-bs-interval="7000">
+              <img src="{{ url_for('static', filename='manuals/s1_face2'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - How It Works" title="How WiFi Water Level S1 Works" >
+            </div>
+            <div class="carousel-item" data-bs-interval="7000">
+              <img src="{{ url_for('static', filename='manuals/wifi_water_level_s1.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - Product Image" title="WiFi Water Level S1 - Product Image" >
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+        <a class="btn btn-sm btn-success ms-4 mt-2" href="/device_info?public_key=demo" >
+            <i class="ti ti-router"></i>
+            {% trans %}UI Demo Device{% endtrans %}
+        </a>
+        <a href="https://www.instructables.com/Build-Your-Own-DIY-WiFi-Water-Level-Sensor-S1/" target="_blank" class="btn btn-warning fs-2 fw-semibold lh-sm ms-1 mt-2">
+                  <i class="ti ti-help"></i> {% trans %}DIY Guide{% endtrans %}
+        </a>
+      </div>
+
+
+    <h2 class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" >{% trans %}Features List{% endtrans %} </h2>
+    <ul class="list-group">
+        {% trans %}
+        <li class="list-group-item list-group-item-action list-group-item-success active">
+            <b>Measures water levels in tanks with centimeter precision</b><br>
+            Obtain water level measurements of tanks or reservoirs on your phone without needing to be near the device.
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-primary">
+            <b>Wi-Fi Wireless Water Level Sensor</b><br>
+
+            <p>
+                Works wherever there is Wi-Fi internet coverage or where it can be extended.
+                This device uses your existing home Wi-Fi, allowing you to check the water level from anywhere
+                in the world as long as you have internet access.
+            </p>
+        </li>
+        {% endtrans %}
+        <li class="list-group-item list-group-item-action list-group-item-success active ">
+            <img src="{{ url_for('static', filename='manuals/solar-panel.png') }}" class="img-thumbnail mx-2" width="50px" alt="Solar Power" title="Solar Power " >
+            {% trans %}
+            <b>Eco-Friendly Solar Power Input with Battery Backup</b>
+
+            <br> Fully autonomous solar power input with AA NiMH batteries for backup, designed for eco-friendly
+            energy use in areas that receive at least 3 hours of direct sunlight daily.
+            {% endtrans %}
+
+        </li>
+        {% trans %}
+        <Li class="list-group-item list-group-item-action list-group-item-primary">
+            <b>Water Level Alerts via Email or Web UI</b><br>
+            <p>
+                Receive notifications when the water level is above or below a specified percentage or if the device goes offline.
+            </p>
+        </Li>
+        <li class="list-group-item list-group-item-action list-group-item-success active ">
+            <b>USB-C Input Power  </b>
+            <br> Flexible input power through a standard <b>USB-C</b> connection.
+            Perfect for indoor use or locations with limited or no sunlight.
+
+        </li>
+        {% endtrans %}
+        <li class="list-group-item list-group-item-action list-group-item-primary">
+            {% trans %}
+            <b>Responsive Web App for Water Level Monitoring</b>
+            <br>Monitor your water level from anywhere using your cellphone, tablet, laptop, or PC.
+            {% endtrans %}
+
+            <div class="text-center my-2">
+                  <img src="{{ url_for('static', filename='prod_img/cel.png') }}" class="img-fluid" alt="Web app cellphone view for S1" title="WiFi Water Level S1 - Smartphone Web App">
+                  <img src="{{ url_for('static', filename='prod_img/tab.png') }}" class="img-fluid" alt="Web app tablet view for S1" title="WiFi Water Level S1 - Tablet Web App">
+                 <br>
+                 <a class="btn btn-sm btn-success ms-4" href="/device_info?public_key=demo" >{% trans %}View Live Demo Web App{% endtrans %}</a>
+            </div>
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-success active ">
+            {% trans %}
+            <b>Flexible Measurement Range from 2 cm to 8 meters</b>
+            <p>
+                The measurement range depends on the sensor used. For the most common waterproof <b>AJ-SR04M sensor</b>,
+                the typical range is from <b>20 cm to 4 meters</b>, and sometimes up to 8 meters.
+            </p>
+            {% endtrans %}
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-info">
+            {% trans %}
+            <a href="https://oshwlab.com/rrguardo83/water-level-.pro-s1-v2" target="_blank">
+                Open Hardware and Open Source Code under GPL3, including 3D case models</a>
+            <p>
+                Users are free to produce, modify, or resell the hardware and code in accordance with GPL3 terms.<br>
+                Experience the future today by 3D printing the device case at home and either ordering or
+                assembling the electronics yourself.
+            </p>
+            {% endtrans %}
+            <div class="text-center my-2">
+                  <img src="{{ url_for('static', filename='manuals/3d_printer.jpg') }}" class="img-fluid" alt="Web app cellphone view for S1" title="WiFi Water Level S1 - Smartphone Web App">
+
+                <div class="ratio ratio-16x9 video-wrapper my-2">
+                  <video autoplay muted loop>
+                    <source src="https://github.com/rrguardo/WiFi-Water-Level-S1/raw/refs/heads/main/images/S1Show.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+            </div>
+
+        </li>
+
+        <li class="list-group-item list-group-item-action list-group-item-primary" >
+            {% trans %}
+            <b>Remote Web Administration of Device Parameters.<br>
+                Access and adjust device settings conveniently from any web browser.
+            </b><br><br>
+            <b>Available adjustment options include:</b>
+            <ul class="list-group ms-3 list-group-numbered my-2" >
+                <li class="list-group-item list-group-item-action list-group-item-info">
+                    <b>Empty Level:</b> Define the depth of the water tank in centimeters. This measurement is taken from the sensor to the bottom of the tank.
+                </li>
+                <li class="list-group-item list-group-item-action list-group-item-dark text-white">
+                    <b>Top Margin:</b>
+                    Specify the margin in centimeters from the sensor to the maximum water level of the tank.<br>
+                    This setting is useful for tanks with a shut-off valve that prevents overfilling by stopping at a specific distance below the top cover.
+                </li>
+                <li class="list-group-item list-group-item-action list-group-item-info">
+                    <b>Water Level Measurement Frequency:</b><br>
+                    Set how often water level measurements are taken.<br>
+                    This feature is useful for conserving battery life or monitoring flow levels more quickly.
+                </li>
+            </ul>
+            {% endtrans %}
+        </li>
+        {% trans %}
+        <li class="list-group-item list-group-item-action list-group-item-success active">
+            <b>Automatic Firmware Updates</b>
+            <p>
+                Keep your device up-to-date with the latest features and improvements.
+                Updates are applied automatically for a seamless user experience.
+            </p>
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-primary" >
+            <b>Designed and tested for outdoor and indoor use.</b><br>
+            Built to withstand sun, rain, and wind under normal outdoor conditions. Reliable performance indoors and outdoors alike.
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-success active" >
+            <b>External 2.4GHz WiFi Antenna (3dBi or 5dBi)</b><br>
+            <p>
+                Offers outdoor ranges of <b>100-150 meters</b> with a <b>3dBi</b> antenna and up to <b>200 meters</b> with a <b>5dBi</b> antenna, depending on line-of-sight.<br>
+                Indoors, the range typically spans <b>30-70 meters</b>, influenced by obstacles and antenna choice.
+                Compatible with <b>2.4GHz WiFi</b> range extenders.
+            </p>
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-primary" >
+            <b>Low Energy Consumption</b><br>
+            <p>
+                Consumes approximately <b>75mA</b> while sending water level data via <b>WiFi</b>.<br>
+                In sleep/waiting mode, energy usage drops to just <b>0.01mA</b>.
+            </p>
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-success active" >
+            <b>Easy-to-Manufacture Design</b>
+            <p>
+               The energy module is integrated into a single PCB. The sensor connects easily via a plug-in,
+                with no soldering required when you purchase the pre-assembled PCB, making it easy for anyone or
+                any factory to manufacture in small batches.
+            </p>
+        </li>
+        <li class="list-group-item list-group-item-action list-group-item-primary" >
+           <b>Expected Operating Temperature Range</b><br>
+            <p>
+                Based on the components used, the expected temperature range is from <b>-20°C (-4°F)</b> to <b>+50°C (122°F)</b>, although this has not been tested extensively.
+            </p>
+         </li>
+        {% endtrans %}
+        <li class="list-group-item list-group-item-action list-group-item-secondary ">
+            <div class="text-center my-3">
+
+
+                <p class="ms-2" >
+                    <a href="https://github.com/rrguardo/WiFi-Water-Level-S1" target="_blank" class="mx-2 my-2" >
+                        <img src="{{ url_for('static', filename='logos/gpl3.png') }}" class="img-thumbnail mx-2" alt="GPL3 S1" title="GPL3 S1" >
+                    </a>
+                    <a href="https://oshwlab.com/rrguardo83/water-level-.pro-s1-v2" target="_blank" class="mx-2" >
+                        <img src="{{ url_for('static', filename='logos/open-hardware.jpg') }}" class="img-thumbnail" alt="Open Hardware S1" title="Open Hardware S1" >
+                    </a>
+                    <a href="https://github.com/rrguardo/WiFi-Water-Level-S1" target="_blank" class="mx-2 my-2" >
+                        <img src="{{ url_for('static', filename='manuals/github.png') }}" class="img-thumbnail" alt="GiHub" title="S1" width="90px" >
+                    </a>
+                </p>
+            </div>
+
+            <div class="ratio ratio-16x9 video-wrapper my-2">
+                  <video autoplay muted loop>
+                    <source src="https://github.com/rrguardo/WiFi-Water-Level-S1/raw/refs/heads/main/images/S1Show2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+            </div>
+        </li>
+    </ul>
+
+<hr class="row small_none" >
+
+<div class="row justify-content-center" id="order_now">
+
+    <div class="accordion my-2" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="importantDisclaimerHeading">
+          <button
+            class="accordion-button collapsed bg-warning text-white"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#importantDisclaimerCollapse"
+            aria-expanded="false"
+            aria-controls="importantDisclaimerCollapse">
+            {% trans %}Important Disclaimer{% endtrans %}
+          </button>
+        </h2>
+        <div
+          id="importantDisclaimerCollapse"
+          class="accordion-collapse collapse"
+          aria-labelledby="importantDisclaimerHeading"
+          data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            {% trans %}
+            <p class="my-1 alert alert-warning" role="alert">
+              This open-source electronics project/device is provided strictly for experimental, educational, and developmental purposes.
+              It is offered "as is," without any warranties, express or implied. This includes, but is not limited to, implied warranties
+              of merchantability, fitness for a particular purpose, or non-infringement.
+            </p>
+            <hr>
+            <p><strong>By using this device, you acknowledge and accept that:</strong></p>
+            <ul class="list-group list-group-numbered ms-1">
+              <li class="list-group-item list-group-item-action" >You assume all risks associated with its use, including but not limited to potential damage to property, personal injury, or any other unintended consequences.</li>
+              <li class="list-group-item list-group-item-action" >This device is not certified for commercial, industrial, or safety-critical applications. It is intended solely for developers, hobbyists, and other users with appropriate technical expertise.</li>
+              <li class="list-group-item list-group-item-action" >The creators and distributors of this project are not liable for any damages, losses, or inconveniences resulting from its use, modification, or integration into other systems.</li>
+            </ul>
+            <p class="my-3" >
+              Users are solely responsible for ensuring that the use of this device complies with local laws, regulations, and safety standards in their region.
+            </p>
+            {% endtrans %}
+
+            <!-- Donations Section at the end of the Disclaimer -->
+            <hr>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+
+<hr class="row small_none" >
+
+<div class="row d-flex justify-content-center mb-3 small_none d-none">
+
+    <div class="card bg-light col-auto" >
+        <div class="card-body" >
+            <h5 class="card-title fw-semibold mb-4 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >{% trans %}S1 Device Subscriptions{% endtrans %}</h5>
+            <ul class="list-group ">
+
+                {% for type in [2 , 1] %}
+                    <li class="list-group-item list-group-item-action list-group-item-light d-flex justify-content-between">
+
+                        {% if type == 1 %}
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="item_name" value="Fast Updates">
+                            <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
+
+                            <div class="row" >
+                                <div class="col-auto" >
+                                    <button class="btn3d btn btn-success mx-2 btn-sm fs-5" type="submit" >
+                                        <i class="ti ti-shopping-cart fs-7 mx-1"></i>
+                                        {% trans %}Fast Updates{% endtrans %} <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} {% trans %}USD/Month{% endtrans %}</span>
+                                    </button>
+
+                                    {% trans %}
+                                    <p class="mx-2 mt-2" >Buy this monthly subscription to enable faster frequency updates up to 30 seconds.
+                                        <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
+                                        <br>
+                                        <span class="fs-1" >Minimum frequency updates 30 seconds.</span>
+                                    </p>
+                                    {% endtrans %}
+                                </div>
+                            </div>
+                        {% elif type == 2 %}
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="item_name" value="Basic Plan">
+                            <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
+
+                            <div class="row" >
+                                {% trans %}
+                                <div class="col-auto" >
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                                        <i class="ti ti-shopping-cart fs-7 mx-1"></i>
+                                        Free Plan <span class="badge bg-warning rounded-pill mx-2 fs-3">0 USD/Month</span>
+                                    </button>
+
+                                    <p class="mx-2 mt-2" >
+                                        Basic free plan to use the device without costs.
+                                        <br>
+                                        <span class="fs-1" >Minimum frequency updates 120 seconds.</span>
+                                    </p>
+                                </div>
+                                {% endtrans %}
+                            </div>
+
+
+                        {% elif type == 3 %}
+                            <input type="hidden" name="cmd" value="_xclick-subscriptions">
+                            <input type="hidden" name="item_name" value="Fast Premium">
+                            <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
+
+                            <div class="row" >
+                                <div class="col-auto" >
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                                        <i class="ti ti-shopping-cart fs-7 mx-1"></i>
+                                        Fast Premium <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} USD/Month</span>
+                                    </button>
+
+                                    <p class="mx-2 mt-2" >
+                                        Premium monthly subscription required to use the device that include faster frequency updates up to 30 seconds.
+                                        <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
+                                        <br>
+                                        <span class="fs-1" >Minimum frequency updates 30 seconds.</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                    </li>
+                {% endfor %}
+
+                {% if active_subs %}
+                <li class="list-group-item list-group-item-action">
+                    {% trans %}
+                    <h6>Manage Your Active Subscription</h6>
+                    <p class="fs-2" >If you wish to manage or cancel your subscription, please click the button below:</p>
+                    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_manage-paylist" target="_blank">
+                        <button class="btn3d  btn btn-secondary btn-sm fs-2" >
+                            <i class="ti ti-settings fs-7 mx-1"></i>
+                            Manage Subscriptions
+                        </button>
+                    </a>
+                    {% endtrans %}
+                </li>
+                {% endif %}
+            </ul>
+
+            <div class="row my-2 alert alert-info" >
+                <span class="fs-3" >
+                    <i class="ti ti-info-circle fs-6 mx-1"></i>
+                    {% trans %}To buy or manage a subscription a user account is not required{% endtrans %}
+                </span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<hr class="row small_none" >
+
+</div>
+
+{% endblock %}
