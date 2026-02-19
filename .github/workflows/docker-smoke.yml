@@ -21,7 +21,7 @@ jobs:
         run: chmod +x scripts/docker_smoke_test.sh
 
       - name: Run docker smoke tests
-        run: ./scripts/docker_smoke_test.sh
+        run: SMOKE_KEEP_STACK_ON_FAIL=1 ./scripts/docker_smoke_test.sh
 
       - name: Show compose status
         if: always()

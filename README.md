@@ -1,6 +1,6 @@
 # WaterLevel.Pro (Open Source)
 
-[![Docker Smoke Tests](https://github.com/rrguardo/wlp/actions/workflows/docker-smoke.yml/badge.svg)](https://github.com/rrguardo/wlp/actions/workflows/docker-smoke.yml)
+[![Docker Smoke Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml)
 
 Water level monitoring platform with:
 - Web app (`app.py`)

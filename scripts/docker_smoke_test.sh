@@ -34,10 +34,26 @@ WEB_HOST_HEADER="${WEB_HOST_HEADER:-localhost}"
 API_HOST_HEADER="${API_HOST_HEADER:-api.localhost}"
 
 cleanup() {
+  exit_status=$?
+  if [ "${SMOKE_KEEP_STACK_ON_FAIL:-0}" = "1" ] && [ "$exit_status" -ne 0 ]; then
+    echo "[info] preserving stack for post-failure diagnostics"
+    return
+  fi
+
   # Always clean resources to keep CI/local runs reproducible.
   docker compose -f "$COMPOSE_FILE" down -v >/dev/null 2>&1 || true
 }
 trap cleanup EXIT
+
+fail() {
+  message="$1"
+  echo "[fail] $message"
+  echo "[debug] docker compose ps"
+  docker compose -f "$COMPOSE_FILE" ps || true
+  echo "[debug] docker compose logs (tail=200)"
+  docker compose -f "$COMPOSE_FILE" logs --no-color --tail=200 || true
+  exit 1
+}
 
 # Build application image and start runtime services.
 docker compose -f "$COMPOSE_FILE" build app
@@ -52,9 +68,7 @@ for i in $(seq 1 "$START_RETRIES"); do
   fi
 
   if [ "$i" -eq "$START_RETRIES" ]; then
-    echo "[fail] services did not reach running state"
-    docker compose -f "$COMPOSE_FILE" ps
-    exit 1
+    fail "services did not reach running state"
   fi
 
   sleep "$RETRY_SLEEP_SECONDS"
@@ -68,9 +82,7 @@ for i in $(seq 1 "$HTTP_RETRIES"); do
   fi
 
   if [ "$i" -eq "$HTTP_RETRIES" ]; then
-    echo "[fail] https listener not ready"
-    docker compose -f "$COMPOSE_FILE" ps
-    exit 1
+    fail "https listener not ready"
   fi
 
   sleep "$RETRY_SLEEP_SECONDS"
@@ -84,8 +96,7 @@ for i in $(seq 1 "$HTTP_RETRIES"); do
   fi
 
   if [ "$i" -eq "$HTTP_RETRIES" ]; then
-    echo "[fail] http->https redirect"
-    exit 1
+    fail "http->https redirect"
   fi
 
   sleep "$RETRY_SLEEP_SECONDS"
@@ -99,8 +110,7 @@ for i in $(seq 1 "$HTTP_RETRIES"); do
   fi
 
   if [ "$i" -eq "$HTTP_RETRIES" ]; then
-    echo "[fail] web smoke"
-    exit 1
+    fail "web smoke"
   fi
 
   sleep "$RETRY_SLEEP_SECONDS"
@@ -114,8 +124,7 @@ for i in $(seq 1 "$HTTP_RETRIES"); do
   fi
 
   if [ "$i" -eq "$HTTP_RETRIES" ]; then
-    echo "[fail] api smoke"
-    exit 1
+    fail "api smoke"
   fi
 
   sleep "$RETRY_SLEEP_SECONDS"
@@ -133,8 +142,7 @@ for i in $(seq 1 "$REPORT_RETRIES"); do
   fi
 
   if [ "$i" -eq "$REPORT_RETRIES" ]; then
-    echo "[fail] goaccess smoke"
-    exit 1
+    fail "goaccess smoke"
   fi
 
   sleep "$RETRY_SLEEP_SECONDS"
