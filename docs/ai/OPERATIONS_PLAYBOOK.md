@@ -51,7 +51,7 @@ Relay R1 update contract (`/relay-update`):
 Demo simulators (cron-managed):
 - `scripts/s1_demo_device_service.py`
 - `scripts/r1_demo_relay_service.py`
-- In Docker cron, both target `https://nginx` with host header `${WLP_API_SERVER_NAME}` and run every 20 seconds.
+- In Docker cron, both target `https://nginx` with host header `${WLP_API_SERVER_NAME}` and run every 30 seconds.
 
 ## Domain/TLS config knobs
 

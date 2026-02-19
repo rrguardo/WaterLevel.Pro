@@ -102,7 +102,7 @@ Notes:
 
 Docker cron integration:
 
-- `ext_conf/crontab.ini` runs this simulator every 20 seconds (3 runs per minute).
+- `ext_conf/crontab.ini` runs this simulator every 30 seconds (2 runs per minute).
 - In Docker cron, requests go to `https://nginx` with host header `${WLP_API_SERVER_NAME}`.
 - Cron log file: `/var/log/cron/s1_demo_device_service.log`
 
@@ -137,8 +137,12 @@ Notes:
 
 Docker cron integration:
 
-- `ext_conf/crontab.ini` runs this relay simulator every 20 seconds (3 runs per minute).
+- `ext_conf/crontab.ini` runs this relay simulator every 30 seconds (2 runs per minute).
 - Cron log file: `/var/log/cron/r1_demo_relay_service.log`
+
+Redis runtime note:
+
+- Keep `WEB_REDIS_DB` and `API_REDIS_DB` aligned (same DB index) so live device keys written by API are visible to web endpoints that read Redis state.
 
 Run CI locally with gitlab-ci-local:
 1. Install `gitlab-ci-local` (for example: `npm i -g gitlab-ci-local`)

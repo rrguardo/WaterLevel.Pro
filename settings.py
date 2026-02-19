@@ -53,7 +53,7 @@ DEMO_RELAY_PRV_KEY = os.getenv("DEMO_RELAY_PRV_KEY", "")
 REDIS_HOST = os.getenv("REDIS_HOST", "127.0.0.1")
 REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
 WEB_REDIS_DB = int(os.getenv("WEB_REDIS_DB", "0"))
-API_REDIS_DB = int(os.getenv("API_REDIS_DB", "3"))
+API_REDIS_DB = int(os.getenv("API_REDIS_DB", str(WEB_REDIS_DB)))
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///database.db?journal_mode=WAL2")
 

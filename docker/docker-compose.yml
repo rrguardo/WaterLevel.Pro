@@ -10,8 +10,8 @@ services:
     environment:
       REDIS_HOST: 127.0.0.1
       REDIS_PORT: 6379
-      WEB_REDIS_DB: 0
-      API_REDIS_DB: 3
+      WEB_REDIS_DB: ${WEB_REDIS_DB:-0}
+      API_REDIS_DB: ${API_REDIS_DB:-0}
       APP_DOMAIN: ${APP_DOMAIN:-https://localhost}
       API_DOMAIN: ${API_DOMAIN:-https://api.localhost}
       API_CACHE_REDIS_HOST: 127.0.0.1
@@ -35,8 +35,8 @@ services:
     environment:
       REDIS_HOST: app
       REDIS_PORT: 6379
-      WEB_REDIS_DB: 0
-      API_REDIS_DB: 3
+      WEB_REDIS_DB: ${WEB_REDIS_DB:-0}
+      API_REDIS_DB: ${API_REDIS_DB:-0}
       DEMO_S1_PUB_KEY: ${DEMO_S1_PUB_KEY:-1pubDEMO_SENSOR_S1}
       DEMO_S1_PRV_KEY: ${DEMO_S1_PRV_KEY:-1prvDEMO_SENSOR_S1}
       DEMO_RELAY_PUB_KEY: ${DEMO_RELAY_PUB_KEY:-3pubDEMO_RELAY_R1}
