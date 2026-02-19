@@ -19,7 +19,7 @@ docker compose version
 Public image used by this guide:
 
 ```bash
-docker pull rrguardo/waterlevel-pro:latest
+docker pull rguardo/waterlevel-pro:latest
 ```
 
 ## 2) Prepare environment variables
@@ -135,6 +135,6 @@ If you maintain your own Docker Hub image, example for user `rrguardo`:
 
 ```bash
 docker login
-docker build -f docker/Dockerfile -t rrguardo/waterlevel-pro:latest .
-docker push rrguardo/waterlevel-pro:latest
+docker build -f docker/Dockerfile -t rguardo/waterlevel-pro:latest .
+docker push rguardo/waterlevel-pro:latest
 ```

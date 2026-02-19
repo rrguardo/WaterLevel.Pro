@@ -39,7 +39,7 @@ Default local URLs:
 ## Quick start (Docker)
 
 Public image (Docker Hub):
-- `rrguardo/waterlevel-pro:latest`
+- `rguardo/waterlevel-pro:latest`
 
 Docker setup and operational notes are documented in:
 - [`docker/README.md`](docker/README.md)
@@ -48,7 +48,7 @@ Docker setup and operational notes are documented in:
 
 Basic run:
 1. Copy `.env.example` to `.env`
-2. Pull public image (optional but recommended for fast deploy): `docker pull rrguardo/waterlevel-pro:latest`
+2. Pull public image (optional but recommended for fast deploy): `docker pull rguardo/waterlevel-pro:latest`
 3. Start stack: `docker compose -f docker/docker-compose.yml up -d`
 3. Open web: `https://localhost`
 

@@ -23,11 +23,11 @@ View logs:
 - `./docker/logs.sh`
 
 Build app image directly:
-- `docker build -f docker/Dockerfile -t rrguardo/waterlevel-pro:latest .`
+- `docker build -f docker/Dockerfile -t rguardo/waterlevel-pro:latest .`
 
 Publish image to Docker Hub:
 - `docker login`
-- `docker push rrguardo/waterlevel-pro:latest`
+- `docker push rguardo/waterlevel-pro:latest`
 
 ## Runtime notes
 
@@ -57,7 +57,7 @@ Nginx hostnames/upstreams are configurable through `.env`:
 - `WLP_API_UPSTREAM` (default: `app:8001`)
 - `WLP_SSL_CERT_PATH` (default: `/etc/nginx/certs/localhost.crt`)
 - `WLP_SSL_KEY_PATH` (default: `/etc/nginx/certs/localhost.key`)
-- `WLP_APP_IMAGE` (default: `rrguardo/waterlevel-pro:latest`)
+- `WLP_APP_IMAGE` (default: `rguardo/waterlevel-pro:latest`)
 
 Minimal DNS layout (recommended for this SQLite-oriented setup):
 
