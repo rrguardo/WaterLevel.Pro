@@ -1232,8 +1232,8 @@ function updateCapacityChart(distance) {
 
     let org_distance = distance;
     distance = mapDistanceToPercentage(parseFloat(distance));
+    distance = Number.isFinite(distance) ? Math.max(0, Math.min(100, distance)) : 0;
 
-    chart_water.updateSeries([], true);
     chart_water.updateSeries([{
                   name: 'Water',
                   data: [distance]
@@ -1366,8 +1366,8 @@ function updateCapacityChart(distance) {
 
     function updateBatteryChart(batteryPercent) {
         batteryPercent = mapVoltageToPercentage(parseFloat(batteryPercent));
+                batteryPercent = Number.isFinite(batteryPercent) ? Math.max(0, Math.min(100, batteryPercent)) : 0;
 
-        chart_battery.updateSeries([], true);
         chart_battery.updateSeries([{
                       name: '{% trans %}Charge{% endtrans %}',
                       data: [batteryPercent]

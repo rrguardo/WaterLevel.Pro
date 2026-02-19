@@ -61,13 +61,8 @@ services:
     restart: unless-stopped
     depends_on:
       - app
-    environment:
-      WLP_SERVER_NAME: ${WLP_SERVER_NAME:-localhost}
-      WLP_API_SERVER_NAME: ${WLP_API_SERVER_NAME:-api.localhost}
-      WLP_WEB_UPSTREAM: ${WLP_WEB_UPSTREAM:-app:8000}
-      WLP_API_UPSTREAM: ${WLP_API_UPSTREAM:-app:8001}
-      WLP_SSL_CERT_PATH: ${WLP_SSL_CERT_PATH:-/etc/nginx/certs/localhost.crt}
-      WLP_SSL_KEY_PATH: ${WLP_SSL_KEY_PATH:-/etc/nginx/certs/localhost.key}
+    env_file:
+      - ../.env
     ports:
       - "80:80"
       - "443:443"
