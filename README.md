@@ -24,19 +24,22 @@ Water level monitoring platform with:
 1. Create local environment variables:
    - Copy `.env.example` to `.env`
 2. Install dependencies:
-   - `pip install -r requirements.txt`
+   - `python3.14 -m pip install -r requirements.txt`
 3. Build demo DB:
-   - `python scripts/reset_demo_db.py --sync-source`
+   - `python3.14 scripts/reset_demo_db.py --sync-source`
 4. Start Redis on port `6379`
 5. Start services:
-   - Web: `python app.py`
-   - API: `python api.py`
+   - Web: `python3.14 app.py`
+   - API: `python3.14 api.py`
 
 Default local URLs:
 - Web: `http://localhost` (app default port)
 - API: `http://localhost:88`
 
 ## Quick start (Docker)
+
+Public image (Docker Hub):
+- `rrguardo/waterlevel-pro:latest`
 
 Docker setup and operational notes are documented in:
 - [`docker/README.md`](docker/README.md)
@@ -45,8 +48,17 @@ Docker setup and operational notes are documented in:
 
 Basic run:
 1. Copy `.env.example` to `.env`
-2. Start stack: `docker compose -f docker/docker-compose.yml up --build`
+2. Pull public image (optional but recommended for fast deploy): `docker pull rrguardo/waterlevel-pro:latest`
+3. Start stack: `docker compose -f docker/docker-compose.yml up -d`
 3. Open web: `https://localhost`
+
+## Minimal server requirements (low-cost VPS)
+
+This project is tuned for low-resource single-node deployment (SQLite + Redis embedded in `app` container).
+
+- Minimum: `1 vCPU`, `1 GB RAM`, ~`8 GB` free disk (basic/light load).
+- Recommended: `1 vCPU`, `2 GB RAM`, ~`12 GB` free disk (more stable with cron + logs + reports).
+- For very small VPS (`3-5 USD` tier), keep background load low and monitor disk growth in Docker volumes/logs.
 
 DNS setup for Docker is fully env-driven (`APP_DOMAIN`, `API_DOMAIN`,
 `WLP_SERVER_NAME`, `WLP_API_SERVER_NAME`). Keep API under a subdomain of the
@@ -94,7 +106,7 @@ Demo admin credentials:
 - Password: `AdminDemo_2026_Open!`
 
 Rebuild command:
-- `python scripts/reset_demo_db.py --sync-source`
+- `python3.14 scripts/reset_demo_db.py --sync-source`
 
 ## i18n workflow (Flask-Babel)
 

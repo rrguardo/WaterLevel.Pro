@@ -1,11 +1,6 @@
 services:
-  redis:
-    image: redis:7-alpine
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-
   app:
+    image: ${WLP_APP_IMAGE:-rrguardo/waterlevel-pro:latest}
     build:
       context: ..
       dockerfile: docker/Dockerfile
@@ -13,17 +8,15 @@ services:
     env_file:
       - ../.env
     environment:
-      REDIS_HOST: redis
+      REDIS_HOST: 127.0.0.1
       REDIS_PORT: 6379
       WEB_REDIS_DB: 0
       API_REDIS_DB: 3
       APP_DOMAIN: ${APP_DOMAIN:-https://localhost}
       API_DOMAIN: ${API_DOMAIN:-https://api.localhost}
-      API_CACHE_REDIS_HOST: redis
-      WEB_CACHE_REDIS_HOST: redis
+      API_CACHE_REDIS_HOST: 127.0.0.1
+      WEB_CACHE_REDIS_HOST: 127.0.0.1
       DATABASE_URL: sqlite:////app/data/database.db?journal_mode=WAL2
-    depends_on:
-      - redis
     volumes:
       - wlp_data:/app/data
       - wlp_reports:/app/reports
@@ -31,28 +24,25 @@ services:
       [
         "/bin/sh",
         "-c",
-        "gunicorn --workers 2 --bind 0.0.0.0:8000 app:app & gunicorn --workers 2 --bind 0.0.0.0:8001 api:app & wait"
+        "redis-server --bind 0.0.0.0 --port 6379 --save '' --appendonly no --protected-mode no & gunicorn --workers 2 --bind 0.0.0.0:8000 app:app & gunicorn --workers 2 --bind 0.0.0.0:8001 api:app & wait"
       ]
 
   cron:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
+    image: ${WLP_APP_IMAGE:-rrguardo/waterlevel-pro:latest}
     restart: unless-stopped
     env_file:
       - ../.env
     environment:
-      REDIS_HOST: redis
+      REDIS_HOST: app
       REDIS_PORT: 6379
       WEB_REDIS_DB: 0
       API_REDIS_DB: 3
       APP_DOMAIN: ${APP_DOMAIN:-https://localhost}
       API_DOMAIN: ${API_DOMAIN:-https://api.localhost}
-      API_CACHE_REDIS_HOST: redis
-      WEB_CACHE_REDIS_HOST: redis
+      API_CACHE_REDIS_HOST: app
+      WEB_CACHE_REDIS_HOST: app
       DATABASE_URL: sqlite:////app/data/database.db?journal_mode=WAL2
     depends_on:
-      - redis
       - app
       - nginx
     volumes:

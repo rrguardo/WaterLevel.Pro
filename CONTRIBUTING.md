@@ -6,14 +6,14 @@ Thanks for helping improve WaterLevel.Pro.
 
 1. Create a local env file:
    - Copy `.env.example` to `.env`
-2. Use Python 3.11+ and install deps:
-   - `pip install -r requirements.txt`
+2. Use Python 3.14 and install deps:
+   - `python3.14 -m pip install -r requirements.txt`
 3. Prepare demo DB:
-   - `python scripts/reset_demo_db.py --sync-source`
+   - `python3.14 scripts/reset_demo_db.py --sync-source`
 4. Run Redis locally on port `6379`
 5. Start apps:
-   - Web: `python app.py`
-   - API: `python api.py`
+   - Web: `python3.14 app.py`
+   - API: `python3.14 api.py`
 
 ## 2) Docker setup (recommended)
 

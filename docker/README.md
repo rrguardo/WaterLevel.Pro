@@ -23,12 +23,16 @@ View logs:
 - `./docker/logs.sh`
 
 Build app image directly:
-- `docker build -f docker/Dockerfile -t wlp-app .`
+- `docker build -f docker/Dockerfile -t rrguardo/waterlevel-pro:latest .`
+
+Publish image to Docker Hub:
+- `docker login`
+- `docker push rrguardo/waterlevel-pro:latest`
 
 ## Runtime notes
 
-- Redis runs as a dedicated container.
-- Web and API run in a single `app` container (ports `8000` and `8001`).
+- Redis runs inside the `app` container (port `6379` internal).
+- Web and API run in the same `app` container (ports `8000` and `8001`).
 - A dedicated `cron` container runs scheduled jobs from `ext_conf/crontab.ini`.
 - SQLite persists in a Docker volume (`wlp_data`).
 - On first run, `/app/data/database.db` is auto-created from `database.opensource.db`.
@@ -53,6 +57,7 @@ Nginx hostnames/upstreams are configurable through `.env`:
 - `WLP_API_UPSTREAM` (default: `app:8001`)
 - `WLP_SSL_CERT_PATH` (default: `/etc/nginx/certs/localhost.crt`)
 - `WLP_SSL_KEY_PATH` (default: `/etc/nginx/certs/localhost.key`)
+- `WLP_APP_IMAGE` (default: `rrguardo/waterlevel-pro:latest`)
 
 Minimal DNS layout (recommended for this SQLite-oriented setup):
 
@@ -69,6 +74,7 @@ Nginx behavior in Docker:
 	- `${WLP_SERVER_NAME}` -> web upstream
 	- `${WLP_API_SERVER_NAME}` -> api upstream
 - Cloudflare real client IP is enabled through `CF-Connecting-IP` + trusted Cloudflare CIDRs.
+- If configured cert/key files are missing, `nginx-entrypoint.sh` auto-generates a temporary self-signed cert in `/tmp/wlp-certs` (useful for CI and fresh local clones).
 
 Example `.env` for production:
 

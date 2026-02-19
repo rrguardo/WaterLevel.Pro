@@ -8,6 +8,7 @@ set -euo pipefail
 # 2) Nginx redirects HTTP to HTTPS.
 # 3) Web and API are reachable through Nginx host-based routing.
 # 4) GoAccess live reports are generated in the shared reports volume.
+# 5) Redis is reachable inside the app container.
 #
 # Notes:
 # - This script is intentionally strict and exits on first failure.
@@ -57,18 +58,32 @@ fail() {
 
 # Build application image and start runtime services.
 docker compose -f "$COMPOSE_FILE" build app
-GOACCESS_REFRESH_SECONDS=5 docker compose -f "$COMPOSE_FILE" up -d redis app nginx cron goaccess
+GOACCESS_REFRESH_SECONDS=5 docker compose -f "$COMPOSE_FILE" up -d app nginx cron goaccess
 
 # Wait until all expected services are in running state.
 for i in $(seq 1 "$START_RETRIES"); do
   running_count=$(docker compose -f "$COMPOSE_FILE" ps --status running --services | wc -l)
-  if [ "$running_count" -ge 5 ]; then
+  if [ "$running_count" -ge 4 ]; then
     echo "[ok] services running"
     break
   fi
 
   if [ "$i" -eq "$START_RETRIES" ]; then
     fail "services did not reach running state"
+  fi
+
+  sleep "$RETRY_SLEEP_SECONDS"
+done
+
+# Validate Redis process inside app container.
+for i in $(seq 1 "$HTTP_RETRIES"); do
+  if docker compose -f "$COMPOSE_FILE" exec -T app sh -lc 'redis-cli -h 127.0.0.1 -p 6379 ping | grep -q PONG'; then
+    echo "[ok] redis in app"
+    break
+  fi
+
+  if [ "$i" -eq "$HTTP_RETRIES" ]; then
+    fail "redis in app"
   fi
 
   sleep "$RETRY_SLEEP_SECONDS"

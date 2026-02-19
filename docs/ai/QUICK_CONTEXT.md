@@ -11,8 +11,7 @@ The API should remain on a subdomain of the same base domain for minimal setup.
 
 ## Current container graph
 
-- `redis`: shared cache/state backend
-- `app`: runs Gunicorn for web (`:8000`) and api (`:8001`)
+- `app`: runs Redis (`:6379` internal) + Gunicorn web (`:8000`) + Gunicorn api (`:8001`)
 - `nginx`: TLS edge, HTTP->HTTPS redirect, host-based split web/api
 - `cron`: executes scheduled tasks from `ext_conf/crontab.ini`
 - `goaccess`: generates report HTML files from Nginx logs

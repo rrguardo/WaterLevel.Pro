@@ -17,6 +17,7 @@
 - SQLite database file stored in volume at `/app/data/database.db`
 - Database bootstrapped from `database.opensource.db` via `docker/entrypoint.sh`
 - Redis used for runtime cache/frequency checks and transient state
+- Redis runs inside the `app` container for low-resource single-node deployments
 
 ## Edge layer (Nginx)
 

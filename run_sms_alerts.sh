@@ -10,7 +10,7 @@ cd /root/wlp
 if ! pgrep -f "PROCESS_NAME" > /dev/null; then
     # The uWSGI process is not running, so restart it
     echo "SMS alert process is not running. Safe to start now"
-    ./venv/bin/python sms_alerts_cron.py
+    ./venv/bin/python3.14 sms_alerts_cron.py
 else
     echo "Warning SMS alert process is running. !INCREASE CRON MINUTES!"
 fi

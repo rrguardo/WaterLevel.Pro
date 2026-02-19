@@ -16,6 +16,12 @@ docker --version
 docker compose version
 ```
 
+Public image used by this guide:
+
+```bash
+docker pull rrguardo/waterlevel-pro:latest
+```
+
 ## 2) Prepare environment variables
 
 From repo root:
@@ -42,6 +48,7 @@ WLP_SSL_KEY_PATH=/etc/nginx/certs/localhost.key
 Notes:
 - The repo already includes local certs in `ext_conf/docker/certs/localhost.crt` and `localhost.key`.
 - If you switch to another local hostname (for example `wlp.test`), provide certs with matching CN/SAN.
+- If cert files are missing, Nginx generates a temporary self-signed cert automatically at startup (for CI/local bootstrap).
 
 ### Scenario B: real domain (basic production)
 
@@ -67,10 +74,14 @@ Project recommendation: keep API as a subdomain of the same base domain.
 ## 4) Start the stack
 
 ```bash
-docker compose -f docker/docker-compose.yml up --build -d
+docker compose -f docker/docker-compose.yml up -d
 ```
 
-Expected services: `redis`, `app`, `nginx`, `cron`, `goaccess`.
+Expected services: `app`, `nginx`, `cron`, `goaccess`.
+
+Notes:
+- Redis runs inside `app` container (minimal-resource topology).
+- If you want to force a specific image tag, set `WLP_APP_IMAGE` in `.env`.
 
 ## 5) Quick verification
 
@@ -117,3 +128,13 @@ docker compose -f docker/docker-compose.yml up -d --build cron
 - **API host shows web content**: verify `WLP_API_SERVER_NAME` and request `Host` header.
 - **Real domain not reachable**: verify DNS and firewall/NAT for `80`/`443`.
 - **`.env` changes not applied**: recreate with `docker compose -f docker/docker-compose.yml up -d --build`.
+
+## 8) Publish your own image (optional)
+
+If you maintain your own Docker Hub image, example for user `rrguardo`:
+
+```bash
+docker login
+docker build -f docker/Dockerfile -t rrguardo/waterlevel-pro:latest .
+docker push rrguardo/waterlevel-pro:latest
+```

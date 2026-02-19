@@ -15,7 +15,8 @@ Primary smoke test:
 - `./scripts/docker_smoke_test.sh`
 
 What smoke test checks:
-- Services running (`redis`, `app`, `nginx`, `cron`, `goaccess`)
+- Services running (`app`, `nginx`, `cron`, `goaccess`)
+- Redis reachable inside `app` container
 - HTTP redirect to HTTPS
 - Web/API host routing through Nginx
 - GoAccess live report generation
