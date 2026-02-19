@@ -1,40 +1,74 @@
-# Fast setup: from zero with Docker (test or real domain)
+# FAST DOCKER SETUP (from zero)
 
-This guide is for new users with basic experience.
-Goal: run WLP on a test or real domain using Docker.
+This guide is for developers with little Docker experience.
 
-## 1) Minimum requirements
+Goal: run WaterLevel.Pro in minutes with Docker, verify it works, and understand what each step does.
 
+---
+
+## 0) What you need before starting
+
+### Minimum requirements
+
+- Git (to clone the repository).
 - Docker Engine + Docker Compose plugin (`docker compose`).
-- Ports `80` and `443` available on the host.
-- Repository cloned locally.
+- Ports `80` and `443` available on your machine/server.
 
-Quick check:
+### Quick checks
 
 ```bash
+git --version
 docker --version
 docker compose version
 ```
 
-Public image used by this guide:
+If any command fails, install that tool first and run the checks again.
+
+---
+
+## 1) Clone the repository (required)
+
+This step is required because the repo contains:
+
+- `docker/docker-compose.yml` (container topology)
+- `ext_conf/docker/nginx.conf.template` (web/api routing)
+- scripts (`docker/up.sh`, `scripts/docker_smoke_test.sh`)
+- cron config, static files, and demo database source
+
+Commands:
 
 ```bash
-docker pull rguardo/waterlevel-pro:latest
+git clone https://github.com/rrguardo/WaterLevel.Pro.git
+cd WaterLevel.Pro
 ```
 
-## 2) Prepare environment variables
+Optional (if you want a specific branch):
 
-From repo root:
+```bash
+git checkout main
+```
+
+---
+
+## 2) Create `.env` from the template
+
+From the repo root:
 
 ```bash
 cp .env.example .env
 ```
 
-## 3) Pick your setup scenario
+This creates your local environment variable file.
 
-### Scenario A: local test domain (fast)
+> Note: `docker/up.sh` can auto-create `.env` if missing, but creating it manually first is better for understanding what is configured.
 
-Use these values in `.env`:
+---
+
+## 3) Choose your setup scenario
+
+### Scenario A: fast local setup (recommended first)
+
+In `.env`, keep these values:
 
 ```dotenv
 APP_DOMAIN=https://localhost
@@ -46,19 +80,25 @@ WLP_SSL_KEY_PATH=/etc/nginx/certs/localhost.key
 ```
 
 Notes:
-- The repo already includes local certs in `ext_conf/docker/certs/localhost.crt` and `localhost.key`.
-- If you switch to another local hostname (for example `wlp.test`), provide certs with matching CN/SAN.
-- If cert files are missing, Nginx generates a temporary self-signed cert automatically at startup (for CI/local bootstrap).
 
-### Scenario B: real domain (basic production)
+- Local certs are already included in `ext_conf/docker/certs/`.
+- If cert/key are missing, Nginx auto-generates a temporary self-signed cert.
+- Browsers may show a TLS warning in local mode (normal with self-signed certs).
+
+### Scenario B: real domain
 
 Example:
-- web: `example.com`
-- api: `api.example.com`
+
+- Web: `example.com`
+- API: `api.example.com`
+
+Checklist:
 
 1. Point DNS A/AAAA for both hostnames to the same server.
 2. Issue TLS certificates for both hostnames.
-3. Place cert files in `ext_conf/docker/certs/` (or mount your own path) and update `.env`:
+3. Place cert/key files and update `.env`.
+
+Example values:
 
 ```dotenv
 APP_DOMAIN=https://example.com
@@ -71,70 +111,104 @@ WLP_SSL_KEY_PATH=/etc/nginx/certs/privkey.pem
 
 Project recommendation: keep API as a subdomain of the same base domain.
 
-## 4) Start the stack
+---
+
+## 4) Start services
+
+### Simple option (recommended)
 
 ```bash
-docker compose -f docker/docker-compose.yml up -d
+./docker/up.sh
 ```
 
-Expected services: `app`, `nginx`, `cron`, `goaccess`.
+### Explicit Compose option
 
-Notes:
-- Redis runs inside `app` container (minimal-resource topology).
-- If you want to force a specific image tag, set `WLP_APP_IMAGE` in `.env`.
+```bash
+docker compose -f docker/docker-compose.yml up -d --build
+```
 
-## 5) Quick verification
+Expected services:
 
-Service status:
+- `app`
+- `nginx`
+- `cron`
+- `goaccess`
+
+---
+
+## 5) Verify everything works
+
+Container status:
 
 ```bash
 docker compose -f docker/docker-compose.yml ps
 ```
 
-Official smoke test:
+Official project smoke test:
 
 ```bash
 ./scripts/docker_smoke_test.sh
 ```
 
-Key checks from smoke test:
+Smoke test checks:
+
 - `http -> https` redirect
-- `GET /ping` on web host returns `PONG`
-- `GET /link` on API host returns `FAIL` without params
+- web host (`/ping`) returns `PONG`
+- api host (`/link` without params) returns `FAIL`
 
-## 6) Basic operations
+Quick manual checks:
 
-Logs:
+- Web: `https://localhost`
+- API: `https://api.localhost/link`
+
+---
+
+## 6) Useful day-to-day commands
+
+View logs:
 
 ```bash
 ./docker/logs.sh
 ```
 
-Stop:
+Stop stack:
 
 ```bash
 ./docker/down.sh
 ```
 
-Rebuild only cron (after `ext_conf/crontab.ini` changes):
+Rebuild only cron (after editing `ext_conf/crontab.ini`):
 
 ```bash
 docker compose -f docker/docker-compose.yml up -d --build cron
 ```
 
-## 7) Common issues
+---
 
-- **Nginx TLS does not start**: verify `WLP_SSL_CERT_PATH` / `WLP_SSL_KEY_PATH` and file availability in container.
-- **API host shows web content**: verify `WLP_API_SERVER_NAME` and request `Host` header.
-- **Real domain not reachable**: verify DNS and firewall/NAT for `80`/`443`.
-- **`.env` changes not applied**: recreate with `docker compose -f docker/docker-compose.yml up -d --build`.
+## 7) Common issues (quick fixes)
 
-## 8) Publish your own image (optional)
+- **Nginx TLS does not start**
+  - Check `WLP_SSL_CERT_PATH` and `WLP_SSL_KEY_PATH`.
+  - Ensure files exist at expected paths in the container.
 
-If you maintain your own Docker Hub image, example for user `rguardo`:
+- **`.env` changes are not applied**
+  - Recreate with build:
+  - `docker compose -f docker/docker-compose.yml up -d --build`
+
+- **API host shows web content**
+  - Check `WLP_API_SERVER_NAME` and confirm you are using the correct hostname.
+
+- **Real domain is not reachable**
+  - Check DNS and firewall/NAT for ports `80` and `443`.
+
+---
+
+## 8) Note about public image
+
+By default, Compose uses `WLP_APP_IMAGE` (for example `rguardo/waterlevel-pro:latest`) and can also build locally (`docker/Dockerfile`) when using `--build`.
+
+If you want to pre-pull the image:
 
 ```bash
-docker login
-docker build -f docker/Dockerfile -t rguardo/waterlevel-pro:latest .
-docker push rguardo/waterlevel-pro:latest
+docker pull rguardo/waterlevel-pro:latest
 ```

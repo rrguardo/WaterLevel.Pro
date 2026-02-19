@@ -590,7 +590,6 @@ input:checked:focus + .switch-left + .switch-right {
                         {% trans %}Pump <b>start</b> when water level reach{% endtrans %} <b>{{ device_setting.START_LEVEL }}% {% trans %}or lower{% endtrans %}</b>.
                     </li>
                     <li class="list-group-item list-group-item-info">{% trans %}Pump <b>stop</b> when water level reach{% endtrans %} <b>{{ device_setting.END_LEVEL }}% {% trans %}or bigger{% endtrans %}</b>.</li>
-                    {% trans %}
                     <li class="list-group-item list-group-item-info">Pump <b>stop</b> if water level get closer to the sensor <b>blind area</b> defined at sensor linked settings.</li>
                     <li class="list-group-item list-group-item-info">Pump <b>stop</b> if the sensor is <b>offline</b> or controller lose internet connection.</li>
                     <li class="list-group-item list-group-item-warning">
@@ -604,7 +603,6 @@ input:checked:focus + .switch-left + .switch-right {
                         installation guide before using this feature. Ensure the sensor inside the water tank is not too close to the water
                         inlet or floating valve and consistently provides accurate water level readings.
                     </li>
-                    {% endtrans %}
 
                 </ul>
             </li>
