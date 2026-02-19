@@ -12,6 +12,25 @@
 - Purpose: device/link/update endpoints and API-related flows
 - Upstream binding in Docker: `0.0.0.0:8001` (inside `app` service)
 
+## Device API flows (firmware contracts)
+
+### Sensor S1 firmware flow
+- Update endpoint: `GET /update`
+- Auth model: device private key (`key`) mapped to public key via DB
+- Required query params: `key`, `distance`, `voltage`
+- Important request headers: `FW-Version`, `RSSI`
+- Cache write: `tin-keys/<public_key> = "distance|epoch|voltage|rssi"`
+- Response body/header contract: body `OK`, headers `fw-version`, `wpl`
+
+### Relay R1 firmware flow
+- Update endpoint: `GET /relay-update`
+- Auth model: device private key (`key`) mapped to public key via DB
+- Required query params: `key`, `status`
+- Important request headers: `FW-Version`, `RSSI`, `EVENTS`
+- Cache write: `relay-keys/<public_key> = "status|epoch|rssi"`
+- Optional event write (developer mode): `relay-events/<public_key>` and DB `relay_events`
+- Response body/header contract: body `OK`, headers include control values (`ACTION`, `ALGO`, `SAFE_MODE`, levels, pool times, etc.) plus linked sensor-derived values (`percent`, `distance`, times)
+
 ## Data layer
 
 - SQLite database file stored in volume at `/app/data/database.db`

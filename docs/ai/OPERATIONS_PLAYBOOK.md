@@ -36,6 +36,23 @@ What smoke test checks:
 - Full reset:
   - `docker compose -f docker/docker-compose.yml down -v`
 
+## Device update API checks
+
+Sensor S1 update contract (`/update`):
+- Required: `key`, `distance`, `voltage`
+- Typical headers: `FW-Version`, `RSSI`
+- Expected success: HTTP `200`, body `OK`, response headers `fw-version` and `wpl`
+
+Relay R1 update contract (`/relay-update`):
+- Required: `key`, `status`
+- Typical headers: `FW-Version`, `RSSI`, `EVENTS`
+- Expected success: HTTP `200`, body `OK`, response headers include `ACTION` and `pool-time`
+
+Demo simulators (cron-managed):
+- `scripts/s1_demo_device_service.py`
+- `scripts/r1_demo_relay_service.py`
+- In Docker cron, both target `https://nginx` with host header `${WLP_API_SERVER_NAME}` and run every 20 seconds.
+
 ## Domain/TLS config knobs
 
 - `WLP_SERVER_NAME`

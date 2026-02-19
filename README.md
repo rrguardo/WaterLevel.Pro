@@ -71,6 +71,75 @@ separates traffic by hostname.
 Smoke test local (Docker + services):
 - `./scripts/docker_smoke_test.sh`
 
+## S1 demo device simulator (Python service)
+
+This repo includes a Python service that simulates a real WiFi Water Level S1 device and sends updates to the API endpoint used by firmware:
+
+- `/update?key=<private_key>&distance=<cm>&voltage=<centivolts>`
+- Headers: `FW-Version`, `RSSI`
+
+Script:
+
+- `scripts/s1_demo_device_service.py`
+
+Run one update (quick check):
+
+- `python3 scripts/s1_demo_device_service.py --once`
+
+Run continuously (default demo private key):
+
+- `python3 scripts/s1_demo_device_service.py`
+
+If your local DNS does not resolve `api.localhost`, use host routing explicitly:
+
+- `python3 scripts/s1_demo_device_service.py --base-url https://localhost --host-header api.localhost`
+
+Notes:
+
+- Defaults are loaded from `.env`: `DEMO_S1_PUB_KEY`, `DEMO_S1_PRV_KEY`, `API_DOMAIN`.
+- The service reads response header `wpl` and adapts posting interval automatically.
+- Add `--verify-tls` only when using valid TLS certs.
+
+Docker cron integration:
+
+- `ext_conf/crontab.ini` runs this simulator every 20 seconds (3 runs per minute).
+- In Docker cron, requests go to `https://nginx` with host header `${WLP_API_SERVER_NAME}`.
+- Cron log file: `/var/log/cron/s1_demo_device_service.log`
+
+## R1 demo relay simulator (Python service)
+
+This repo includes a Python service that simulates the WiFi Smart Water Pump Controller S1 relay device and posts updates like firmware:
+
+- `/relay-update?key=<private_key>&status=<0|1>`
+- Headers: `FW-Version`, `RSSI`, `EVENTS`
+
+Script:
+
+- `scripts/r1_demo_relay_service.py`
+
+Run one update (quick check):
+
+- `python3 scripts/r1_demo_relay_service.py --once`
+
+Run continuously:
+
+- `python3 scripts/r1_demo_relay_service.py`
+
+If your local DNS does not resolve `api.localhost`, use host routing explicitly:
+
+- `python3 scripts/r1_demo_relay_service.py --base-url https://localhost --host-header api.localhost`
+
+Notes:
+
+- Defaults are loaded from `.env`: `DEMO_RELAY_PUB_KEY`, `DEMO_RELAY_PRV_KEY`, `API_DOMAIN`.
+- It reads response header `pool-time` and adapts posting interval automatically.
+- Add `--random-events` to inject occasional demo relay event codes.
+
+Docker cron integration:
+
+- `ext_conf/crontab.ini` runs this relay simulator every 20 seconds (3 runs per minute).
+- Cron log file: `/var/log/cron/r1_demo_relay_service.log`
+
 Run CI locally with gitlab-ci-local:
 1. Install `gitlab-ci-local` (for example: `npm i -g gitlab-ci-local`)
 2. Run: `gitlab-ci-local --force-shell-executor docker_smoke_test`

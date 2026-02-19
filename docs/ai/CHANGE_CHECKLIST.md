@@ -23,6 +23,9 @@ Use this checklist before finishing runtime-impacting changes.
 
 - [ ] `./scripts/docker_smoke_test.sh` passes locally
 - [ ] If CI behavior changed, `.github/workflows/docker-smoke.yml` and `.gitlab-ci.yml` still align
+- [ ] Sensor update contract still works: `/update` expects `key,distance,voltage` and returns body `OK` + `wpl`
+- [ ] Relay update contract still works: `/relay-update` expects `key,status` and returns body `OK` + control headers (including `ACTION`)
+- [ ] Demo simulator jobs (if enabled) still run in cron and route via Nginx API host split
 
 ## 5) Documentation updates
 

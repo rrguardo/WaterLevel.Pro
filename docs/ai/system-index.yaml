@@ -6,10 +6,8 @@ runtime:
   container_orchestrator: docker-compose
   compose_file: docker/docker-compose.yml
   services:
-    - name: redis
-      role: cache/state
     - name: app
-      role: flask-web-and-api
+      role: flask-web-api-plus-redis
       upstreams:
         web: app:8000
         api: app:8001
@@ -24,6 +22,44 @@ runtime:
 entrypoints:
   web: https://<WLP_SERVER_NAME>
   api: https://<WLP_API_SERVER_NAME>
+device_api_contracts:
+  sensor_s1_update:
+    endpoint: /update
+    method: GET
+    auth: private key query param `key`
+    query_params: [key, distance, voltage]
+    request_headers: [FW-Version, RSSI]
+    success:
+      body: OK
+      response_headers: [fw-version, wpl]
+  relay_r1_update:
+    endpoint: /relay-update
+    method: GET
+    auth: private key query param `key`
+    query_params: [key, status]
+    request_headers: [FW-Version, RSSI, EVENTS]
+    success:
+      body: OK
+      response_headers:
+        - fw-version
+        - pool-time
+        - ACTION
+        - percent
+        - event-time
+        - current-time
+        - distance
+        - ALGO
+        - SAFE_MODE
+        - START_LEVEL
+        - END_LEVEL
+        - AUTO_OFF
+        - AUTO_ON
+        - MIN_FLOW_MM_X_MIN
+        - BLIND_DISTANCE
+        - HOURS_OFF
+simulators:
+  sensor_s1: scripts/s1_demo_device_service.py
+  relay_r1: scripts/r1_demo_relay_service.py
 source_of_truth:
   architecture: docs/ai/ARCHITECTURE.md
   operations: docs/ai/OPERATIONS_PLAYBOOK.md

@@ -42,6 +42,8 @@ Publish image to Docker Hub:
 Cron jobs in Docker include:
 
 - alert workers (`email_alerts_cron.py`, `sms_alerts_cron.py`)
+- demo S1 device simulator every 20 seconds (`scripts/s1_demo_device_service.py`, env keys `DEMO_S1_PUB_KEY`/`DEMO_S1_PRV_KEY`)
+- demo relay R1 simulator every 20 seconds (`scripts/r1_demo_relay_service.py`, env keys `DEMO_RELAY_PUB_KEY`/`DEMO_RELAY_PRV_KEY`)
 - daily/fulls reports from Nginx logs into `/app/reports`
 - old report cleanup (retention)
 

@@ -46,7 +46,9 @@ TWILIO_NUMBER = os.getenv("TWILIO_NUMBER", "")
 # ++++++++++++++++
 
 DEMO_S1_PUB_KEY = os.getenv("DEMO_S1_PUB_KEY", "")
+DEMO_S1_PRV_KEY = os.getenv("DEMO_S1_PRV_KEY", "")
 DEMO_RELAY_PUB_KEY = os.getenv("DEMO_RELAY_PUB_KEY", "")
+DEMO_RELAY_PRV_KEY = os.getenv("DEMO_RELAY_PRV_KEY", "")
 
 REDIS_HOST = os.getenv("REDIS_HOST", "127.0.0.1")
 REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
