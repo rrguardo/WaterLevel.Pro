@@ -131,7 +131,7 @@ docker compose -f docker/docker-compose.yml up -d --build cron
 
 ## 8) Publish your own image (optional)
 
-If you maintain your own Docker Hub image, example for user `rrguardo`:
+If you maintain your own Docker Hub image, example for user `rguardo`:
 
 ```bash
 docker login
