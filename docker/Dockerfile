@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends build-essential cron goaccess redis-server \
+    && apt-get install -y --no-install-recommends cron goaccess redis-server \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt ./

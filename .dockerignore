@@ -5,7 +5,11 @@ __pycache__/
 *.swp
 *.log
 .git/
+.gitlab-ci-local/
 .gitignore
+.gitattributes
+.github/
+.gitlab-ci.yml
 .venv/
 venv/
 ENV/
@@ -20,6 +24,7 @@ dist/
 *.egg-info/
 node_modules/
 reports/
+.env
 cert/
 videos/
 static/fw/
