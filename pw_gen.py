@@ -4,6 +4,14 @@ import string
 
 # Function to generate a secure password
 def generate_secure_password(length=12):
+    """Generate a random alphanumeric password.
+
+    Args:
+        length: Desired password length (minimum recommended is 8).
+
+    Returns:
+        str: Generated password value.
+    """
     if length < 8:
         raise ValueError("Length must be at least 8 characters for better security.")
     charset = string.ascii_letters + string.digits
@@ -11,10 +19,27 @@ def generate_secure_password(length=12):
 
 # Function to generate a SHA-256 hash
 def generate_sha256_hash(password):
+    """Compute SHA-256 hash for a plain text password.
+
+    Args:
+        password: Raw password string.
+
+    Returns:
+        str: Hexadecimal SHA-256 digest.
+    """
     return hashlib.sha256(password.encode('utf-8')).hexdigest()
 
 # Function to verify the hash
 def verify_hash(entered_password, saved_hash):
+    """Verify whether a password matches a stored SHA-256 hash.
+
+    Args:
+        entered_password: Password candidate to validate.
+        saved_hash: Persisted SHA-256 digest to compare against.
+
+    Returns:
+        bool: True when the password and hash match.
+    """
     computed_hash = generate_sha256_hash(entered_password)
     return computed_hash == saved_hash
 

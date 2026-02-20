@@ -11,6 +11,7 @@ import urllib3
 
 
 class S1DemoDeviceService:
+    """Simulate an S1 sensor device posting telemetry to the WLP API."""
     def __init__(self, args):
         self.base_url = args.base_url.rstrip("/")
         self.update_url = f"{self.base_url}/update"
@@ -39,6 +40,11 @@ class S1DemoDeviceService:
         self.start_time = time.time()
 
     def _build_distance_cm(self):
+        """Compute next simulated distance value in centimeters.
+
+        Returns:
+            int: Distance constrained to configured min/max bounds.
+        """
         center = (self.distance_min + self.distance_max) / 2.0
         amplitude = (self.distance_max - self.distance_min) / 2.0
         elapsed = max(0.0, time.time() - self.start_time)
@@ -48,14 +54,32 @@ class S1DemoDeviceService:
         return max(self.distance_min, min(self.distance_max, value))
 
     def _build_voltage_centivolts(self):
+        """Compute next simulated battery value in centivolts.
+
+        Returns:
+            int: Battery voltage multiplied by 100.
+        """
         value = self.voltage_base + random.uniform(-self.voltage_jitter, self.voltage_jitter)
         value = max(3.0, min(5.5, value))
         return int(round(value * 100.0))
 
     def _build_rssi(self):
+        """Compute next simulated RSSI value.
+
+        Returns:
+            int: Signal strength in dBm.
+        """
         return int(self.rssi_base + random.randint(-self.rssi_jitter, self.rssi_jitter))
 
     def _handle_response_interval(self, response):
+        """Adjust posting interval using `wpl` header returned by API.
+
+        Args:
+            response: HTTP response from `/update` endpoint.
+
+        Returns:
+            None.
+        """
         header_wpl = response.headers.get("wpl", "")
         try:
             wpl = int(header_wpl)
@@ -67,6 +91,11 @@ class S1DemoDeviceService:
         self.current_interval = self.default_interval
 
     def send_update(self):
+        """Send one simulated sensor update request to the API endpoint.
+
+        Returns:
+            None.
+        """
         distance_cm = self._build_distance_cm()
         voltage_cv = self._build_voltage_centivolts()
         rssi = self._build_rssi()
@@ -110,6 +139,14 @@ class S1DemoDeviceService:
             self.current_interval = self.default_interval
 
     def run(self, once=False):
+        """Run continuous update loop or single-shot mode.
+
+        Args:
+            once: When True, send a single update and exit.
+
+        Returns:
+            None.
+        """
         while self.running:
             try:
                 self.send_update()
@@ -128,6 +165,11 @@ class S1DemoDeviceService:
 
 
 def parse_args():
+    """Parse CLI arguments for S1 device simulator runtime.
+
+    Returns:
+        argparse.Namespace: Parsed command-line options.
+    """
     env_api_domain = os.getenv("API_DOMAIN", "https://api.localhost")
     env_demo_pub = os.getenv("DEMO_S1_PUB_KEY", "1pubDEMO_SENSOR_S1")
     env_demo_prv = os.getenv("DEMO_S1_PRV_KEY", "1prvDEMO_SENSOR_S1")
@@ -166,6 +208,11 @@ def parse_args():
 
 
 def main():
+    """Entrypoint for launching the S1 simulator service.
+
+    Returns:
+        None.
+    """
     args = parse_args()
     if not args.verify_tls:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

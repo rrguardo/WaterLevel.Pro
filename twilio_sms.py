@@ -6,6 +6,11 @@ import logging
 
 def setup_logger():
     # Configure the logging system
+    """Configure logging for Twilio SMS operations.
+
+    Returns:
+        None.
+    """
     logging.basicConfig(level=logging.WARNING, handlers=[], format='%(asctime)s - %(levelname)s - %(message)s')  # Do not add the implicit handler
     #formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -29,6 +34,15 @@ SMS_RATE = 0.05  # 0.0115
 MIN_BALANCE = 0.2
 
 def send_phone_verify_code(user_phone, code):
+    """Send a phone verification one-time code via Twilio SMS.
+
+    Args:
+        user_phone: Destination phone number in E.164 format.
+        code: Numeric verification code to deliver.
+
+    Returns:
+        None.
+    """
     client = Client(account_sid, auth_token)
     message = client.messages \
         .create(
@@ -39,6 +53,16 @@ def send_phone_verify_code(user_phone, code):
 
 
 def send_alert(user_id, user_phone, alert):
+    """Send an alert SMS and consume user credits when balance is sufficient.
+
+    Args:
+        user_id: Internal user identifier used for credit accounting.
+        user_phone: Destination phone number in E.164 format.
+        alert: Alert message prefix to send.
+
+    Returns:
+        bool: False when credits are below threshold; otherwise None.
+    """
     credits = db.User.get_sms_credits(user_id)
     if credits < MIN_BALANCE:
         logging.warning(f"Low SMS credits, user: {user_id} --- credits {credits}")

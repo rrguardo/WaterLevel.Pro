@@ -10,6 +10,7 @@ import urllib3
 
 
 class R1DemoRelayService:
+    """Simulate an R1 relay device posting state/events to the WLP API."""
     def __init__(self, args):
         self.base_url = args.base_url.rstrip("/")
         self.update_url = f"{self.base_url}/relay-update"
@@ -33,9 +34,19 @@ class R1DemoRelayService:
         self.relay_status = max(0, min(1, args.status))
 
     def _build_rssi(self):
+        """Compute next simulated RSSI value.
+
+        Returns:
+            int: Signal strength in dBm.
+        """
         return int(self.rssi_base + random.randint(-self.rssi_jitter, self.rssi_jitter))
 
     def _build_events_header(self):
+        """Build EVENTS header payload for relay update request.
+
+        Returns:
+            str: Five comma-separated event slots.
+        """
         if not self.random_events:
             return self.events
 
@@ -46,6 +57,14 @@ class R1DemoRelayService:
         return ",".join(str(item) for item in base)
 
     def _handle_response_interval(self, response):
+        """Adjust posting interval using `pool-time` header returned by API.
+
+        Args:
+            response: HTTP response from `/relay-update` endpoint.
+
+        Returns:
+            None.
+        """
         header_pool = response.headers.get("pool-time", "")
         try:
             pool_time = int(header_pool)
@@ -57,6 +76,11 @@ class R1DemoRelayService:
         self.current_interval = self.default_interval
 
     def send_update(self):
+        """Send one simulated relay update request to the API endpoint.
+
+        Returns:
+            None.
+        """
         rssi = self._build_rssi()
         events = self._build_events_header()
 
@@ -109,6 +133,14 @@ class R1DemoRelayService:
             self.current_interval = self.default_interval
 
     def run(self, once=False):
+        """Run continuous relay update loop or single-shot mode.
+
+        Args:
+            once: When True, send a single update and exit.
+
+        Returns:
+            None.
+        """
         while self.running:
             try:
                 self.send_update()
@@ -127,6 +159,11 @@ class R1DemoRelayService:
 
 
 def parse_args():
+    """Parse CLI arguments for R1 relay simulator runtime.
+
+    Returns:
+        argparse.Namespace: Parsed command-line options.
+    """
     env_api_domain = os.getenv("API_DOMAIN", "https://api.localhost")
     env_demo_pub = os.getenv("DEMO_RELAY_PUB_KEY", "3pubDEMO_RELAY_R1")
     env_demo_prv = os.getenv("DEMO_RELAY_PRV_KEY", "3prvDEMO_RELAY_R1")
@@ -159,6 +196,11 @@ def parse_args():
 
 
 def main():
+    """Entrypoint for launching the R1 simulator service.
+
+    Returns:
+        None.
+    """
     args = parse_args()
     if not args.verify_tls:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

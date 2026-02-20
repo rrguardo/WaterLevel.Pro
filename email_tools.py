@@ -13,6 +13,16 @@ from urllib.parse import quote
 
 
 def send_device_added(to_email, public_key, device_type='Water Level S1 Sensor'):
+    """Send a notification email when a device gets linked to a user account.
+
+    Args:
+        to_email: Recipient email address.
+        public_key: Device public key used to build monitor URL.
+        device_type: Human-readable device model name.
+
+    Returns:
+        None.
+    """
     confirmation_code = generate_confirmation_code(to_email)
     encoded_email = quote(to_email)
 
@@ -72,6 +82,15 @@ def send_device_added(to_email, public_key, device_type='Water Level S1 Sensor')
 
 
 def send_register_email(to_email, lang='en'):
+    """Send account confirmation email with signed confirmation link.
+
+    Args:
+        to_email: Recipient email address.
+        lang: UI language hint used by translated email strings.
+
+    Returns:
+        None.
+    """
     confirmation_code = generate_confirmation_code(to_email)
     encoded_email = quote(to_email)
 
@@ -127,6 +146,16 @@ def send_register_email(to_email, lang='en'):
 
 
 def send_alert_email(to_email, alert_subject, alert_body):
+    """Send a level/offline alert email to a user.
+
+    Args:
+        to_email: Recipient email address.
+        alert_subject: Subject line for the email.
+        alert_body: HTML/text content fragment for alert details.
+
+    Returns:
+        None.
+    """
     confirmation_code = generate_confirmation_code(to_email)
     encoded_email = quote(to_email)
 
@@ -171,11 +200,28 @@ def send_alert_email(to_email, alert_subject, alert_body):
 
 
 def generate_confirmation_code(to_email):
+    """Generate deterministic HMAC confirmation token for an email address.
+
+    Args:
+        to_email: Email to sign with application secret.
+
+    Returns:
+        str: Hex-encoded HMAC-SHA256 token.
+    """
     to_email = to_email.encode()
     return hmac.new(APP_SEC_KEY.encode(), to_email, hashlib.sha256).hexdigest()
 
 
 def check_confirmation_code(to_email, hmac_digest):
+    """Validate confirmation token generated for an email address.
+
+    Args:
+        to_email: Email address associated with the token.
+        hmac_digest: Candidate token received from user link.
+
+    Returns:
+        bool: True when token matches computed HMAC.
+    """
     to_email = to_email.encode()
     hmac_digest = hmac_digest.encode()
     hmac_sha256_verifier = hmac.new(APP_SEC_KEY.encode(), to_email, hashlib.sha256)
@@ -185,6 +231,15 @@ def check_confirmation_code(to_email, hmac_digest):
 
 
 def support_email(to_email, message_reply):
+    """Send a support team reply email to a customer.
+
+    Args:
+        to_email: Recipient customer email.
+        message_reply: Support response content (HTML-safe expected).
+
+    Returns:
+        None.
+    """
     confirmation_code = generate_confirmation_code(to_email)
     encoded_email = quote(to_email)
 

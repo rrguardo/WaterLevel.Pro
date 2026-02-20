@@ -6,6 +6,16 @@ DOMAIN = 'http://127.0.0.1:88' #'http://waterlevel.pro:88'  # 'http://127.0.0.1:
 DOMAIN = 'https://api.waterlevel.pro'
 
 def simulate_sensor_post(device_key, distance, voltage):
+    """Send a simulated sensor update request to the API `/update` endpoint.
+
+    Args:
+        device_key: Sensor private key used by firmware updates.
+        distance: Simulated measured distance in centimeters.
+        voltage: Simulated battery voltage in centivolts.
+
+    Returns:
+        None.
+    """
     params = {'key': device_key, 'distance': distance, 'voltage': voltage}
 
     # "%d|%d|%d|%d|%d", EMPTY_LEVEL, TOP_MARGIN, WIFI_POOL_TIME, SONIC_POOL_TIME, (int)CurrentStatus
@@ -36,6 +46,15 @@ def simulate_sensor_post(device_key, distance, voltage):
 
 
 def simulate_relay_post(device_key, status=0):
+    """Send a simulated relay update request to the API `/relay-update` endpoint.
+
+    Args:
+        device_key: Relay private key used by firmware updates.
+        status: Relay state value (`0` off, `1` on).
+
+    Returns:
+        None.
+    """
     params = {'key': device_key, 'status': status}
 
     # "%d|%d|%d|%d|%d|%d|%s|%d", ALGO, START_LEVEL, END_LEVEL, AUTO_OFF, AUTO_ON, MIN_FLOW_MM_X_MIN, SensorKey.c_str(), ACTION);

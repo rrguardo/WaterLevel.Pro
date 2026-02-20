@@ -1,6 +1,6 @@
 # WaterLevel.Pro (Open Source)
 
-[![Docker Smoke Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml)
+[![Docker Smoke Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml) [![Docker Publish](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml) [![Docker Hub Version](https://img.shields.io/docker/v/rguardo/waterlevel-pro?label=Docker%20Hub&sort=semver)](https://hub.docker.com/r/rguardo/waterlevel-pro) [![Docker Hub Pulls](https://img.shields.io/docker/pulls/rguardo/waterlevel-pro?label=Pulls)](https://hub.docker.com/r/rguardo/waterlevel-pro)
 
 Water level monitoring platform with:
 - Web app (`app.py`)
@@ -167,6 +167,39 @@ Important variables:
 - `REDIS_PORT`
 
 See `.env.example` for full list.
+
+## Environment variables reference (`settings.py`)
+
+| Group | Variable | What it does | Default | Production example |
+|---|---|---|---|---|
+| Core app | `DEV_MODE` | Enables development-oriented behavior when `true`. | `true` | `false` |
+| Core app | `APP_SEC_KEY` | Flask secret key used for sessions/signing. | `CHANGE_ME_IN_PRODUCTION` | `use-a-64-char-random-secret` |
+| Core app | `APP_RECAPTCHA_SECRET_KEY` | Server-side key used to verify reCAPTCHA tokens. | empty | `your-google-recaptcha-secret` |
+| Core app | `RECAPTCHA_PUBLIC_KEY` | Client-side reCAPTCHA site key rendered in forms. | empty | `your-google-recaptcha-site-key` |
+| Core app | `APP_DOMAIN` | Canonical web app base URL. | `http://localhost` | `https://example.com` |
+| Core app | `API_DOMAIN` | Canonical API base URL. | `http://api.localhost` | `https://api.example.com` |
+| SMTP | `SMTP_TEST` | Enables test mode for outbound email behavior. | follows `DEV_MODE` | `false` |
+| SMTP | `EMAIL_SENDER` | Default sender header for system emails. | `"Water Level .Pro" <no-reply@example.com>` | `"WaterLevel Pro" <no-reply@example.com>` |
+| SMTP | `SMTP_SERVER` | SMTP host used by mail helpers. | `127.0.0.1` | `smtp.mailprovider.com` |
+| SMTP | `SMTP_PORT` | SMTP TCP port. | `25` | `587` |
+| Redis runtime | `REDIS_HOST` | Redis host used by web/API runtime clients. | `127.0.0.1` | `redis` |
+| Redis runtime | `REDIS_PORT` | Redis port used by web/API runtime clients. | `6379` | `6379` |
+| Redis runtime | `WEB_REDIS_DB` | Redis DB index used by web runtime keys. | `0` | `0` |
+| Redis runtime | `API_REDIS_DB` | Redis DB index used by API runtime keys. | `WEB_REDIS_DB` | `0` |
+| Redis cache | `API_CACHE_REDIS_HOST` | Redis host used by API Flask-Caching backend. | `127.0.0.1` | `redis` |
+| Redis cache | `API_CACHE_DEFAULT_TIMEOUT` | Default TTL (seconds) for API cache entries. | `30` | `30` |
+| Redis cache | `API_CACHE_REDIS_DB` | Redis DB index for API cache. | `2` | `2` |
+| Redis cache | `WEB_CACHE_REDIS_HOST` | Redis host used by web Flask-Caching backend. | `127.0.0.1` | `redis` |
+| Redis cache | `WEB_CACHE_DEFAULT_TIMEOUT` | Default TTL (seconds) for web cache entries. | `30` | `30` |
+| Redis cache | `WEB_CACHE_REDIS_DB` | Redis DB index for web cache. | `1` | `1` |
+| Persistence | `DATABASE_URL` | SQLAlchemy database URL (SQLite WAL2 by default). | `sqlite:///database.db?journal_mode=WAL2` | `sqlite:////app/data/database.db?journal_mode=WAL2` |
+| Twilio | `TWILIO_ACCOUNT_SID` | Twilio account identifier. | empty | `ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` |
+| Twilio | `TWILIO_AUTH_TOKEN` | Twilio authentication token. | empty | `set-in-secret-store` |
+| Twilio | `TWILIO_NUMBER` | Twilio sender number for SMS. | empty | `+15551234567` |
+| Demo keys | `DEMO_S1_PUB_KEY` | Public key used by the S1 demo sensor flow. | empty | `1pubDEMO_SENSOR_S1` |
+| Demo keys | `DEMO_S1_PRV_KEY` | Private key used by the S1 demo sensor flow. | empty | `1prvDEMO_SENSOR_S1` |
+| Demo keys | `DEMO_RELAY_PUB_KEY` | Public key used by the relay demo flow. | empty | `3pubDEMO_RELAY_R1` |
+| Demo keys | `DEMO_RELAY_PRV_KEY` | Private key used by the relay demo flow. | empty | `3prvDEMO_RELAY_R1` |
 
 ## Demo database
 

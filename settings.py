@@ -2,6 +2,17 @@ import os
 
 
 def env_bool(name, default=False):
+    """Read an environment variable and coerce it to boolean.
+
+    Accepted truthy values are: `1`, `true`, `yes`, `on` (case-insensitive).
+
+    Args:
+        name: Environment variable name to read.
+        default: Fallback value used when the variable is missing.
+
+    Returns:
+        bool: Parsed boolean value from environment or fallback.
+    """
     return os.getenv(name, str(default)).lower() in {"1", "true", "yes", "on"}
 
 

@@ -11,6 +11,11 @@ import logging
 
 def setup_logger():
     # Configure the logging system
+    """Configure logging output for the SMS alerts cron runner.
+
+    Returns:
+        None.
+    """
     logging.basicConfig(level=logging.WARNING, handlers=[])  # Do not add the implicit handler
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 

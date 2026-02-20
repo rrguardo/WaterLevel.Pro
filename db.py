@@ -16,6 +16,14 @@ cache = Cache(config=settings.API_CACHE_SETT)
 
 @cache.memoize(300)
 def get_user_by_id(id):
+    """Fetch a user row by internal user identifier.
+
+    Args:
+        id: Numeric user id in the `users` table.
+
+    Returns:
+        Row | None: User record when found, otherwise None.
+    """
     with engine.connect() as connection:
         query = "SELECT id, email, passw, is_admin, phone FROM users WHERE id = :id"
         result = connection.execute(text(query), {"id": id})
@@ -29,6 +37,14 @@ def get_user_by_id(id):
 
 @cache.memoize(300)
 def get_user_by_email(email):
+    """Fetch a user row by email address.
+
+    Args:
+        email: User email to search in the `users` table.
+
+    Returns:
+        Row | None: Matching user record when found, otherwise None.
+    """
     with engine.connect() as connection:
         query = "SELECT id, email, passw, is_admin, phone FROM users WHERE email = :email"
         result = connection.execute(text(query), {"email": email})
@@ -41,6 +57,14 @@ def get_user_by_email(email):
 
 
 def valid_4register(user_email):
+    """Check whether an email is available for registration.
+
+    Args:
+        user_email: Email candidate submitted by the user.
+
+    Returns:
+        bool: True when registration is allowed for that email.
+    """
     with engine.connect() as connection:
         query = "SELECT confirmed FROM users WHERE email = :user_email"
         result = connection.execute(text(query), {"user_email": user_email})
@@ -55,11 +79,28 @@ def valid_4register(user_email):
 
 def valid_hours_list(hours_list):
     # Regular expression to validate list of numbers between 0 and 23 separated by commas
+    """Validate relay disabled-hours format (`0-23` comma-separated list).
+
+    Args:
+        hours_list: String with hour numbers separated by commas.
+
+    Returns:
+        bool: True when the input matches the expected hour-list pattern.
+    """
     pattern = r'^(?:[0-9]|1[0-9]|2[0-3])(?:,(?:[0-9]|1[0-9]|2[0-3]))*$'
     return bool(re.fullmatch(pattern, hours_list))
 
 
 def add_user(email, passw_hash):
+    """Insert a new non-admin user record.
+
+    Args:
+        email: User email to persist.
+        passw_hash: SHA-256 hashed password string.
+
+    Returns:
+        bool: True when the insert/update succeeds.
+    """
     sql_query = """
         INSERT OR REPLACE INTO users (email, passw, is_admin, confirmed) 
         VALUES (:email, :passw, 0, 0)
@@ -73,6 +114,14 @@ def add_user(email, passw_hash):
 
 
 def confirm_user(email):
+    """Mark a user account as email-confirmed.
+
+    Args:
+        email: User email to update.
+
+    Returns:
+        bool: True when the confirmation flag is updated.
+    """
     sql_query = """
             UPDATE users 
                 SET confirmed=1
@@ -87,6 +136,15 @@ def confirm_user(email):
 
 
 def try_login(email, passw):
+    """Retrieve a user row for login credential verification.
+
+    Args:
+        email: Email provided at login.
+        passw: Stored-hash candidate to compare.
+
+    Returns:
+        Row | None: Matching user row when credentials are valid.
+    """
     connection = engine.connect()
 
     query = "SELECT id, email, passw, is_admin, confirmed FROM users WHERE email = :email AND passw = :passw"
@@ -100,7 +158,7 @@ def try_login(email, passw):
 
 
 class PP_IPN:
-
+    """Store PayPal IPN helper constants and persistence utilities."""
     Payments_Status = ["Completed", "Pending", "Denied", "Refunded", "Reversed"]
     Valid_Product_Names = []
 
@@ -151,6 +209,7 @@ class PP_IPN:
         return False
 
 class CronsDB:
+    """Expose query helpers used by email/SMS alert cron jobs."""
 
     @staticmethod
     def get_email_alerts_info():
@@ -198,6 +257,7 @@ class CronsDB:
 
 
 class DevicesDB:
+    """Provide device-centric read/write operations and cached lookups."""
 
     @staticmethod
     @cache.memoize(600)
@@ -602,6 +662,7 @@ class DevicesDB:
 
 
 class User(UserMixin):
+    """Flask-Login compatible user model backed by SQL helper methods."""
     def __init__(self, id, username, password, is_admin=False):
         self.username = username
         self.password = password
@@ -841,6 +902,7 @@ class User(UserMixin):
 
 
 class Support:
+    """Support ticket persistence and retrieval helpers."""
 
     @staticmethod
     def get_all_users_support():

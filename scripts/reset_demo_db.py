@@ -17,6 +17,14 @@ DEMO_DEVICES = [
 
 
 def rebuild_demo_dataset(db_path: Path) -> None:
+    """Reset and repopulate a SQLite database with open-source demo records.
+
+    Args:
+        db_path: Filesystem path to target SQLite database.
+
+    Returns:
+        None.
+    """
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
     cur.execute("PRAGMA foreign_keys=OFF")
@@ -111,6 +119,11 @@ def rebuild_demo_dataset(db_path: Path) -> None:
 
 
 def main() -> None:
+    """Parse CLI arguments and rebuild target/source demo databases.
+
+    Returns:
+        None.
+    """
     parser = argparse.ArgumentParser(description="Reset demo SQLite dataset for open-source usage")
     parser.add_argument("--target", default="database.db", help="Target database file used by app")
     parser.add_argument(

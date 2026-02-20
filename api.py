@@ -46,6 +46,11 @@ RELAY_EVENTS_CODE = {
 
 def setup_logger():
     # Configure the logging system
+    """Configure root logger output for API service diagnostics.
+
+    Returns:
+        None.
+    """
     logging.basicConfig(level=logging.WARNING, handlers=[])  # Do not add the implicit handler
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -84,6 +89,14 @@ CORS(app, origins=[WEB_APP_DOMAIN])
 
 
 def generate_secure_random_string(length=16):
+    """Generate a strong random alphanumeric token with complexity checks.
+
+    Args:
+        length: Number of characters to generate.
+
+    Returns:
+        str: Random token containing lowercase, uppercase, and digits.
+    """
     alphabet = string.ascii_letters + string.digits
     password = ''
     while True:
@@ -97,6 +110,11 @@ def generate_secure_random_string(length=16):
 
 @app.route('/link', methods=["GET"])
 def link():
+    """Link a device to an existing user and optionally auto-provision a new keypair.
+
+    Returns:
+        flask.Response: Plain-text response with firmware metadata headers.
+    """
     private_key = request.args.get('key')
     email = request.args.get('email')
     dtype = int(request.args.get('dtype', 1))
@@ -145,6 +163,11 @@ def link():
 
 @app.route('/relay_view_api', methods=["GET", "POST"])
 def relay_view_api():
+    """Read relay live status/events or post relay on/off action commands.
+
+    Returns:
+        flask.Response: JSON payload for current status or action result.
+    """
     if request.method == "GET":
         key = request.args.get('public_key')
 
@@ -193,6 +216,11 @@ def relay_view_api():
 @app.route('/sensor_view_api', methods=["GET"])
 def sensor_view_api():
     # Define your title and SEO tags here
+    """Return latest sensor telemetry snapshot for dashboard polling.
+
+    Returns:
+        flask.Response: JSON payload with distance, voltage, RSSI, and timestamps.
+    """
     key = request.args.get('public_key')
 
     if key == "demo":
@@ -225,6 +253,11 @@ def sensor_view_api():
 @app.route('/update')
 def update():
     # Get the 'key' parameter from the query string
+    """Ingest sensor device updates and return runtime configuration headers.
+
+    Returns:
+        flask.Response | tuple: Plain-text OK response or JSON error tuple.
+    """
     private_key = request.args.get('key')
     public_key = db.DevicesDB.valid_private_key(private_key)
     if not public_key:
@@ -303,6 +336,11 @@ def update():
 @app.route('/relay-update', methods=["GET"])
 def relay_update():
     # Get the 'key' parameter from the query string
+    """Ingest relay heartbeat/events and return current control/settings headers.
+
+    Returns:
+        flask.Response | tuple: Plain-text OK response or JSON error tuple.
+    """
     private_key = request.args.get('key')
     public_key = db.DevicesDB.valid_private_key(private_key)
     if not public_key:
@@ -402,6 +440,14 @@ def relay_update():
 
 def get_relay_action(public_key):
     # 0-neutral, 1-on, -1-off
+    """Read pending relay action command from Redis for a device.
+
+    Args:
+        public_key: Relay public key used to build the Redis action key.
+
+    Returns:
+        int: Action value (`0` neutral, `1` on, `-1` off).
+    """
     rkey = f'relay_action/{public_key}'
     raction = redis_client.get(rkey)
     if raction:
@@ -411,6 +457,15 @@ def get_relay_action(public_key):
 
 def set_relay_action(public_key, action=1):
     # 0-neutral, 1-on, -1-off
+    """Persist relay action command in Redis for device pickup.
+
+    Args:
+        public_key: Relay public key used to build the Redis action key.
+        action: Desired action (`0` neutral, `1` on, `-1` off).
+
+    Returns:
+        None.
+    """
     rkey = f'relay_action/{public_key}'
     redis_client.set(rkey, action)
 

@@ -32,6 +32,11 @@ from email_validator import validate_email, EmailNotValidError
 
 def setup_logger():
     # Configure the logging system
+    """Configure root logging handlers and output format for the web app.
+
+    Returns:
+        None.
+    """
     logging.basicConfig(level=logging.WARNING, handlers=[])  # Do not add the implicit handler
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -56,6 +61,11 @@ app.config['LANGUAGES'] = ['en', 'es', 'hi']  # Supported languages
 
 def get_locale():
     # Extract language from the URL 'lang' parameter
+    """Resolve the active UI language from route parameters with fallback to default locale.
+
+    Returns:
+        str: Active locale code.
+    """
     lang = request.view_args.get('lang', app.config['BABEL_DEFAULT_LOCALE'])
 
     logging.warning(f"lang: {lang}")
@@ -66,7 +76,14 @@ def get_locale():
 
 
 def ensure_language(func):
-    """Decorator to ensure the URL uses a valid language."""
+    """Wrap a view to keep language prefix and cookie preference aligned for GET requests.
+
+    Args:
+        func: View function to decorate.
+
+    Returns:
+        callable: Wrapped view function.
+    """
     def wrapper(*args, **kwargs):
         # Skip language redirect logic for POST requests
         if request.method == "POST":
@@ -96,6 +113,11 @@ def ensure_language(func):
 @app.before_request
 def before_request():
     # Set `g.lang` so templates can use the active language
+    """Initialize per-request language helpers used by templates before view execution.
+
+    Returns:
+        None.
+    """
     g.img_lang = ''
     if request.view_args:
         g.lang = request.view_args.get('lang', app.config['BABEL_DEFAULT_LOCALE'])
@@ -106,6 +128,11 @@ def before_request():
 
 
 def get_timezone():
+    """Provide timezone information for Flask-Babel from the current request context user.
+
+    Returns:
+        str | None: User timezone if available.
+    """
     user = getattr(g, 'user', None)
     if user is not None:
         return user.timezone
@@ -142,6 +169,11 @@ API_URL = settings.API_DOMAIN
 
 @app.context_processor
 def inject_global_variables():
+    """Inject global template variables such as API URL, domain, and support pending flag.
+
+    Returns:
+        dict: Values exposed to Jinja templates.
+    """
     CONTACT_PENDING = False
     SITE_LOGO_FILE = os.getenv("SITE_LOGO_FILE", "logos/waterlevel.pro.png")
 
@@ -162,6 +194,11 @@ def inject_global_variables():
 
 @app.context_processor
 def utility_processor():
+    """Expose URL helper functions to templates for locale-aware endpoint generation.
+
+    Returns:
+        dict: Utility functions for Jinja templates.
+    """
     def url_with_lang(endpoint, **kwargs):
         lang = g.get('lang', 'en')
         # Do not add a prefix for the default language
@@ -176,6 +213,14 @@ def utility_processor():
 # Load user callback function required by Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
+    """Load a user record for Flask-Login from the persistent store.
+
+    Args:
+        user_id: User identifier from session.
+
+    Returns:
+        db.User | None: Authenticated user model or None.
+    """
     user_data = db.get_user_by_id(user_id)
     if user_data:
         return db.User(user_data.id, user_data.email, user_data.passw, user_data.is_admin)
@@ -183,6 +228,14 @@ def load_user(user_id):
 
 
 def admin_login_required(func):
+    """Restrict access to admin-only views while preserving Flask compatibility behavior.
+
+    Args:
+        func: View function requiring admin access.
+
+    Returns:
+        callable: Wrapped view function enforcing admin checks.
+    """
     @wraps(func)
     def decorated_view(*args, **kwargs):
         print("decorated_view decorated_view decorated_view")
@@ -203,6 +256,14 @@ def admin_login_required(func):
 
 
 def validate_recaptcha(response):
+    """Verify a reCAPTCHA token against Google verification endpoint.
+
+    Args:
+        response: reCAPTCHA token submitted by the client.
+
+    Returns:
+        bool: True when verification succeeds.
+    """
     data = {
         'secret': RECAPTCHA_SECRET_KEY,
         'response': response
@@ -216,6 +277,14 @@ def validate_recaptcha(response):
 @app.route('/<lang>/login', methods=['GET', 'POST'], strict_slashes=False)
 @ensure_language
 def login(lang='en'):
+    """Handle user login flow including form validation and session creation.
+
+    Args:
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Rendered page or redirect response.
+    """
     if request.method == 'POST':
         username = request.form['email']
         password = request.form['password']
@@ -249,6 +318,14 @@ def login(lang='en'):
 @app.route('/<lang>/register', methods=['GET', 'POST'], strict_slashes=False)
 @ensure_language
 def register(lang='en'):
+    """Handle user registration flow with validation, anti-spam checks, and confirmation email trigger.
+
+    Args:
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Rendered page or redirect response.
+    """
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -289,6 +366,14 @@ def register(lang='en'):
 @app.route('/<lang>/user-confirm', methods=['GET'], strict_slashes=False)
 @ensure_language
 def user_confirm(lang='en'):
+    """Validate a user confirmation code and activate the account.
+
+    Args:
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Rendered confirmation page or redirect.
+    """
     email = request.args.get('email')
     code = request.args.get('code')
     if email and code:
@@ -305,6 +390,14 @@ def user_confirm(lang='en'):
 @ensure_language
 @login_required
 def user_settings(lang='en'):
+    """Display and update authenticated user settings, alerts, and contact preferences.
+
+    Args:
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Rendered settings page or redirect.
+    """
     if request.method == 'POST':
         action = request.form.get("action")
         if action == 'update-phone':
@@ -373,10 +466,26 @@ def user_settings(lang='en'):
 @app.route('/<lang>', methods=['GET', 'POST'], strict_slashes=False)
 @ensure_language
 def index(lang='en'):
+    """Render the localized home page.
+
+    Args:
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Rendered index template.
+    """
     return render_template('index.html')
 
 
 def generate_secure_random_string(length=16):
+    """Generate a cryptographically secure random alphanumeric string.
+
+    Args:
+        length: Desired number of characters.
+
+    Returns:
+        str: Randomly generated token.
+    """
     alphabet = string.ascii_letters + string.digits
     password = ''
     while True:
@@ -391,6 +500,11 @@ def generate_secure_random_string(length=16):
 @app.route('/admin_dashboard', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def admin_dashboard():
+    """Render the admin dashboard with users and support summary information.
+
+    Returns:
+        flask.Response: Rendered admin dashboard page.
+    """
     is_admin = current_user.is_admin
     if request.method == 'POST':
         action = request.form.get("action")
@@ -461,6 +575,11 @@ def admin_dashboard():
 @app.route('/add_sensor', methods=['GET'], strict_slashes=False)
 @login_required
 def add_sensor():
+    """Create a new sensor device record from admin dashboard inputs.
+
+    Returns:
+        flask.Response: Redirect response back to admin area.
+    """
     is_admin = current_user.is_admin
     return render_template('add_sensor.html',  RECAPTCHA_PUBLIC_KEY=RECAPTCHA_PUBLIC_KEY,
                            is_admin=is_admin)
@@ -469,10 +588,23 @@ def add_sensor():
 @app.route('/add_relay', methods=['GET'], strict_slashes=False)
 @login_required
 def add_relay():
+    """Create a new relay device record from admin dashboard inputs.
+
+    Returns:
+        flask.Response: Redirect response back to admin area.
+    """
     return render_template('add_relay.html',  RECAPTCHA_PUBLIC_KEY=RECAPTCHA_PUBLIC_KEY)
 
 
 def validate_recaptcha(response):
+    """Verify a reCAPTCHA token against Google verification endpoint.
+
+    Args:
+        response: reCAPTCHA token submitted by the client.
+
+    Returns:
+        bool: True when verification succeeds.
+    """
     data = {
         'secret': RECAPTCHA_SECRET_KEY,
         'response': response
@@ -487,11 +619,27 @@ def validate_recaptcha(response):
 @ensure_language
 @login_required
 def logout(lang='en'):
+    """Terminate current user session and redirect to localized login page.
+
+    Args:
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Redirect response.
+    """
     logout_user()
     return redirect(url_for('index'))
 
 
 def get_relay_event_text(event_code):
+    """Convert relay event code to a localized human-readable label.
+
+    Args:
+        event_code: Numeric relay event code.
+
+    Returns:
+        str: Localized event description.
+    """
     RELAY_EVENTS_CODE = {
         0: ("NO_EVENT", _("No event reported")),
         1: ("BLIND_AREA", _("Sensor reach near the blind area!")),
@@ -513,6 +661,14 @@ def get_relay_event_text(event_code):
 
 
 def format_hours(hours):
+    """Format uptime hours into a human-readable days/hours string.
+
+    Args:
+        hours: Total uptime in hours.
+
+    Returns:
+        str: Formatted uptime text.
+    """
     days = hours // 24
     remaining_hours = hours % 24
 
@@ -529,6 +685,14 @@ def format_hours(hours):
 @app.route('/<lang>/device_info', methods=['GET', 'POST'], strict_slashes=False)
 @ensure_language
 def device_info(lang='en'):
+    """Show device details and telemetry for a selected user device.
+
+    Args:
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Rendered device details page.
+    """
     public_key = request.args.get('public_key')
     private_key = request.args.get('private_key')
     small_version = request.args.get('smallversion')
@@ -603,6 +767,11 @@ def device_info(lang='en'):
 
 @app.route('/device_admin', methods=['POST'])
 def device_admin():
+    """Handle device administration actions such as update, delete, and ownership settings.
+
+    Returns:
+        flask.Response: Redirect response after admin operation.
+    """
     action = request.form.get("action")
     is_admin = current_user.is_admin
     public_key = request.form.get("public_key")
@@ -756,6 +925,11 @@ def device_admin():
 
 @app.route('/data-api', methods=['GET'])
 def get_device_data():
+    """Return device chart and status data as JSON for dashboard polling.
+
+    Returns:
+        flask.Response: JSON response with device metrics.
+    """
     key = request.args.get('key')
 
     cache_key = f'tin-keys/{key}'
@@ -788,6 +962,11 @@ def get_device_data():
 
 @app.route('/ping')
 def ping():
+    """Expose a lightweight health endpoint used by smoke tests and monitoring.
+
+    Returns:
+        str: Health-check marker text.
+    """
     return 'PONG'
 
 
@@ -795,6 +974,14 @@ def ping():
 @app.route('/<lang>/devices', methods=['GET', 'POST'], strict_slashes=False)
 @ensure_language
 def devices(lang='en'):
+    """Render the authenticated user device list view.
+
+    Args:
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Rendered devices page.
+    """
     if request.method == 'POST' and current_user.is_authenticated:
         action = request.form.get("action")
         public_key = request.form.get("public_key")
@@ -816,6 +1003,15 @@ def devices(lang='en'):
 @app.route('/<lang>/products/<product_name>', methods=['GET', 'POST'], strict_slashes=False)
 @ensure_language
 def products(product_name, lang='en'):
+    """Render a localized product information page for a supported product slug.
+
+    Args:
+        product_name: Product slug from route.
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Rendered product page or 404.
+    """
     template = "products/s1.html".lower()
     if product_name.lower() == 'WiFi-Water-Level-S1'.lower():
         template = "products/s1.html"
@@ -832,6 +1028,15 @@ def products(product_name, lang='en'):
 @app.route('/<lang>/manuals/<product_name>', methods=['GET'], strict_slashes=False)
 @ensure_language
 def manuals(product_name, lang='en'):
+    """Render a localized product manual page for a supported product slug.
+
+    Args:
+        product_name: Product slug from route.
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Rendered manual page or 404.
+    """
     template = "manuals/s1.html".lower()
     if product_name.lower() == 'WiFi-Water-Level-S1'.lower():
         template = "manuals/s1.html"
@@ -847,36 +1052,74 @@ def manuals(product_name, lang='en'):
 
 @app.route('/ipn-routes-83', methods=['GET', 'POST'])
 def IPN():
+    """Receive and process incoming payment IPN notifications.
+
+    Returns:
+        str: Plain-text status response.
+    """
     return jsonify(status='disabled', message='Payment processing has been removed in open-source mode.'), 410
 
 
 def process_ipn(ipn_message):
+    """Parse and persist IPN payload fields into the payment audit store.
+
+    Args:
+        ipn_message: Parsed IPN key-value payload.
+
+    Returns:
+        None.
+    """
     return False
 
 
 
 @app.route('/robots.txt')
 def robots_txt():
+    """Serve robots.txt from static assets.
+
+    Returns:
+        flask.Response: Static file response.
+    """
     return send_from_directory(app.static_folder, 'robots.txt')
 
 @app.route('/favicon.ico')
 def favicon():
+    """Serve site favicon from static assets.
+
+    Returns:
+        flask.Response: Static file response.
+    """
     return send_from_directory(app.static_folder, 'logos/waterlevel.pro-icon.ico')
 
 
 @app.route('/sitemap.xml')
 def sitemap_txt():
+    """Serve XML sitemap from static assets.
+
+    Returns:
+        flask.Response: Static file response.
+    """
     return send_from_directory(app.static_folder, 'sitemap.xml')
 
 
 @app.route('/image-sitemap.xml')
 def image_sitemap_txt():
+    """Serve image sitemap from static assets.
+
+    Returns:
+        flask.Response: Static file response.
+    """
     return send_from_directory(app.static_folder, 'image-sitemap.xml')
 
 
 @app.route('/ads.txt')
 @app.route('/Ads.txt')
 def ads_txt():
+    """Serve ads.txt from static assets.
+
+    Returns:
+        flask.Response: Static file response.
+    """
     return send_from_directory(app.static_folder, 'Ads.txt')
 
 
@@ -885,6 +1128,14 @@ def ads_txt():
 @ensure_language
 @login_required
 def contact(lang='en'):
+    """Handle contact form submissions and support message persistence.
+
+    Args:
+        lang: Active locale used in localized routes.
+
+    Returns:
+        flask.Response: Rendered contact page or redirect.
+    """
     sent = False
     if request.method == 'POST':
         reason = request.form['reason']
@@ -936,6 +1187,14 @@ def contact(lang='en'):
 @app.route('/reportes/<filename>')
 @admin_login_required
 def view_report(filename):
+    """Serve generated analytics reports from the reports directory.
+
+    Args:
+        filename: Report filename requested by the client.
+
+    Returns:
+        flask.Response: File response or 404.
+    """
     report_filename = 'report.html'  # Report filename
     try:
         with open(f'{settings.REPORTS_FOLDER}/{filename}', 'rb') as file:
@@ -948,6 +1207,14 @@ def view_report(filename):
 @app.route('/set_language/<language>')
 def set_language(language):
     # Build response
+    """Store selected language in cookie and redirect back to referrer page.
+
+    Args:
+        language: Target locale code.
+
+    Returns:
+        flask.Response: Redirect response with updated cookie.
+    """
     resp = make_response(redirect(request.referrer or '/'))  # Redirect to previous URL or '/' if missing
     resp.set_cookie('lang', language)  # Store selected language in cookie
     return resp
@@ -955,6 +1222,14 @@ def set_language(language):
 
 @app.route('/short/<short_code>', methods=['GET'], strict_slashes=False)
 def short(short_code):
+    """Resolve and redirect short links to their destination URL.
+
+    Args:
+        short_code: Short-link identifier from route.
+
+    Returns:
+        flask.Response: Redirect response or 404.
+    """
     if short_code == "sunbuddy":
         return redirect("https://pro.easyeda.com/editor#id=a14129a4c1e049319308b75c967798a8,tab=*fc869bda6bfd418a8f1333c83e32ca45@a14129a4c1e049319308b75c967798a8")
     if short_code == "smartswitch":
