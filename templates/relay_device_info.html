@@ -3,361 +3,21 @@
 {% block head %}
 
 <script src="{{ url_for('static', filename='assets/js/qrcode.min.js') }}"></script>
-
-<style>
-
- .advanced_settings{
-    display: none;
- }
-
- .apexcharts-toolbar {
-      display: none;
- }
-
-.large-switch .form-check-input {
-    width: 3rem; /* Aumenta el ancho */
-    height: 1.5rem; /* Aumenta la altura */
-    transform: scale(1.5); /* Escala el switch */
-    margin-right: 20px;
-}
-
-.mid-switch .form-check-input {
-    width: 2.5rem; /* Aumenta el ancho */
-    height: 1.2rem; /* Aumenta la altura */
-    transform: scale(1.2); /* Escala el switch */
-    margin-right: 10px;
-}
-
-</style>
-
-
-<style>
-/* WiFi signal CSS */
-
-.wave {
-    display: inline-block;
-    border: 7px solid transparent;
-    border-top-color: currentColor;
-    border-radius: 50%;
-    border-style: solid;
-    margin: 3px;
-}
-
-.waveStrength-3 .wv4.wave,
-.waveStrength-2 .wv4.wave,
-.waveStrength-2 .wv3.wave,
-.waveStrength-1 .wv4.wave,
-.waveStrength-1 .wv3.wave,
-.waveStrength-1 .wv2.wave {
-    border-top-color: #eee;
-}
-</style>
-
-
-<style>
-/* Switch CSS */
-
-html {
-  box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
-  font-size: 100%;
-}
-
-.mid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top:1em;
-}
-
-
-/* Switch starts here */
-.rocker {
-  display: inline-block;
-  position: relative;
-  /*
-  SIZE OF SWITCH
-  ==============
-  All sizes are in em - therefore
-  changing the font-size here
-  will change the size of the switch.
-  See .rocker-small below as example.
-  */
-  font-size: 1.7em;
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-  color: #888;
-  width: 7em;
-  height: 4em;
-  overflow: hidden;
-  border-bottom: 0.5em solid #eee;
-}
-
-.rocker-small {
-  font-size: 0.75em; /* Sizes the switch */
-  margin: 1em;
-}
-
-.rocker::before {
-  content: "";
-  position: absolute;
-  top: 0.5em;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #999;
-  border: 0.5em solid #eee;
-  border-bottom: 0;
-}
-
-.rocker input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.switch-left,
-.switch-right {
-  cursor: pointer;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 2.5em;
-  width: 3em;
-  transition: 0.2s;
-}
-
-.switch-left {
-  height: 2.4em;
-  width: 2.75em;
-  left: 0.85em;
-  bottom: 0.4em;
-  background-color: #ddd;
-  transform: rotate(15deg) skewX(15deg);
-}
-
-.switch-right {
-  right: 0.5em;
-  bottom: 0;
-  background-color: #bd5757;
-  color: #fff;
-}
-
-.switch-left::before,
-.switch-right::before {
-  content: "";
-  position: absolute;
-  width: 0.4em;
-  height: 2.45em;
-  bottom: -0.45em;
-  background-color: #ccc;
-  transform: skewY(-65deg);
-}
-
-.switch-left::before {
-  left: -0.4em;
-}
-
-.switch-right::before {
-  right: -0.375em;
-  background-color: transparent;
-  transform: skewY(65deg);
-}
-
-input:checked + .switch-left {
-  background-color: #0084d0;
-  color: #fff;
-  bottom: 0px;
-  left: 0.5em;
-  height: 2.5em;
-  width: 3em;
-  transform: rotate(0deg) skewX(0deg);
-}
-
-input:checked + .switch-left::before {
-  background-color: transparent;
-  width: 3.0833em;
-}
-
-input:checked + .switch-left + .switch-right {
-  background-color: #ddd;
-  color: #888;
-  bottom: 0.4em;
-  right: 0.8em;
-  height: 2.4em;
-  width: 2.75em;
-  transform: rotate(-15deg) skewX(-15deg);
-}
-
-input:checked + .switch-left + .switch-right::before {
-  background-color: #ccc;
-}
-
-/* Keyboard Users */
-input:focus + .switch-left {
-  color: #333;
-}
-
-input:checked:focus + .switch-left {
-  color: #fff;
-}
-
-input:focus + .switch-left + .switch-right {
-  color: #fff;
-}
-
-input:checked:focus + .switch-left + .switch-right {
-  color: #333;
-}
-</style>
-
-
-<style>
-/* 3D btn CSS */
-
-.btn3d {
-	position: relative;
-	top: -6px;
-	border: 0;
-	transition: all 40ms linear;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	margin-left: 2px;
-	margin-right: 2px;
-}
-
-.btn3d:active:focus,
-.btn3d:focus:hover,
-.btn3d:focus {
-	-moz-outline-style: none;
-	outline: medium none;
-}
-
-.btn3d:active,
-.btn3d.active {
-	top: 2px;
-}
-
-.btn3d.btn-white {
-	color: #666666;
-	box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 2px rgba(255, 255, 255, 0.10) inset, 0 8px 0 0 #f5f5f5, 0 8px 8px 1px rgba(0, 0, 0, .2);
-	background-color: #fff;
-}
-
-.btn3d.btn-white:active,
-.btn3d.btn-white.active {
-	color: #666666;
-	box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, .1);
-	background-color: #fff;
-}
-
-.btn3d.btn-default {
-	color: #666666;
-	box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 2px rgba(255, 255, 255, 0.10) inset, 0 8px 0 0 #BEBEBE, 0 8px 8px 1px rgba(0, 0, 0, .2);
-	background-color: #f9f9f9;
-}
-
-.btn3d.btn-default:active,
-.btn3d.btn-default.active {
-	color: #666666;
-	box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, .1);
-	background-color: #f9f9f9;
-}
-
-.btn3d.btn-primary {
-	box-shadow: 0 0 0 1px #417fbd inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #4D5BBE, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
-	background-color: #4274D7;
-}
-
-.btn3d.btn-primary:active,
-.btn3d.btn-primary.active {
-	box-shadow: 0 0 0 1px #417fbd inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
-	background-color: #4274D7;
-}
-
-.btn3d.btn-secondary {
-	box-shadow: 0 0 0 1px #417fbd inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #4784d9, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
-	background-color: #539BFF;
-}
-
-.btn3d.btn-secondary:active,
-.btn3d.btn-secondary.active {
-	box-shadow: 0 0 0 1px #417fbd inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
-	background-color: #539BFF;
-}
-
-.btn3d.btn-success {
-	box-shadow: 0 0 0 1px #31c300 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #5eb924, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
-	background-color: #78d739;
-}
-
-.btn3d.btn-success:active,
-.btn3d.btn-success.active {
-	box-shadow: 0 0 0 1px #30cd00 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
-	background-color: #78d739;
-}
-
-.btn3d.btn-info {
-	box-shadow: 0 0 0 1px #00a5c3 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #348FD2, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
-	background-color: #39B3D7;
-}
-
-.btn3d.btn-info:active,
-.btn3d.btn-info.active {
-	box-shadow: 0 0 0 1px #00a5c3 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
-	background-color: #39B3D7;
-}
-
-.btn3d.btn-warning {
-	box-shadow: 0 0 0 1px #d79a47 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #D79A34, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
-	background-color: #FEAF20;
-}
-
-.btn3d.btn-warning:active,
-.btn3d.btn-warning.active {
-	box-shadow: 0 0 0 1px #d79a47 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
-	background-color: #FEAF20;
-}
-
-.btn3d.btn-danger {
-	box-shadow: 0 0 0 1px #b93802 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #AA0000, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
-	background-color: #D73814;
-}
-
-.btn3d.btn-danger:active,
-.btn3d.btn-danger.active {
-	box-shadow: 0 0 0 1px #b93802 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
-	background-color: #D73814;
-}
-
-.btn3d.btn-magick {
-	color: #fff;
-	box-shadow: 0 0 0 1px #9a00cd inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #9823d5, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
-	background-color: #bb39d7;
-}
-
-.btn3d.btn-magick:active,
-.btn3d.btn-magick.active {
-	box-shadow: 0 0 0 1px #9a00cd inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
-	background-color: #bb39d7;
-}
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/relay-device-info.css') }}" />
 
 {% endblock %}
 
 
 {% block headmenu_left %}
 <li class="nav-item">
-  <a class="navbar-brand " >
+  <a class="navbar-brand ">
 
   </a>
 </li>
 {% endblock %}
 
 {% block headmenu_right %}
-    <button class="btn3d btn btn-primary" id="add_device" >
+    <button class="btn3d btn btn-primary" id="add_device">
         <i class="ti ti-circle-plus fs-5"></i> {% trans %}Save Device{% endtrans %}
     </button>
 
@@ -371,16 +31,16 @@ input:checked:focus + .switch-left + .switch-right {
 
 
 {% block content %}
-<div class="container-fluid" >
+<div class="container-fluid">
 
   <div class="card bg-dark position-relative overflow-hidden mb-4">
     <div class="card-body px-4 py-3">
       <div class="row align-items-center">
         <div class="col-md-9">
 
-            <a class="nav-link " >
+            <a class="nav-link ">
                 <h4 class="fw-semibold mb-8 text-white">{{ model_info.long_name }}
-                <button type="button" class="btn btn-sm rounded-pill bg-danger text-white d-none offline ms-2" >
+                <button type="button" class="btn btn-sm rounded-pill bg-danger text-white d-none offline ms-2">
                       {% trans %}OFLLINE{% endtrans %} <i class="ti ti-wifi-off"></i>
                 </button>
                 <button type="button" class="btn btn-sm rounded-pill btn-success text-white d-none online ms-2">
@@ -389,19 +49,19 @@ input:checked:focus + .switch-left + .switch-right {
                 </h4>
             </a>
 
-            <button  class="btn3d btn btn-secondary fs-2" id="device_name" data-bs-toggle="modal" data-bs-target="#ChangeNameModal" >
+            <button  class="btn3d btn btn-secondary fs-2" id="device_name" data-bs-toggle="modal" data-bs-target="#ChangeNameModal">
                 <i class="ti ti-edit fs-6"></i>
             </button>
-            <button type="button" class="btn3d btn btn-primary fs-2" data-bs-toggle="modal" data-bs-target="#ChangeNameModal"  >
+            <button type="button" class="btn3d btn btn-primary fs-2" data-bs-toggle="modal" data-bs-target="#ChangeNameModal">
                 <strong>{% trans %}key{% endtrans %}:</strong>
-                <span class="text-decoration-underline" >{{ key_used }}
+                <span class="text-decoration-underline">{{ key_used }}
 
                 </span>
             </button>
 
         </div>
 
-          <div class="col-md-3" >
+          <div class="col-md-3">
             <div class="mid online switch-ready">
               <label class="rocker">
                 <input type="checkbox" checked id="Switch" name="switch-checkbox">
@@ -409,13 +69,13 @@ input:checked:focus + .switch-left + .switch-right {
                 <span class="switch-right">Off</span>
               </label>
             </div>
-              <div class="offline row ms-4 mt-3" >
+              <div class="offline row ms-4 mt-3">
                   <div class="col-auto spinner-grow text-light" role="status">
                     <span class="visually-hidden">{% trans %}Loading...{% endtrans %}</span>
                   </div>
                   <h2 class="text-white col-auto">{% trans %}OFFLINE{% endtrans %}</h2>
               </div>
-              <div class="switch-busy d-none" >
+              <div class="switch-busy d-none">
                  <div class="col-auto spinner-grow text-danger" role="status">
                     <span class="visually-hidden">{% trans %}Loading...{% endtrans %}</span>
                   </div>
@@ -425,7 +85,7 @@ input:checked:focus + .switch-left + .switch-right {
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                <div class="my-3 row" >
+                <div class="my-3 row">
                     {% for category, message in messages %}
                         <div class="alert alert-{{ category }}">
                             {{ message|safe }}
@@ -454,7 +114,7 @@ input:checked:focus + .switch-left + .switch-right {
                         </div>
                       </div>
                   <div class="modal-footer"> <button type="button" class="btn3d btn btn-danger" data-bs-dismiss="modal"> {% trans %}Close{% endtrans %} </button>
-                  <button type="button" class="btn3d btn btn-primary" id="set_name_btn" > {% trans %}Save{% endtrans %} </button> </div>
+                  <button type="button" class="btn3d btn btn-primary" id="set_name_btn"> {% trans %}Save{% endtrans %} </button> </div>
               </div> <!-- /.modal-content -->
           </div> <!-- /.modal-dialog -->
       </div> <!-- /.modal -->
@@ -463,8 +123,8 @@ input:checked:focus + .switch-left + .switch-right {
     </div>
 
         {% if device_setting.SENSOR_KEY %}
-          <div class="row align-items-center" >
-               <a class="col-md-3 btn3d btn btn-danger fs-2"  href="{{ url_with_lang('device_info') + '?public_key=' + device_setting.SENSOR_KEY }}" >{% trans %}Sensor Linked:{% endtrans %} {{ device_setting.SENSOR_KEY }}</a>
+          <div class="row align-items-center">
+               <a class="col-md-3 btn3d btn btn-danger fs-2"  href="{{ url_with_lang('device_info') + '?public_key=' + device_setting.SENSOR_KEY }}">{% trans %}Sensor Linked:{% endtrans %} {{ device_setting.SENSOR_KEY }}</a>
           </div>
         {% endif %}
   </div>
@@ -490,15 +150,15 @@ input:checked:focus + .switch-left + .switch-right {
               </div>
 
 
-              <div class="col-lg-12 card d-flex justify-content-center align-items-center" >
-                <h5 class="mt-4 fw-bolder" >{% trans %}Wi-Fi Signal Strength{% endtrans %} </h5>
+              <div class="col-lg-12 card d-flex justify-content-center align-items-center">
+                <h5 class="mt-4 fw-bolder">{% trans %}Wi-Fi Signal Strength{% endtrans %} </h5>
 
-                  <div class="row mt-2 online ms-4" >
+                  <div class="row mt-2 online ms-4">
 
                     <div class="waveStrength-3" id="rssi-symbol">
-                      <div class="wv4 wave" style="">
-                        <div class="wv3 wave" style="">
-                          <div class="wv2 wave" style="">
+                                            <div class="wv4 wave">
+                                                <div class="wv3 wave">
+                                                    <div class="wv2 wave">
                             <div class="wv1 wave">
                             </div>
                           </div>
@@ -511,20 +171,20 @@ input:checked:focus + .switch-left + .switch-right {
                     </div>
                   </div>
 
-                  <button type="button" class="btn btn-sm rounded-pill bg-danger text-white d-none disabled offline mb-3" >
+                  <button type="button" class="btn btn-sm rounded-pill bg-danger text-white d-none disabled offline mb-3">
                       {% trans %}OFLLINE{% endtrans %} <i class="ti ti-wifi-off"></i>
                   </button>
-                  <div class="offline ms-4 mb-3 " >
-                      <span class="fs-2 fw-bolder" >{% trans %}offline time:{% endtrans %} </span> <span class="fs-2" id="diff_time"></span>
+                  <div class="offline ms-4 mb-3 ">
+                      <span class="fs-2 fw-bolder">{% trans %}offline time:{% endtrans %} </span> <span class="fs-2" id="diff_time"></span>
                   </div>
               </div>
 
-                <div class="col-lg-12 card d-flex justify-content-center align-items-center" >
-                <h5 class="mt-4 fw-bolder" >{% trans %}Public QR (Read-Only){% endtrans %}</h5>
+                <div class="col-lg-12 card d-flex justify-content-center align-items-center">
+                <h5 class="mt-4 fw-bolder">{% trans %}Public QR (Read-Only){% endtrans %}</h5>
 
-                  <div class="row mt-2  d-flex justify-content-center align-items-center" >
-                      <button class="btn3d btn btn-danger" id="show_qr" >{% trans %}Show QR{% endtrans %}</button>
-                        <div id="qrcode" class="card" >
+                  <div class="row mt-2  d-flex justify-content-center align-items-center">
+                      <button class="btn3d btn btn-danger" id="show_qr">{% trans %}Show QR{% endtrans %}</button>
+                        <div id="qrcode" class="card">
                         </div>
 
                   </div>
@@ -542,7 +202,7 @@ input:checked:focus + .switch-left + .switch-right {
 
 <hr>
 
-<div class="row mb-5" >
+<div class="row mb-5">
 
 <p>
   <a class="btn3d btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -552,7 +212,7 @@ input:checked:focus + .switch-left + .switch-right {
 <div class="collapse" id="collapseExample">
   <div class="card card-body pt-1 px-0">
  {% if device_setting %}
-        <ul class="list-group ms-3" >
+        <ul class="list-group ms-3">
             <form method="post" action="{{ url_for('device_admin') }}" id="SettingsForm">
                 <input type="hidden" name="action" value="relay-setting">
                 <input type="hidden" name="public_key" value="{{ key_used }}">
@@ -562,23 +222,23 @@ input:checked:focus + .switch-left + .switch-right {
                     <select class="select2 form-control custom-select select2-hidden-accessible auto-input" id="fruits"  name="SENSOR_KEY">
                       {% for usr_device in current_user.get_devices() %}
                         {% if usr_device.type in (1, 2) %}
-                            <option value="{{ usr_device.public_key }}"  {% if usr_device.public_key == device_setting.SENSOR_KEY %} selected {% endif %} >
+                            <option value="{{ usr_device.public_key }}"  {% if usr_device.public_key == device_setting.SENSOR_KEY %} selected {% endif %}>
                                 {{ usr_device.name or '>>' }} [{{ usr_device.public_key }}]
                             </option>
                         {% endif %}
                       {% endfor %}
-                        <option value="" {% if not device_setting.SENSOR_KEY %} selected {% endif %} >{% trans %}None{% endtrans %}</option>
+                        <option value="" {% if not device_setting.SENSOR_KEY %} selected {% endif %}>{% trans %}None{% endtrans %}</option>
                     </select>
                         </label>
                     <p class="ms-4 my-3">
                         {% trans %}Connect a <b>Water Level S1</b> sensor to this smart controller.{% endtrans %}
                     </p>
                 {% else %}
-                    <a href="{{ url_with_lang('device_info') + '?public_key=' + device_setting.SENSOR_KEY }}" >{{ device_setting.SENSOR_KEY or '{% trans %}None{% endtrans %}' }}</a>
+                    <a href="{{ url_with_lang('device_info') + '?public_key=' + device_setting.SENSOR_KEY }}">{{ device_setting.SENSOR_KEY or '{% trans %}None{% endtrans %}' }}</a>
                 {% endif %}
             </li>
 
-            <li class="basic_settings list-group-item list-group-item-action" >
+            <li class="basic_settings list-group-item list-group-item-action">
 
                <div class="form-check form-switch large-switch">
                   <input class="form-check-input auto-input" name="ALGO" type="checkbox" id="SmartModeCheckBox" disabled {% if device_setting.ALGO %} checked {% endif %}>
@@ -586,16 +246,13 @@ input:checked:focus + .switch-left + .switch-right {
                </div>
                 <ul class="list-group my-3">
 
-                    <li class="list-group-item list-group-item-info" >
+                    <li class="list-group-item list-group-item-info">
                         {% trans %}Pump <b>start</b> when water level reach{% endtrans %} <b>{{ device_setting.START_LEVEL }}% {% trans %}or lower{% endtrans %}</b>.
                     </li>
-                    <li class="list-group-item list-group-item-info">{% trans %}Pump <b>stop</b> when water level reach{% endtrans %} <b>{{ device_setting.END_LEVEL }}% {% trans %}or bigger{% endtrans %}</b>.</li>
-                    <li class="list-group-item list-group-item-info">Pump <b>stop</b> if water level get closer to the sensor <b>blind area</b> defined at sensor linked settings.</li>
-                    <li class="list-group-item list-group-item-info">Pump <b>stop</b> if the sensor is <b>offline</b> or controller lose internet connection.</li>
-                    <li class="list-group-item list-group-item-warning">
+                    <li class="list-group-item list-group-item-info">{% trans %}Pump <b>stop</b> when water level reach{% endtrans %} <b>{{ device_setting.END_LEVEL }}% {% trans %}or bigger{% endtrans %}</b>.</li>                    <li class="list-group-item list-group-item-info">Pump <b>stop</b> if water level get closer to the sensor <b>blind area</b> defined at sensor linked settings.</li>                    <li class="list-group-item list-group-item-info">Pump <b>stop</b> if the sensor is <b>offline</b> or controller lose internet connection.</li>                    <li class="list-group-item list-group-item-warning">
                         <b>This is an experimental feature; do not use it without supervision.</b> <br>
                         Ensure all necessary precautions are taken, as it may not work under your specific conditions.<br>
-                        <div class="btn3d btn btn-sm btn-primary" id="AdvancedSettingsButton" >Use Advanced Settings</div> to customize
+                        <div class="btn3d btn btn-sm btn-primary" id="AdvancedSettingsButton">Use Advanced Settings</div> to customize
                         the smart mode for factors like water tank size, pump flow, and other variables.
                     </li>
                     <li class="list-group-item list-group-item-danger">
@@ -607,13 +264,13 @@ input:checked:focus + .switch-left + .switch-right {
                 </ul>
             </li>
 
-            <li class="advanced_settings list-group-item list-group-item-action bg-secondary-subtle" >
+            <li class="advanced_settings list-group-item list-group-item-action bg-secondary-subtle">
                 <div class="form-check form-switch mid-switch">
                   <input class="form-check-input" name="AUTO_OFF" id="AUTO_OFFCheckBox" type="checkbox"  disabled {% if device_setting.AUTO_OFF %} checked {% endif %}>
                   <label class="form-check-label fs-5 fw-bold" for="AUTO_OFFCheckBox">{% trans %}Smart Off{% endtrans %}</label>
                </div>
                 {% trans %}
-                <p class="ms-4 my-3" >
+                <p class="ms-4 my-3">
                     Enable the <b>smart off</b> conditions: <b>End Level</b>, <b>Blind Area</b>, <b>Not Water Flow</b>, <b>Offline Sensor</b>.<br>
                     If enabled, the pump will stop when the water level reaches <b>End Level &#37;</b> or <b>Blind Area</b>,
                     if the linked sensor goes <b>offline</b>, or if no incoming water flow is detected during the
@@ -627,66 +284,66 @@ input:checked:focus + .switch-left + .switch-right {
                     The <b>Blind Area</b> and <b>Offline Sensor</b> conditions activate with <span class="badge text-bg-primary fw-bold">Smart Off</span>,
                     even if <span class="badge text-bg-danger fw-bold">Smart Mode</span> is disabled.
                 </p>
-                <div class="row justify-content-md-center my-3" >
+                <div class="row justify-content-md-center my-3">
                     <div class="col-md-auto my-2">
                         Don't Depends On: <span class="badge text-bg-danger fw-bold">Smart Mode</span>
                     </div>
                 </div>
                 {% endtrans %}
             </li>
-            <li class="advanced_settings list-group-item list-group-item-action" >
+            <li class="advanced_settings list-group-item list-group-item-action">
                 <div class="form-check form-switch mid-switch">
                   <input class="form-check-input" name="AUTO_ON" id="AUTO_ONCheckBox" type="checkbox"  disabled {% if device_setting.AUTO_ON %} checked {% endif %}>
                   <label class="form-check-label fs-5 fw-bold" for="AUTO_ONCheckBox">{% trans %}Smart On{% endtrans %}</label>
                </div>
                 {% trans %}
-                <p class="ms-4 my-3" >
+                <p class="ms-4 my-3">
                     Enable the <b>smart on</b> condition: <b>Start Level</b>.<br>
                     If enabled, the pump will start if water level reaches or falls below <b>Start Level &#37;</b>.
                 </p>
                 <p class="ms-4 alert alert-warning" role="alert">
                     If <b>disabled</b>, the pump will <b>not start</b> automatically, and will require click the <b>ON/OFF</b> button at UI to turn on the pump.
                 </p>
-                <div class="row justify-content-md-center my-3" >
+                <div class="row justify-content-md-center my-3">
                     <div class="col-md-auto my-2">
                         Requires: <span class="badge text-bg-danger fw-bold">Smart Mode</span>
                     </div>
                 </div>
                 {% endtrans %}
             </li>
-            <li class="advanced_settings list-group-item list-group-item-action bg-secondary-subtle" >
+            <li class="advanced_settings list-group-item list-group-item-action bg-secondary-subtle">
                 <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Start Level:{% endtrans %}</button>
-                <input type="number" step="1" max="100" min="0" name="START_LEVEL" value="{{ device_setting.START_LEVEL }}" disabled > %
+                <input type="number" step="1" max="100" min="0" name="START_LEVEL" value="{{ device_setting.START_LEVEL }}" disabled> %
                 {% trans %}
-                <p class="ms-4 my-3" >
+                <p class="ms-4 my-3">
                     Pump will start if the water level reaches or falls below this percentage.
                 </p>
-                <div class="row justify-content-md-center my-3" >
+                <div class="row justify-content-md-center my-3">
                     <div class="col-md-auto my-2">
                         Requires: <span class="badge text-bg-success fw-bold">Smart On</span> and <span class="badge text-bg-danger fw-bold">Smart Mode</span>
                     </div>
                 </div>
                 {% endtrans %}
             </li>
-            <li class="advanced_settings list-group-item list-group-item-action" >
+            <li class="advanced_settings list-group-item list-group-item-action">
                 <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}End Level:{% endtrans %}</button>
-                <input type="number" step="1" max="100" min="0" name="END_LEVEL" value="{{ device_setting.END_LEVEL }}" disabled > %
+                <input type="number" step="1" max="100" min="0" name="END_LEVEL" value="{{ device_setting.END_LEVEL }}" disabled> %
                 {% trans %}
-                <p class="ms-4 my-3" >
+                <p class="ms-4 my-3">
                     Pump will stop if the water level reaches or pass above this percentage.
                 </p>
-                <div class="row justify-content-md-center my-3" >
+                <div class="row justify-content-md-center my-3">
                     <div class="col-md-auto my-2">
                         Requires: <span class="badge text-bg-primary fw-bold">Smart Off</span> and <span class="badge text-bg-danger fw-bold">Smart Mode</span>
                     </div>
                 </div>
                 {% endtrans %}
             </li>
-            <li class="advanced_settings list-group-item list-group-item-action bg-secondary-subtle" >
+            <li class="advanced_settings list-group-item list-group-item-action bg-secondary-subtle">
                 <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Flow Check:{% endtrans %}</button>
-                <input type="number" step="1" max="120" min="0" name="MIN_FLOW_MM_X_MIN" value="{{ device_setting.MIN_FLOW_MM_X_MIN }}" disabled > {% trans %}minutes{% endtrans %}
+                <input type="number" step="1" max="120" min="0" name="MIN_FLOW_MM_X_MIN" value="{{ device_setting.MIN_FLOW_MM_X_MIN }}" disabled> {% trans %}minutes{% endtrans %}
                 {% trans %}
-                <p class="ms-4 my-3" >
+                <p class="ms-4 my-3">
                     When the pump is <b>ON</b>, it checks every X minutes whether it is providing incoming flow.
                     If no flow is detected, the pump will <b>stop</b> and attempt to restart after <b>3 hours.</b>
                 </p>
@@ -700,7 +357,7 @@ input:checked:focus + .switch-left + .switch-right {
                 <p class="ms-4 alert alert-info" role="alert">
                     To disable the <b>Flow Check</b> feature, set the value to <b>zero (0)</b>.
                 </p>
-                <div class="row justify-content-md-center my-3" >
+                <div class="row justify-content-md-center my-3">
                     <div class="col-md-auto my-2">
                         Requires: <span class="badge text-bg-danger fw-bold">Smart Mode</span>
                     </div>
@@ -710,9 +367,9 @@ input:checked:focus + .switch-left + .switch-right {
                 </div>
                 {% endtrans %}
             </li>
-            <li class="advanced_settings list-group-item list-group-item-action" >
+            <li class="advanced_settings list-group-item list-group-item-action">
                 <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Blind Distance:{% endtrans %}</button>
-                <input type="number" step="1" max="120" min="0" name="BLIND_DISTANCE" value="{{ device_setting.BLIND_DISTANCE }}" disabled > CM
+                <input type="number" step="1" max="120" min="0" name="BLIND_DISTANCE" value="{{ device_setting.BLIND_DISTANCE }}" disabled> CM
 
                 {% trans %}
                 <p class="ms-4 my-3">
@@ -725,18 +382,18 @@ input:checked:focus + .switch-left + .switch-right {
                     <b>erratic behavior</b> in the automatic pump feature.
                 </p>
 
-                <ul class="list-group my-3 mx-3" >
-                    <h6 class="ms-4" >
+                <ul class="list-group my-3 mx-3">
+                    <h6 class="ms-4">
                         Common Sensor Blind Distances
                     </h6>
-                    <li class="list-group-item list-group-item-action" >
+                    <li class="list-group-item list-group-item-action">
                         <b>AJ-SR04M: </b> 20 CM
                     </li>
                     <li class="list-group-item list-group-item-action">
                         <b>RCWL-1670: </b> 2 CM
                     </li>
                 </ul>
-                <div class="row justify-content-md-center my-3" >
+                <div class="row justify-content-md-center my-3">
                     <div class="col-md-auto my-2">
                         Requires: <span class="badge text-bg-primary fw-bold">Smart Off</span> and <span class="badge text-bg-danger fw-bold">Smart Mode</span>
                     </div>
@@ -746,30 +403,30 @@ input:checked:focus + .switch-left + .switch-right {
                 </div>
                 {% endtrans %}
             </li>
-            <li class="advanced_settings list-group-item list-group-item-action bg-secondary-subtle" >
+            <li class="advanced_settings list-group-item list-group-item-action bg-secondary-subtle">
                 <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Disabled Hours:{% endtrans %}</button>
-                <input id="hours_off" type="text" name="HOURS_OFF" value="{{ device_setting.HOURS_OFF if device_setting.HOURS_OFF else '' }}" disabled > GTM-4
+                <input id="hours_off" type="text" name="HOURS_OFF" value="{{ device_setting.HOURS_OFF if device_setting.HOURS_OFF else '' }}" disabled> GTM-4
 
                 {% trans %}
-                <p class="ms-4 my-3" >
+                <p class="ms-4 my-3">
                     Comma separated list of GMT-4 hours when the pump will not start. Example: 23,0,1,2,3,4,5,6,7,8,9 <br>
                     Useful to avoid pump start at specific hours, use GMT-4 timezone.
                 </p>
 
-                <div class="ms-4 my-2 alert alert-info" >
-                    Local Timezone Converter: <span class="badge text-bg-primary fw-bold" id="timezone_name" >-</span>
-                    <input id="local_hours_off" type="text"  value="" disabled >
+                <div class="ms-4 my-2 alert alert-info">
+                    Local Timezone Converter: <span class="badge text-bg-primary fw-bold" id="timezone_name">-</span>
+                    <input id="local_hours_off" type="text"  value="" disabled>
                 </div>
 
 
-                <p class="ms-4 my-3" >
+                <p class="ms-4 my-3">
                     If the pump is running and <span class="badge text-bg-primary fw-bold">Smart Mode</span> is enabled,
                     it will stop when <span class="badge text-bg-success fw-bold">Disabled Hours</span> begin.
                 </p>
-                <p class="ms-4 my-3 alert alert-warning" role="alert" >
+                <p class="ms-4 my-3 alert alert-warning" role="alert">
                     <span class="badge text-bg-primary fw-bold">Smart Off</span> don't influence or disable this feature.
                 </p>
-                <div class="row justify-content-md-center my-3" >
+                <div class="row justify-content-md-center my-3">
                     <div class="col-md-auto my-2">
                         Requires: <span class="badge text-bg-danger fw-bold">Smart Mode</span>
                     </div>
@@ -780,7 +437,7 @@ input:checked:focus + .switch-left + .switch-right {
                 {% endtrans %}
             </li>
 
-            <li class="advanced_settings list-group-item list-group-item-action" >
+            <li class="advanced_settings list-group-item list-group-item-action">
                <div class="form-check form-switch mid-switch">
                   <input class="form-check-input" name="SAFE_MODE" type="checkbox" id="SafeModeCheckBox" disabled {% if device_setting.SAFE_MODE %} checked {% endif %}>
                   <label class="form-check-label fs-4 fw-bold" for="SafeModeCheckBox">{% trans %}Safe Run{% endtrans %}</label>
@@ -792,7 +449,7 @@ input:checked:focus + .switch-left + .switch-right {
                     will be disabled, and the pump will turn <b>OFF</b> if the device moves beyond the <b>blind area</b> by more
                     than <b>2 centimeters</b>, or if the sensor reports <b>zero distance</b> (indicating a disconnected sensor cable).
                 </p>
-                <div class="row justify-content-md-center my-3" >
+                <div class="row justify-content-md-center my-3">
                     <div class="col-md-auto my-2">
                         Requires: <span class="badge text-bg-primary fw-bold">Smart Off</span>
                     </div>
@@ -803,20 +460,20 @@ input:checked:focus + .switch-left + .switch-right {
                 {% endtrans %}
             </li>
 
-            <li class="d-none advanced_settings list-group-item list-group-item-action bg-secondary-subtle" id="can_edit_btn" >
-                <button class="btn3d btn btn-success" >{% trans %}Update Settings{% endtrans %}</button>
+            <li class="d-none advanced_settings list-group-item list-group-item-action bg-secondary-subtle" id="can_edit_btn">
+                <button class="btn3d btn btn-success">{% trans %}Update Settings{% endtrans %}</button>
             </li>
             </form>
             {% if not current_user.is_authenticated %}
-            <div class="alert alert-info my-3" role="alert" >{% trans %}To edit settings{% endtrans %} <a href="{{ url_with_lang('login') }}" >{% trans %}Login{% endtrans %}</a> {% trans %}or{% endtrans %} <a href="{{ url_with_lang('register') }}" >{% trans %}Register{% endtrans %}</a> {% trans %}a user account{% endtrans %}</div>
+            <div class="alert alert-info my-3" role="alert">{% trans %}To edit settings{% endtrans %} <a href="{{ url_with_lang('login') }}">{% trans %}Login{% endtrans %}</a> {% trans %}or{% endtrans %} <a href="{{ url_with_lang('register') }}">{% trans %}Register{% endtrans %}</a> {% trans %}a user account{% endtrans %}</div>
             {% else %}
-                <div class="alert alert-info my-4 cant_edit" role="alert" >
+                <div class="alert alert-info my-4 cant_edit" role="alert">
                     {% trans %}To edit settings, scan the QR code belonging to the device's private key.{% endtrans %}
-                    <button class="btn btn-secondary mx-3" id="qr_scan_prv" >{% trans %}Scan Private QR{% endtrans %}</button>
+                    <button class="btn btn-secondary mx-3" id="qr_scan_prv">{% trans %}Scan Private QR{% endtrans %}</button>
                     <div id="resultado"></div>
                 </div>
             {% endif %}
-            <li>
+            </li>
 
             </li>
         </ul>
@@ -830,12 +487,12 @@ input:checked:focus + .switch-left + .switch-right {
 </div>
 
 <hr>
-<div class="row justify-content-md-center my-3" >
-    <div class="col-md-auto my-2" >
+<div class="row justify-content-md-center my-3">
+    <div class="col-md-auto my-2">
         <button class="btn3d btn btn-success" id="show_events">{% trans %}Show Live Device Events{% endtrans %}</button>
     </div>
     <div class="ms-1 my-3" id="events">
-        <div class="alert alert-info d-none" role="alert" id="no_event" >
+        <div class="alert alert-info d-none" role="alert" id="no_event">
             {% trans %}No events reported yet by device!{% endtrans %}
         </div>
     </div>
@@ -843,15 +500,15 @@ input:checked:focus + .switch-left + .switch-right {
 
 <hr>
 
-<div class="row justify-content-md-center my-3" >
-    <div class="col-md-auto my-2" >
+<div class="row justify-content-md-center my-3">
+    <div class="col-md-auto my-2">
         <button class="btn3d btn btn-info" id="show_events_past">{% trans %}Show Past 20 Events{% endtrans %}</button>
     </div>
 
     <div id="no_event_past" class="d-none">
         {% if not DISPLAY_EVENTS %}
-        <div class="row ms-1 my-3" >
-            <div class="alert alert-info d-none" role="alert" >
+        <div class="row ms-1 my-3">
+            <div class="alert alert-info d-none" role="alert">
                 {% trans %}No events reported yet by device!{% endtrans %}
             </div>
         </div>
@@ -869,17 +526,17 @@ input:checked:focus + .switch-left + .switch-right {
 
 <hr>
 
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+<div class="position-fixed bottom-0 end-0 p-3 wlp-toast-container">
     <div id="liveToast" class="toast fw-bold hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
         <div class="toast-header"> <svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                 <rect width="100%" height="100%" fill="#007aff"></rect>
             </svg>
-            <div id="toast-info-head" >
+            <div id="toast-info-head">
                 -
             </div>
 
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> </div>
-        <div id="toast-info-body" >
+        <div id="toast-info-body">
             <div class="toast-body"> - </div>
         </div>
 
@@ -891,25 +548,37 @@ input:checked:focus + .switch-left + .switch-right {
 
 <script>
 
+// -----------------------------------------------------------------------------
+// Section: Live relay telemetry polling and UI synchronization
+// - Reads current relay state from backend
+// - Updates online/offline indicators and RSSI strength icon
+// - Reconciles optimistic switch state while command is pending
+// -----------------------------------------------------------------------------
+
+// Runtime UI/control flags for relay page state synchronization.
 var offline = true;
 var device_key = '{{ key_used }}';
 var waiting_status = -1;
 var waiting_counter = 0;
 var show_events = false;
 
+// Converts seconds into a compact human-readable duration (e.g., "1h 3m 20s").
 function formatDuration(durationInSeconds) {
   const seconds = durationInSeconds % 60;
   const minutes = Math.floor((durationInSeconds / 60) % 60);
   const hours = Math.floor(durationInSeconds / 3600);
 
-  // Format the output string
+    // Step: Build a compact duration label.
   const formattedDuration = `${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m ` : ''}${seconds}s`;
 
   return formattedDuration;
 }
 
 function fetchData() {
+    // Polls relay status from API and updates all live UI widgets.
     $.get("{{API_URL}}/relay_view_api?public_key={{ key_used }}", function(data) {
+
+        // Section: last-seen timestamp and basic signal values.
 
         if(data.diff_time != 0){
             $('#diff_time').text( formatDuration(data.diff_time));
@@ -919,10 +588,11 @@ function fetchData() {
 
          $('.rssi').text(data.rssi);
 
+        // Section: optional event stream panel rendering.
         if (show_events && Array.isArray(data.events) && data.events.length > 0) {
-            // Iterar sobre el arreglo
+            // Step: Build an event summary badge list for the latest payload.
             const now = new Date();
-            const localDatetime = now.toLocaleString(); // Obtiene la fecha y hora en formato local
+            const localDatetime = now.toLocaleString(); // Step: Generate localized date/time stamp.
 
             $('#no_event').hide();
             let alertBox = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -943,6 +613,7 @@ function fetchData() {
 
 
 
+         // Section: map RSSI value to signal-wave visual class.
          let rssi_val = parseInt(data.rssi);
          $('#rssi-symbol').removeAttr("class");
          if(rssi_val <= -80){
@@ -956,8 +627,10 @@ function fetchData() {
          }
 
          let device_pool_time = 30;
-        // 30 sec-outdated
+        // Consider device data stale after 30 seconds.
         console.log(data);
+
+         // Section: online/offline gate and switch availability.
          if(parseInt(data.diff_time) > device_pool_time || parseInt(data.rtime) == 0){
             $('.offline').removeClass('d-none');
             $('.online').addClass('d-none');
@@ -971,6 +644,7 @@ function fetchData() {
          }
 
 
+         // Section: optimistic switch state reconciliation after command send.
          if(waiting_status == data.status){
             waiting_status = -1;
             waiting_counter = 0;
@@ -991,6 +665,7 @@ function fetchData() {
              }
          }
 
+         // Section: timeout fallback if status does not converge.
          if(waiting_counter > 5){
             waiting_status = -1;
             waiting_counter = 0;
@@ -1007,228 +682,26 @@ function fetchData() {
     });
 }
 
+// Starts the periodic relay polling loop.
 $(document).ready(function() {
     fetchData();
-    setInterval(fetchData, 10000); // Update every 10 seconds
+    setInterval(fetchData, 10000); // Refresh every 10 seconds.
 });
 </script>
 
 <script>
-$(document).ready(function() {
+    // Relay switch action handlers.
 
-    function GetNameToDisplay() {
-        var local_name = localStorage.getItem('name-' + device_key);
-        var user_dev_name = false;
-        {% if current_user.is_authenticated %}
-            user_dev_name = "{{ current_user.get_device_name(key_used) }}";
-        {% endif %}
-        if(local_name || user_dev_name){
-            console.log("case 1");
-            return user_dev_name || local_name;
-        }
-        console.log("case 2");
-        return '';
-    }
-
-    function load_device_name(){
-        let name_to_use = GetNameToDisplay();
-        $('#device_name').html(name_to_use+'<i class="ti ti-edit fs-4 ms-2"></i>');
-    }
-
-    load_device_name();
-
-    $('#set_name_btn').click(function() {
-        var inputValue = $('#set_name_input').val();
-        localStorage.setItem('name-'+device_key, inputValue);
-
-        {% if current_user.is_authenticated %}
-            $.post( "{{ url_with_lang('devices') }}", { action: "add", public_key: device_key, name: inputValue})
-              .done(function( data ) {
-            });
-        {% endif %}
-
-        $('#ChangeNameModal').modal('hide');
-        $('#device_name').text(inputValue);
-    });
-
-    $('#add_device').click(function() {
-        var devices = localStorage.getItem('devices');
-        let new_device = '{{ key_used }}';
-
-        if(!devices){
-            devices = '{{ key_used }}';
-        }else if(devices.indexOf(new_device) == -1){
-            devices += '|{{ key_used }}';
-        }
-        localStorage.setItem('devices', devices);
-        localStorage.setItem('info-'+new_device, '{{ model_info.long_name }}');
-
-        CheckCurrentDevice();
-
-        {% if current_user.is_authenticated %}
-            let name_value = localStorage.getItem('name-' + device_key) || '';
-            $.post( "{{ url_with_lang('devices') }}", { action: "add", public_key: new_device, name: name_value})
-              .done(function( data ) {
-            });
-        {% endif %}
-
-        $('#toast-info-head').html('<strong class="me-auto">{% trans %}Device Add Success{% endtrans %}</strong>');
-        $('#toast-info-body').html('<div class="toast-body">{% trans %}If not user logged, device will be stored only at your local browser.{% endtrans %}</div>');
-
-        var myToastEl = document.getElementById('liveToast')
-        var myToast = bootstrap.Toast.getOrCreateInstance(myToastEl) // Returns a Bootstrap toast instance
-        myToast.show();
-    });
-
-    function GetStorageDevices() {
-        var devices = localStorage.getItem('devices');
-        if(!devices){
-            return [];
-        }else{
-            return devices.split('|');
-        }
-    }
-
-    function CheckCurrentDevice() {
-        let current_device = '{{ key_used }}';
-        var devices = localStorage.getItem('devices');
-        // device was added
-        if(devices && devices.indexOf(current_device) != -1){
-            $('#add_device').addClass('d-none');
-        }else{
-            $('#add_device').removeClass('d-none');
-        }
-    }
-
-    CheckCurrentDevice();
-
-    $('#bookmarkBtn').click(function() {
-        var pageTitle = document.title;
-        var pageUrl = window.location.href;
-
-        if (window.sidebar && window.sidebar.addPanel) { // Mozilla Firefox Bookmark
-          window.sidebar.addPanel(pageTitle, pageUrl, '');
-        } else if (window.external && ('AddFavorite' in window.external)) { // IE Favorite
-          window.external.AddFavorite(pageUrl, pageTitle);
-        } else { // Other browsers (prompt the user)
-          alert('Press ' + (navigator.userAgent.toLowerCase().indexOf('mac') != -1 ? 'Cmd' : 'Ctrl') + '+D {% trans %}to bookmark this page.{% endtrans %}');
-        }
-    });
-
-});
-</script>
-
-<script>
-    // ADMIN SETTING CODE
-
-$(document).ready(function() {
-
-{% if current_user.is_admin or can_admin %}
-     $('input').prop('disabled', false);
-     $('#can_edit_btn').removeClass('d-none');
-     $('.cant_edit').addClass('d-none');
-{% endif %}
-
-});
-</script>
-
-
-<script type="text/javascript">
-// QR JS code
-
-$(document).ready(function() {
-
-    $('#show_qr').click(function() {
-        var qrcode = new QRCode(document.getElementById("qrcode"), {
-            text: '{{ DOMAIN }}{{ url_with_lang('device_info') }}?public_key={{ key_used }}',
-            width: 256,
-            height: 256,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
-        $(this).hide();
-    });
-
-
-
-
-
-});
-</script>
-
-
-<script src="{{ url_for('static', filename='assets/js/jsQR.min.js') }}"></script>
-<script>
-// PRIVATE QR SCANNER
-
-$(document).ready(function() {
-    $('#qr_scan_prv').on('click', function() {
-        abrirLectorQR();
-    });
-});
-
-function abrirLectorQR() {
-    // Check if the browser supports getUserMedia
-    if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-        // Open camera to scan QR code
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-        .then(function(stream) {
-            // Render video stream in a <video> element
-            var video = document.createElement('video');
-            document.body.appendChild(video);
-            video.srcObject = stream;
-            video.play();
-
-            // Use jsQR to scan QR codes from the video stream
-            var canvasElement = document.createElement('canvas');
-            var canvas = canvasElement.getContext('2d');
-            tick();
-
-            function tick() {
-                if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                    canvasElement.width = video.videoWidth;
-                    canvasElement.height = video.videoHeight;
-                    canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-                    var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-                    var code = jsQR(imageData.data, imageData.width, imageData.height, {
-                        inversionAttempts: 'dontInvert',
-                    });
-                    if (code && code.data && code.data.indexOf('{{ DOMAIN.rstrip('/') }}/') == 0) {
-                        // If a QR code is detected, stop video playback and process the result
-                        video.pause();
-                        stream.getTracks().forEach(track => track.stop());
-                        $('#resultado').text('QR Result : ' + code.data);
-                        if(code.data.indexOf('private_key=') == -1){
-                            alert({% trans %}"QR don't contains a private key"{% endtrans %});
-                        }
-                        window.location.href = code.data;
-                    } else {
-                        // If no QR code is detected, keep scanning
-                        requestAnimationFrame(tick);
-                    }
-                } else {
-                    requestAnimationFrame(tick);
-                }
-            }
-        })
-        .catch(function(error) {
-            alert('{% trans %}Error accessing the camera. Please make sure you give permission to access the camera.{% endtrans %}');
-        });
-    } else {
-        alert('{% trans %}This browser does not support the functionality necessary to scan QR codes.{% endtrans %}');
-    }
-}
-
-</script>
-
-
-<script>
-    // Switch JS
+    // -------------------------------------------------------------------------
+    // Section: Relay command dispatch
+    // - Sends ON/OFF command immediately when user toggles switch
+    // - Shows busy state until next telemetry confirmation
+    // -------------------------------------------------------------------------
 
 $(document).ready(function() {
 
 
+    // Step: Send relay ON/OFF command and mark UI state as pending.
     $("#Switch").change(function() {
 
         let action_value = 'on';
@@ -1256,21 +729,31 @@ $(document).ready(function() {
 
 
 <script>
-// Settings updates JS
+// Auto-submit and advanced settings UI handlers.
+
+// -----------------------------------------------------------------------------
+// Section: Settings interactions
+// - Auto-submit configurable inputs
+// - Toggle advanced settings visibility
+// - Activate event panels and scroll to selected section
+// -----------------------------------------------------------------------------
 
 $(document).ready(function() {
 
+    // Step: Auto-submit settings when any field marked as auto-input changes.
     $('.auto-input').change(function() {
 
-        // Submit the form with the modified value
+        // Step: Submit the settings form after any tracked input change.
         $('#SettingsForm').submit();
     });
 
+    // Step: Reveal advanced configuration controls.
     $('#AdvancedSettingsButton').click(function() {
         $('.advanced_settings').css('display', 'block');
     });
 
 
+    // Step: Enable live event mode and scroll to the live event panel.
     $('#show_events').click(function() {
 
         $('#show_events').text('Live Device Events: ');
@@ -1281,6 +764,7 @@ $(document).ready(function() {
         }, 500);
     });
 
+    // Step: Show historical events panel and scroll to that section.
     $('#show_events_past').click(function() {
 
         $('#show_events_past').text('Past 20 Events: ');
@@ -1301,6 +785,12 @@ $(document).ready(function() {
 <script>
 // JS Timezone Logic
 
+// -----------------------------------------------------------------------------
+// Section: Timezone conversion helpers for smart schedule hours
+// - Displays browser timezone label
+// - Keeps local-time and GMT-4 schedule inputs in sync
+// -----------------------------------------------------------------------------
+
 $(document).ready(function() {
 
     var lock_local = false;
@@ -1312,6 +802,7 @@ $(document).ready(function() {
     let local_hours_off = convertToLocalTime('{{ device_setting.HOURS_OFF if device_setting.HOURS_OFF else '' }}');
     $('#local_hours_off').val(local_hours_off);
 
+    // Step: Sync local-hours input into GMT-4 input without recursive updates.
     $('#local_hours_off').on('input', function() {
         if(lock_local) return;
 
@@ -1321,6 +812,7 @@ $(document).ready(function() {
         lock_gmt = false;
     });
 
+    // Step: Sync GMT-4 input back into local-hours input without recursive updates.
     $('#hours_off').on('input', function() {
         if(lock_gmt) return;
 
@@ -1333,6 +825,8 @@ $(document).ready(function() {
 });
 
 
+// Section: Hour-list conversion utilities.
+// Step: Convert a comma-separated GMT-4 hour list to browser-local hour list.
 function convertToLocalTime(hourList) {
   if (!hourList || hourList.length === 0) {
     return '';
@@ -1355,7 +849,7 @@ function convertToLocalTime(hourList) {
     .split(',')
     .map(hour => parseInt(hour.trim(), 10))
     .map(hour => {
-            // Build an ISO date in GMT-4 directly
+            // Step: Build an ISO date using GMT-4 offset.
       const gmtDate = new Date(`${baseDate}T${hour.toString().padStart(2, '0')}:00:00-04:00`);
       const localHour = gmtDate.toLocaleTimeString().split(':')[0];
 
@@ -1367,6 +861,8 @@ function convertToLocalTime(hourList) {
 
 
 function convertToGMTMinus4(hourList) {
+
+    // Step: Convert a comma-separated local hour list to GMT-4 hour list.
 
   if (hourList === undefined || hourList.length <= 0) {
     return '';
@@ -1381,30 +877,75 @@ function convertToGMTMinus4(hourList) {
   const targetTimeZone = 'Etc/GMT+4'; // GMT-4
   const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  // Parse the hour list into an array of numbers
+    // Step: Parse the hour list into numeric values.
   const hours = hourList.split(',').map(hour => parseInt(hour.trim(), 10));
 
   const convertedHours = hours.map(hour => {
-    // Create a date object for the local hour
+        // Step: Build a date object with the selected local hour.
     let localDate = new Date();
     const formattedDate = localDate.toLocaleString('en-US', { timeZone: localTimeZone });
     localDate = new Date(formattedDate);
 
-    localDate.setHours(hour, 0, 0, 0); // Set hour, reset minutes, seconds, and ms
+        localDate.setHours(hour, 0, 0, 0); // Step: Reset minute/second/millisecond precision.
 
-    // Convert the local date to GMT-4
+        // Step: Convert that local date into GMT-4.
     const gmtDate = new Date(
       localDate.toLocaleString("en-US", { timeZone: targetTimeZone })
     );
 
-    // Get the hour in GMT-4
+        // Step: Extract target timezone hour.
     return gmtDate.getHours();
   });
 
-  // Convert the array of hours back into a comma-separated string
+    // Step: Serialize the converted hour list back to CSV format.
   return convertedHours.join(',');
 }
 
+</script>
+
+<script src="{{ url_for('static', filename='assets/js/templates/device-page-common.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/jsQR.min.js') }}"></script>
+<script>
+// -----------------------------------------------------------------------------
+// Section: Device page common-module bootstrap
+// - Builds page-specific config payload from Jinja values
+// - Initializes shared handlers from device-page-common.js
+// -----------------------------------------------------------------------------
+
+$(document).ready(function() {
+    // Step: Provide runtime config consumed by WLPDevicePage.init.
+        window.WLP_DEVICE_PAGE_CONFIG = {
+            deviceKey: "{{ key_used }}",
+            userDeviceName: {% if current_user.is_authenticated %}{{ current_user.get_device_name(key_used)|tojson }}{% else %}""{% endif %},
+            modelLongName: {{ model_info.long_name|tojson }},
+            authUser: {% if current_user.is_authenticated %}true{% else %}false{% endif %},
+            devicesPostUrl: "{{ url_with_lang('devices') }}",
+            deviceNameSelector: "#device_name",
+            setNameButtonSelector: "#set_name_btn",
+            setNameInputSelector: "#set_name_input",
+            changeNameModalSelector: "#ChangeNameModal",
+            addDeviceSelector: "#add_device",
+            bookmarkSelector: "#bookmarkBtn",
+            bookmarkMessage: {% trans %}"to bookmark this page."{% endtrans %},
+            toastTitle: {% trans %}"Device Add Success"{% endtrans %},
+            toastBody: {% trans %}"If not user logged, device will be stored only at your local browser."{% endtrans %},
+            enableAdminEditing: {% if current_user.is_admin or can_admin %}true{% else %}false{% endif %},
+            canEditButtonSelector: "#can_edit_btn",
+            cantEditSelector: ".cant_edit",
+            showPublicQrSelector: "#show_qr",
+            publicQrTargetSelector: "#qrcode",
+            publicQrText: "{{ DOMAIN }}{{ url_with_lang('device_info') }}?public_key={{ key_used }}",
+            privateScanButtonSelector: "#qr_scan_prv",
+            scanResultSelector: "#resultado",
+            domainPrefix: "{{ DOMAIN.rstrip('/') }}/",
+            requirePrivateKeyParam: "private_key=",
+            privateKeyMissingMsg: {% trans %}"QR don't contains a private key"{% endtrans %},
+            cameraErrorMsg: {% trans %}"Error accessing the camera. Please make sure you give permission to access the camera."{% endtrans %},
+            cameraUnsupportedMsg: {% trans %}"This browser does not support the functionality necessary to scan QR codes."{% endtrans %}
+        };
+
+        window.WLPDevicePage.init(window.WLP_DEVICE_PAGE_CONFIG);
+});
 </script>
 
 {% endblock %}

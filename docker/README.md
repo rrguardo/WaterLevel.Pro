@@ -65,6 +65,14 @@ Nginx hostnames/upstreams are configurable through `.env`:
 - `WLP_SSL_KEY_PATH` (default: `/etc/nginx/certs/localhost.key`)
 - `WLP_APP_IMAGE` (default: `rguardo/waterlevel-pro:latest`)
 
+Optional tracking and ads (disabled by default, app service only):
+
+- `WLP_ENABLE_TRACKING` (default: `false`)
+- `WLP_GA_MEASUREMENT_ID` (default: empty)
+- `WLP_TWITTER_PIXEL_ID` (default: empty)
+- `WLP_ENABLE_ADSENSE` (default: `false`)
+- `WLP_ADSENSE_CLIENT_ID` (default: empty)
+
 Minimal DNS layout (recommended for this SQLite-oriented setup):
 
 - Web app on root domain: `example.com`
@@ -96,6 +104,19 @@ After changing DNS values, recreate the stack:
 To apply cron schedule changes from `ext_conf/crontab.ini`, recreate the `cron` service:
 
 - `docker compose -f docker/docker-compose.yml up -d --build cron`
+
+## Local resync helper
+
+For local development changes (code or `.env`) without destroying volumes, use:
+
+- `./docker/resync.sh`
+
+This rebuilds/recreates `app`, `nginx`, and `cron` so runtime state matches local sources.
+
+Useful options:
+
+- `./docker/resync.sh --no-build` (faster container refresh)
+- `./docker/resync.sh --full` (also refreshes `goaccess`)
 
 ## Reports used by web app
 

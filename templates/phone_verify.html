@@ -17,9 +17,9 @@
         <div class="card mb-0">
           <div class="card-body">
             <h3 class="text-center">User Phone Verification</h3>
-            <form action="{{ url_for('user_settings') }}" method="post" >
+            <form action="{{ url_for('user_settings') }}" method="post">
 
-              <div class="mb-3" >
+              <div class="mb-3">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                         {% for category, message in messages %}
@@ -39,7 +39,7 @@
               <div class="mb-3">
                 <label for="InputCode" class="form-label">Verification Code:</label>
                 <input type="number" step="1" class="form-control" id="InputCode" aria-describedby="InputCodeHelp" name="code">
-                <span id="InputCodeHelp" >Use the code sent to your phone.</span>
+                <span id="InputCodeHelp">Use the code sent to your phone.</span>
               </div>
 
 
@@ -54,19 +54,4 @@
 </div>
 
 </div>
-
-
-<script>
-    function onSubmit(event) {
-        var response = grecaptcha.getResponse();
-        if (response.length == 0) {
-            // reCAPTCHA not verified
-            alert('Please verify that you are not a robot.');
-            event.preventDefault(); // Prevent form submission
-            return false;
-        }
-        // Form submission can proceed
-        return true;
-    }
-</script>
 {% endblock %}

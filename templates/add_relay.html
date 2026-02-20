@@ -1,14 +1,8 @@
 {% extends "base2.html" %}
 
 {% block head %}
-
-<script src="https://code.jquery.com/jquery-3.7.1.js"  ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"  ></script>
-
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css" />
-<script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"  ></script>
-
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="{{ url_for('static', filename='assets/js/templates/recaptcha-form.js') }}" defer></script>
 
 <title>Add Relay</title>
 {% endblock %}
@@ -18,7 +12,7 @@
 {% block content %}
 
 
-<div class="container-fluid card align-items-center justify-content-center bg-light" >
+<div class="container-fluid card align-items-center justify-content-center bg-light">
     <div class="col-md-12">
               <div class="card">
                 <div class="px-4 py-3 border-bottom">
@@ -31,7 +25,7 @@
                         keys, that could be uploaded inside the Smart Pump microcontroller memory.
                     </p>
 
-                    <div class="mb-3" >
+                    <div class="mb-3">
                         {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
                                 {% for category, message in messages %}
@@ -43,8 +37,9 @@
                         {% endwith %}
                     </div>
 
-                    <form method="post" action="{{ url_for('admin_dashboard') }}" >
-                        <input type="hidden" name="action" value="add-relay" >
+                      <form method="post" action="{{ url_for('admin_dashboard') }}" data-recaptcha-form="true"
+                        data-recaptcha-msg="Please verify that you are not a robot.">
+                        <input type="hidden" name="action" value="add-relay">
                       <div class="mb-4">
                         <label for="PrivateKeyInput" class="form-label">Private Key:</label>
                         <input type="text" class="form-control" id="PrivateKeyInput" placeholder="Leave empty to use secure random" name="private_key">
@@ -58,10 +53,10 @@
                         <textarea class="form-control p-7" name="note" id="" cols="30" rows="3" placeholder="Extra info about device. (dev., ebay, amazon, ..)"></textarea>
                       </div>
 
-                      <div class="mb-4" >
+                      <div class="mb-4">
                         <label for="stype" class="form-label d-flex">
-                        <span class="col-auto  pt-1" >Relay Type: </span>
-                            <span class="col-auto mx-2" >
+                        <span class="col-auto  pt-1">Relay Type: </span>
+                            <span class="col-auto mx-2">
                         <select id="stype" name="stype" class="form-select">
                             <option value="3">S1 Pump Controller</option>
                         </select>
@@ -79,20 +74,4 @@
               </div>
             </div>
 </div>
-
-
-<script>
-    function onSubmit(event) {
-        var response = grecaptcha.getResponse();
-        if (response.length == 0) {
-            // reCAPTCHA not verified
-            alert('Please verify that you are not a robot.');
-            event.preventDefault(); // Prevent form submission
-            return false;
-        }
-        // Form submission can proceed
-        return true;
-    }
-</script>
-
 {% endblock %}

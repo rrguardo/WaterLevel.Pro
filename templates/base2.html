@@ -5,20 +5,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NR4BDDPMX8"></script>
+  {% if TRACKING_CONFIG.enable_tracking %}
+  {% if TRACKING_CONFIG.ga_measurement_id %}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ TRACKING_CONFIG.ga_measurement_id }}"></script>
+  {% endif %}
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-NR4BDDPMX8');
+    window.WLP_TRACKING_CONFIG = {{ TRACKING_CONFIG | tojson }};
   </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1432664808275238"
+  <script src="{{ url_for('static', filename='assets/js/templates/base2-tracking.js') }}"></script>
+  {% if TRACKING_CONFIG.enable_adsense and TRACKING_CONFIG.adsense_client_id %}
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ TRACKING_CONFIG.adsense_client_id }}"
      crossorigin="anonymous"></script>
+  {% endif %}
+  {% endif %}
 
   <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='logos/favicon.png') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/styles.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/base2-layout.css') }}" />
 
   <script src="{{ url_for('static', filename='assets/libs/jquery/dist/jquery.min.js') }}"></script>
   <script src="{{ url_for('static', filename='assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
@@ -34,26 +37,9 @@
   {% block head %}
   {% endblock %}
 
-  <!-- Twitter conversion tracking base code -->
-  <script>
-  !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
-  },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-  a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
-  twq('config','p00pf');
-  </script>
-  <!-- End Twitter conversion tracking base code -->
-
-  {% if current_user.is_authenticated and current_user.is_admin and CONTACT_PENDING %}
-  <style>
-      body {
-          background-color: #ffe6e6 !important;
-      }
-  </style>
-  {% endif %}
-
 </head>
 
-<body>
+<body class="{% if current_user.is_authenticated and current_user.is_admin and CONTACT_PENDING %}wlp-contact-pending-bg{% endif %}">
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
@@ -191,7 +177,7 @@
                 <a href="/manuals/WiFi-Water-Level-S1" target="_self" class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mt-1"><i class="ti ti-help"></i> {% trans %}Manual{% endtrans %}</a>
 
                 <div class="text-center my-2">
-                  <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" target="_self" >
+                  <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" target="_self">
                   <img src="{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}" class="img-thumbnail" alt="WiFi Water Level S1 Features" title="WiFi Water Level S1 Features">
                   </a>
                 </div>
@@ -211,7 +197,7 @@
                 <a href="{{ url_with_lang('manuals', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mt-1"><i class="ti ti-help"></i> {% trans %}Manual{% endtrans %}</a>
 
                 <div class="text-center my-2">
-                  <a href="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" >
+                  <a href="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self">
                   <img src="{{ url_for('static', filename='manuals/WiFi_Smart_Pump_Controller_S1.png') }}" class="img-thumbnail" alt="WiFi Smart Water Pump Controller S1" title="WiFi Smart Water Pump Controller S1">
                   </a>
                 </div>

@@ -25,6 +25,11 @@ APP_RECAPTCHA_SECRET_KEY = os.getenv("APP_RECAPTCHA_SECRET_KEY", "")
 RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY", "")
 APP_DOMAIN = os.getenv("APP_DOMAIN", "http://localhost")
 API_DOMAIN = os.getenv("API_DOMAIN", "http://api.localhost")
+WLP_ENABLE_TRACKING = env_bool("WLP_ENABLE_TRACKING", False)
+WLP_GA_MEASUREMENT_ID = os.getenv("WLP_GA_MEASUREMENT_ID", "")
+WLP_TWITTER_PIXEL_ID = os.getenv("WLP_TWITTER_PIXEL_ID", "")
+WLP_ENABLE_ADSENSE = env_bool("WLP_ENABLE_ADSENSE", False)
+WLP_ADSENSE_CLIENT_ID = os.getenv("WLP_ADSENSE_CLIENT_ID", "")
 
 #  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # SMTP Settings

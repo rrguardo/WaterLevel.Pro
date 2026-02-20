@@ -69,13 +69,7 @@
 }
 </script>
 
-
-<style>
-.long-img-area {
-  max-width: 650px;
-  margin: 35px auto;
-}
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/products-s2.css') }}" />
 {% endblock %}
 
 
@@ -85,7 +79,7 @@
 
   <div class="d-flex">
     <div class="p-2">
-        <h1 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" >WiFi Water Level S2 - Features</h1>
+        <h1 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5">WiFi Water Level S2 - Features</h1>
     </div>
     <div class="ms-auto">
         <a href="/manuals/WiFi-Water-Level-S2" target="_self" class="btn btn-info btn-sm  mt-1">
@@ -103,10 +97,10 @@
               <img src="{{ url_for('static', filename='manuals/s1_face.png') }}" class="d-block w-100" alt="WiFi Water Level S2 Features" title="WiFi Water Level S2 Features">
             </div>
             <div class="carousel-item" data-bs-interval="7000">
-              <img src="{{ url_for('static', filename='manuals/s1_face2.png') }}" class="d-block w-100" alt="WiFi Water Level S2 - How It Works" title="How WiFi Water Level S2 Works" >
+              <img src="{{ url_for('static', filename='manuals/s1_face2.png') }}" class="d-block w-100" alt="WiFi Water Level S2 - How It Works" title="How WiFi Water Level S2 Works">
             </div>
             <div class="carousel-item" data-bs-interval="7000">
-              <img src="{{ url_for('static', filename='manuals/wifi_water_level_s2.png') }}" class="d-block w-100" alt="WiFi Water Level S2 - Product Image" title="WiFi Water Level S2 - Product Image" >
+              <img src="{{ url_for('static', filename='manuals/wifi_water_level_s2.png') }}" class="d-block w-100" alt="WiFi Water Level S2 - Product Image" title="WiFi Water Level S2 - Product Image">
             </div>
 
           </div>
@@ -122,7 +116,7 @@
       </div>
 
 
-    <h2 class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" >Features List </h2>
+    <h2 class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5">Features List </h2>
     <ul class="list-group">
         <li class="list-group-item list-group-item-action list-group-item-success active">
             <b>Measures the water level in tanks up to 4 meters deep.</b><br>
@@ -137,22 +131,18 @@
                 water level even from the other side of the world while you have internet.
             </p>
         </li>
-        <Li class="list-group-item list-group-item-action list-group-item-primary">
+        <li class="list-group-item list-group-item-action list-group-item-primary">
             <b>Water Level Alerts By Email Or Web UI.</b><br>
             <p>
                 Get notification alerts if water level in under or over specific % level or if device is offline.
             </p>
-        </Li>
+        </li>
         <li class="list-group-item list-group-item-action list-group-item-success active ">
             <b>USBC Input Power</b>
             <br> Flexible input power, from standard <b>USBC</b>.
             <br> <b>Input power options:</b>
-            <ul class="list-group ms-3 list-group-numbered" >
-                <li class="list-group-item list-group-item-action list-group-item-info">Water Level .Pro <b>USBC</b> Solar Energy Module.</li>
-                <li class="list-group-item list-group-item-action list-group-item-dark text-white">Standard <b>USBC</b> phone charger.</li>
-                <li class="list-group-item list-group-item-action list-group-item-info"><b>USBC</b> power banks solar powered</li>
-                <li class="list-group-item list-group-item-action list-group-item-dark text-white"><b>USBC</b> power banks</li>
-            </ul>
+            <ul class="list-group ms-3 list-group-numbered">
+                <li class="list-group-item list-group-item-action list-group-item-info">Water Level .Pro <b>USBC</b> Solar Energy Module.</li>                <li class="list-group-item list-group-item-action list-group-item-dark text-white">Standard <b>USBC</b> phone charger.</li>                <li class="list-group-item list-group-item-action list-group-item-info"><b>USBC</b> power banks solar powered</li>                <li class="list-group-item list-group-item-action list-group-item-dark text-white"><b>USBC</b> power banks</li>            </ul>
         </li>
         <li class="list-group-item list-group-item-action list-group-item-primary">
             <b>Responsive Web App Water Level Monitoring</b>
@@ -162,7 +152,7 @@
                   <img src="{{ url_for('static', filename='prod_img/cel.png') }}" class="img-fluid" alt="Web app cellphone view for S2" title="WiFi Water Level S2 - Smartphone Web App">
                   <img src="{{ url_for('static', filename='prod_img/tab.png') }}" class="img-fluid" alt="Web app tablet view for S2" title="WiFi Water Level S2 - Tablet Web App">
                  <br>
-                 <a class="btn btn-sm btn-success ms-4" href="/device_info?public_key=demo" >View Live Demo Web App</a>
+                 <a class="btn btn-sm btn-success ms-4" href="/device_info?public_key=demo">View Live Demo Web App</a>
             </div>
         </li>
         <li class="list-group-item list-group-item-action list-group-item-success active ">
@@ -171,10 +161,10 @@
             </p>
         </li>
 
-        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <li class="list-group-item list-group-item-action list-group-item-primary">
             <b>Remote Web administration of device parameters.</b><br>
             <b>Device adjust options:</b>
-            <ul class="list-group ms-3 list-group-numbered" >
+            <ul class="list-group ms-3 list-group-numbered">
                 <li class="list-group-item list-group-item-action list-group-item-info">
                     <b>Empty Level:</b> how many centimeters of deep have the water tank, from sensor to the water tank bottom.
                 </li>
@@ -192,11 +182,11 @@
         <li class="list-group-item list-group-item-action list-group-item-success active">
             <b>Automatic device firmware updates to incorporate new features and improvements.</b>
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <li class="list-group-item list-group-item-action list-group-item-primary">
             <b>Designed and tested for outdoor and indoor use.</b><br>
             Tested and durable outdoors in sun, rain and wind, under normal conditions.
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-success active" >
+        <li class="list-group-item list-group-item-action list-group-item-success active">
             <b>3dBi Gain External 4GHz WiFi Antenna</b><br>
             <p>
                 Ranges of more than 100 meters outdoors with line of sight. Indoors, a shorter
@@ -204,18 +194,18 @@
                 Compatible with 4GHz WiFi range extenders.
             </p>
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <li class="list-group-item list-group-item-action list-group-item-primary">
             <b>Low energy consumption.</b><br>
             <p>
                 During water level sending by WiFi approximately <b>75 mA</b>.
                 During waiting/sleep period <b>0.01 mA</b>
             </p>
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-success active" >
+        <li class="list-group-item list-group-item-action list-group-item-success active">
             <b>Modular design.</b><br>
             Independent sensor control unit, sensor, energy module and smart switch.
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <li class="list-group-item list-group-item-action list-group-item-primary">
            Usage temperature range from <b>-20°C (-4°F)</b> to <b>+50°C (122°F)</b>
          </li>
 
@@ -223,13 +213,13 @@
     </ul>
 
 
-<hr class="row small_none" >
+<hr class="row small_none">
 
 <div class="row d-flex justify-content-center mb-3 small_none d-none">
 
-    <div class="card bg-light col-auto" >
-        <div class="card-body" >
-            <h3 class="card-title fw-semibold mb-4 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" >S2 Device Subscriptions</h3>
+    <div class="card bg-light col-auto">
+        <div class="card-body">
+            <h3 class="card-title fw-semibold mb-4 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5">S2 Device Subscriptions</h3>
             <ul class="list-group ">
 
                 {% for type in [0, 1, 2, 3] %}
@@ -237,17 +227,17 @@
 
                         {% if type == 0 %}
 
-                            <div class="row" >
-                                <div class="col-auto" >
-                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                            <div class="row">
+                                <div class="col-auto">
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit">
                                         <i class="ti ti-shopping-cart fs-7 mx-1"></i>
                                         Unlock Device <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ UNLOCK_PRICE }} USD</span>
                                     </button>
 
-                                    <p class="mx-2 mt-2" >
+                                    <p class="mx-2 mt-2">
                                         Unlock this device to use it without subscriptions.
                                         <br>
-                                        <span class="fs-1" >Minimum frequency updates 120 seconds.</span>
+                                        <span class="fs-1">Minimum frequency updates 120 seconds.</span>
                                     </p>
                                 </div>
                             </div>
@@ -257,17 +247,17 @@
                             <input type="hidden" name="item_name" value="Fast Updates">
                             <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
 
-                            <div class="row" >
-                                <div class="col-auto" >
-                                    <button class="btn3d btn btn-success mx-2 btn-sm fs-5" type="submit" >
+                            <div class="row">
+                                <div class="col-auto">
+                                    <button class="btn3d btn btn-success mx-2 btn-sm fs-5" type="submit">
                                         <i class="ti ti-shopping-cart fs-7 mx-1"></i>
                                         Fast Updates <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} USD/Month</span>
                                     </button>
 
-                                    <p class="mx-2 mt-2" >Buy this monthly subscription to enable faster frequency updates up to 30 seconds.
+                                    <p class="mx-2 mt-2">Buy this monthly subscription to enable faster frequency updates up to 30 seconds.
                                         <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
                                         <br>
-                                        <span class="fs-1" >Minimum frequency updates 30 seconds. Requires the <b>Basic Plan</b> or <b>Unlock Device</b></span>
+                                        <span class="fs-1">Minimum frequency updates 30 seconds. Requires the <b>Basic Plan</b> or <b>Unlock Device</b></span>
                                     </p>
                                 </div>
                             </div>
@@ -278,18 +268,18 @@
                             <input type="hidden" name="item_name" value="Basic Plan">
                             <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
 
-                            <div class="row" >
-                                <div class="col-auto" >
-                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                            <div class="row">
+                                <div class="col-auto">
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit">
                                         <i class="ti ti-shopping-cart fs-7 mx-1"></i>
                                         Basic Plan <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} USD/Month</span>
                                     </button>
 
-                                    <p class="mx-2 mt-2" >
+                                    <p class="mx-2 mt-2">
                                         Basic monthly subscription required to use the device.
                                         <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
                                         <br>
-                                        <span class="fs-1" >Minimum frequency updates 120 seconds.</span>
+                                        <span class="fs-1">Minimum frequency updates 120 seconds.</span>
                                     </p>
                                 </div>
                             </div>
@@ -300,18 +290,18 @@
                             <input type="hidden" name="item_name" value="Fast Premium">
                             <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
 
-                            <div class="row" >
-                                <div class="col-auto" >
-                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                            <div class="row">
+                                <div class="col-auto">
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit">
                                         <i class="ti ti-shopping-cart fs-7 mx-1"></i>
                                         Fast Premium <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} USD/Month</span>
                                     </button>
 
-                                    <p class="mx-2 mt-2" >
+                                    <p class="mx-2 mt-2">
                                         Premium monthly subscription required to use the device that include faster frequency updates up to 30 seconds.
                                         <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
                                         <br>
-                                        <span class="fs-1" >Minimum frequency updates 30 seconds.</span>
+                                        <span class="fs-1">Minimum frequency updates 30 seconds.</span>
                                     </p>
                                 </div>
                             </div>
@@ -322,8 +312,8 @@
 
             </ul>
 
-            <div class="row my-2 alert alert-info" >
-                <span class="fs-3" >
+            <div class="row my-2 alert alert-info">
+                <span class="fs-3">
                     <i class="ti ti-info-circle fs-6 mx-1"></i>
                     To buy or manage a subscription or unlock a device a user account is not required
                 </span>

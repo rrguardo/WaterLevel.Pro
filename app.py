@@ -189,6 +189,13 @@ def inject_global_variables():
         'DOMAIN': DOMAIN,
         "CONTACT_PENDING": CONTACT_PENDING,
         "SITE_LOGO_FILE": SITE_LOGO_FILE,
+        "TRACKING_CONFIG": {
+            "enable_tracking": settings.WLP_ENABLE_TRACKING,
+            "ga_measurement_id": settings.WLP_GA_MEASUREMENT_ID,
+            "twitter_pixel_id": settings.WLP_TWITTER_PIXEL_ID,
+            "enable_adsense": settings.WLP_ENABLE_ADSENSE,
+            "adsense_client_id": settings.WLP_ADSENSE_CLIENT_ID,
+        },
     }
 
 

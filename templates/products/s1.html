@@ -69,27 +69,7 @@
 }
 </script>
 
-
-<style>
-.long-img-area {
-  max-width: 650px;
-  margin: 35px auto;
-}
-
-.video-wrapper {
-  max-width: 600px; /* Maximum width of 400px */
-  margin: 0 auto;   /* Center horizontally */
-}
-
-.carousel-item img {
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
-  max-width: 700px; /* Adjust this value to your desired limit */
-  margin: 0 auto; /* Center image if it does not take full width */
-}
-
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/products-s1.css') }}" />
 {% endblock %}
 
 
@@ -99,7 +79,7 @@
 
   <div class="d-flex">
     <div class="p-2">
-        <h1 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" >WiFi Water Level S1 - {% trans %}Features{% endtrans %}</h1>
+        <h1 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5">WiFi Water Level S1 - {% trans %}Features{% endtrans %}</h1>
     </div>
     <div class="ms-auto">
         <a href="/manuals/WiFi-Water-Level-S1" target="_self" class="btn btn-info btn-sm  mt-1">
@@ -117,10 +97,10 @@
               <img src="{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 Features" title="WiFi Water Level S1 Features">
             </div>
             <div class="carousel-item" data-bs-interval="7000">
-              <img src="{{ url_for('static', filename='manuals/s1_face2'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - How It Works" title="How WiFi Water Level S1 Works" >
+              <img src="{{ url_for('static', filename='manuals/s1_face2'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - How It Works" title="How WiFi Water Level S1 Works">
             </div>
             <div class="carousel-item" data-bs-interval="7000">
-              <img src="{{ url_for('static', filename='manuals/wifi_water_level_s1.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - Product Image" title="WiFi Water Level S1 - Product Image" >
+              <img src="{{ url_for('static', filename='manuals/wifi_water_level_s1.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - Product Image" title="WiFi Water Level S1 - Product Image">
             </div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
@@ -132,7 +112,7 @@
             <span class="visually-hidden">Next</span>
           </button>
         </div>
-        <a class="btn btn-sm btn-success ms-4 mt-2" href="/device_info?public_key=demo" >
+        <a class="btn btn-sm btn-success ms-4 mt-2" href="/device_info?public_key=demo">
             <i class="ti ti-router"></i>
             {% trans %}UI Demo Device{% endtrans %}
         </a>
@@ -142,7 +122,7 @@
       </div>
 
 
-    <h2 class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" >{% trans %}Features List{% endtrans %} </h2>
+    <h2 class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5">{% trans %}Features List{% endtrans %} </h2>
     <ul class="list-group">
         {% trans %}
         <li class="list-group-item list-group-item-action list-group-item-success active">
@@ -160,7 +140,7 @@
         </li>
         {% endtrans %}
         <li class="list-group-item list-group-item-action list-group-item-success active ">
-            <img src="{{ url_for('static', filename='manuals/solar-panel.png') }}" class="img-thumbnail mx-2" width="50px" alt="Solar Power" title="Solar Power " >
+            <img src="{{ url_for('static', filename='manuals/solar-panel.png') }}" class="img-thumbnail mx-2" width="50px" alt="Solar Power" title="Solar Power ">
             {% trans %}
             <b>Eco-Friendly Solar Power Input with Battery Backup</b>
 
@@ -170,12 +150,12 @@
 
         </li>
         {% trans %}
-        <Li class="list-group-item list-group-item-action list-group-item-primary">
+        <li class="list-group-item list-group-item-action list-group-item-primary">
             <b>Water Level Alerts via Email or Web UI</b><br>
             <p>
                 Receive notifications when the water level is above or below a specified percentage or if the device goes offline.
             </p>
-        </Li>
+        </li>
         <li class="list-group-item list-group-item-action list-group-item-success active ">
             <b>USB-C Input Power  </b>
             <br> Flexible input power through a standard <b>USB-C</b> connection.
@@ -193,7 +173,7 @@
                   <img src="{{ url_for('static', filename='prod_img/cel.png') }}" class="img-fluid" alt="Web app cellphone view for S1" title="WiFi Water Level S1 - Smartphone Web App">
                   <img src="{{ url_for('static', filename='prod_img/tab.png') }}" class="img-fluid" alt="Web app tablet view for S1" title="WiFi Water Level S1 - Tablet Web App">
                  <br>
-                 <a class="btn btn-sm btn-success ms-4" href="/device_info?public_key=demo" >{% trans %}View Live Demo Web App{% endtrans %}</a>
+                 <a class="btn btn-sm btn-success ms-4" href="/device_info?public_key=demo">{% trans %}View Live Demo Web App{% endtrans %}</a>
             </div>
         </li>
         <li class="list-group-item list-group-item-action list-group-item-success active ">
@@ -228,13 +208,13 @@
 
         </li>
 
-        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <li class="list-group-item list-group-item-action list-group-item-primary">
             {% trans %}
             <b>Remote Web Administration of Device Parameters.<br>
                 Access and adjust device settings conveniently from any web browser.
             </b><br><br>
             <b>Available adjustment options include:</b>
-            <ul class="list-group ms-3 list-group-numbered my-2" >
+            <ul class="list-group ms-3 list-group-numbered my-2">
                 <li class="list-group-item list-group-item-action list-group-item-info">
                     <b>Empty Level:</b> Define the depth of the water tank in centimeters. This measurement is taken from the sensor to the bottom of the tank.
                 </li>
@@ -259,11 +239,11 @@
                 Updates are applied automatically for a seamless user experience.
             </p>
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <li class="list-group-item list-group-item-action list-group-item-primary">
             <b>Designed and tested for outdoor and indoor use.</b><br>
             Built to withstand sun, rain, and wind under normal outdoor conditions. Reliable performance indoors and outdoors alike.
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-success active" >
+        <li class="list-group-item list-group-item-action list-group-item-success active">
             <b>External 2.4GHz WiFi Antenna (3dBi or 5dBi)</b><br>
             <p>
                 Offers outdoor ranges of <b>100-150 meters</b> with a <b>3dBi</b> antenna and up to <b>200 meters</b> with a <b>5dBi</b> antenna, depending on line-of-sight.<br>
@@ -271,14 +251,14 @@
                 Compatible with <b>2.4GHz WiFi</b> range extenders.
             </p>
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <li class="list-group-item list-group-item-action list-group-item-primary">
             <b>Low Energy Consumption</b><br>
             <p>
                 Consumes approximately <b>75mA</b> while sending water level data via <b>WiFi</b>.<br>
                 In sleep/waiting mode, energy usage drops to just <b>0.01mA</b>.
             </p>
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-success active" >
+        <li class="list-group-item list-group-item-action list-group-item-success active">
             <b>Easy-to-Manufacture Design</b>
             <p>
                The energy module is integrated into a single PCB. The sensor connects easily via a plug-in,
@@ -286,7 +266,7 @@
                 any factory to manufacture in small batches.
             </p>
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <li class="list-group-item list-group-item-action list-group-item-primary">
            <b>Expected Operating Temperature Range</b><br>
             <p>
                 Based on the components used, the expected temperature range is from <b>-20°C (-4°F)</b> to <b>+50°C (122°F)</b>, although this has not been tested extensively.
@@ -297,15 +277,15 @@
             <div class="text-center my-3">
 
 
-                <p class="ms-2" >
-                    <a href="https://github.com/rrguardo/WiFi-Water-Level-S1" target="_blank" class="mx-2 my-2" >
-                        <img src="{{ url_for('static', filename='logos/gpl3.png') }}" class="img-thumbnail mx-2" alt="GPL3 S1" title="GPL3 S1" >
+                <p class="ms-2">
+                    <a href="https://github.com/rrguardo/WiFi-Water-Level-S1" target="_blank" class="mx-2 my-2">
+                        <img src="{{ url_for('static', filename='logos/gpl3.png') }}" class="img-thumbnail mx-2" alt="GPL3 S1" title="GPL3 S1">
                     </a>
-                    <a href="https://oshwlab.com/rrguardo83/water-level-.pro-s1-v2" target="_blank" class="mx-2" >
-                        <img src="{{ url_for('static', filename='logos/open-hardware.jpg') }}" class="img-thumbnail" alt="Open Hardware S1" title="Open Hardware S1" >
+                    <a href="https://oshwlab.com/rrguardo83/water-level-.pro-s1-v2" target="_blank" class="mx-2">
+                        <img src="{{ url_for('static', filename='logos/open-hardware.jpg') }}" class="img-thumbnail" alt="Open Hardware S1" title="Open Hardware S1">
                     </a>
-                    <a href="https://github.com/rrguardo/WiFi-Water-Level-S1" target="_blank" class="mx-2 my-2" >
-                        <img src="{{ url_for('static', filename='manuals/github.png') }}" class="img-thumbnail" alt="GiHub" title="S1" width="90px" >
+                    <a href="https://github.com/rrguardo/WiFi-Water-Level-S1" target="_blank" class="mx-2 my-2">
+                        <img src="{{ url_for('static', filename='manuals/github.png') }}" class="img-thumbnail" alt="GiHub" title="S1" width="90px">
                     </a>
                 </p>
             </div>
@@ -319,7 +299,7 @@
         </li>
     </ul>
 
-<hr class="row small_none" >
+<hr class="row small_none">
 
 <div class="row justify-content-center" id="order_now">
 
@@ -351,11 +331,8 @@
             <hr>
             <p><strong>By using this device, you acknowledge and accept that:</strong></p>
             <ul class="list-group list-group-numbered ms-1">
-              <li class="list-group-item list-group-item-action" >You assume all risks associated with its use, including but not limited to potential damage to property, personal injury, or any other unintended consequences.</li>
-              <li class="list-group-item list-group-item-action" >This device is not certified for commercial, industrial, or safety-critical applications. It is intended solely for developers, hobbyists, and other users with appropriate technical expertise.</li>
-              <li class="list-group-item list-group-item-action" >The creators and distributors of this project are not liable for any damages, losses, or inconveniences resulting from its use, modification, or integration into other systems.</li>
-            </ul>
-            <p class="my-3" >
+              <li class="list-group-item list-group-item-action">You assume all risks associated with its use, including but not limited to potential damage to property, personal injury, or any other unintended consequences.</li>              <li class="list-group-item list-group-item-action">This device is not certified for commercial, industrial, or safety-critical applications. It is intended solely for developers, hobbyists, and other users with appropriate technical expertise.</li>              <li class="list-group-item list-group-item-action">The creators and distributors of this project are not liable for any damages, losses, or inconveniences resulting from its use, modification, or integration into other systems.</li>            </ul>
+            <p class="my-3">
               Users are solely responsible for ensuring that the use of this device complies with local laws, regulations, and safety standards in their region.
             </p>
             {% endtrans %}
@@ -372,13 +349,13 @@
 </div>
 
 
-<hr class="row small_none" >
+<hr class="row small_none">
 
 <div class="row d-flex justify-content-center mb-3 small_none d-none">
 
-    <div class="card bg-light col-auto" >
-        <div class="card-body" >
-            <h5 class="card-title fw-semibold mb-4 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >{% trans %}S1 Device Subscriptions{% endtrans %}</h5>
+    <div class="card bg-light col-auto">
+        <div class="card-body">
+            <h5 class="card-title fw-semibold mb-4 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{% trans %}S1 Device Subscriptions{% endtrans %}</h5>
             <ul class="list-group ">
 
                 {% for type in [2 , 1] %}
@@ -389,18 +366,18 @@
                             <input type="hidden" name="item_name" value="Fast Updates">
                             <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
 
-                            <div class="row" >
-                                <div class="col-auto" >
-                                    <button class="btn3d btn btn-success mx-2 btn-sm fs-5" type="submit" >
+                            <div class="row">
+                                <div class="col-auto">
+                                    <button class="btn3d btn btn-success mx-2 btn-sm fs-5" type="submit">
                                         <i class="ti ti-shopping-cart fs-7 mx-1"></i>
                                         {% trans %}Fast Updates{% endtrans %} <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} {% trans %}USD/Month{% endtrans %}</span>
                                     </button>
 
                                     {% trans %}
-                                    <p class="mx-2 mt-2" >Buy this monthly subscription to enable faster frequency updates up to 30 seconds.
+                                    <p class="mx-2 mt-2">Buy this monthly subscription to enable faster frequency updates up to 30 seconds.
                                         <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
                                         <br>
-                                        <span class="fs-1" >Minimum frequency updates 30 seconds.</span>
+                                        <span class="fs-1">Minimum frequency updates 30 seconds.</span>
                                     </p>
                                     {% endtrans %}
                                 </div>
@@ -410,18 +387,18 @@
                             <input type="hidden" name="item_name" value="Basic Plan">
                             <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
 
-                            <div class="row" >
+                            <div class="row">
                                 {% trans %}
-                                <div class="col-auto" >
-                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                                <div class="col-auto">
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit">
                                         <i class="ti ti-shopping-cart fs-7 mx-1"></i>
                                         Free Plan <span class="badge bg-warning rounded-pill mx-2 fs-3">0 USD/Month</span>
                                     </button>
 
-                                    <p class="mx-2 mt-2" >
+                                    <p class="mx-2 mt-2">
                                         Basic free plan to use the device without costs.
                                         <br>
-                                        <span class="fs-1" >Minimum frequency updates 120 seconds.</span>
+                                        <span class="fs-1">Minimum frequency updates 120 seconds.</span>
                                     </p>
                                 </div>
                                 {% endtrans %}
@@ -433,18 +410,18 @@
                             <input type="hidden" name="item_name" value="Fast Premium">
                             <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
 
-                            <div class="row" >
-                                <div class="col-auto" >
-                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit" >
+                            <div class="row">
+                                <div class="col-auto">
+                                    <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit">
                                         <i class="ti ti-shopping-cart fs-7 mx-1"></i>
                                         Fast Premium <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} USD/Month</span>
                                     </button>
 
-                                    <p class="mx-2 mt-2" >
+                                    <p class="mx-2 mt-2">
                                         Premium monthly subscription required to use the device that include faster frequency updates up to 30 seconds.
                                         <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
                                         <br>
-                                        <span class="fs-1" >Minimum frequency updates 30 seconds.</span>
+                                        <span class="fs-1">Minimum frequency updates 30 seconds.</span>
                                     </p>
                                 </div>
                             </div>
@@ -457,9 +434,9 @@
                 <li class="list-group-item list-group-item-action">
                     {% trans %}
                     <h6>Manage Your Active Subscription</h6>
-                    <p class="fs-2" >If you wish to manage or cancel your subscription, please click the button below:</p>
+                    <p class="fs-2">If you wish to manage or cancel your subscription, please click the button below:</p>
                     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_manage-paylist" target="_blank">
-                        <button class="btn3d  btn btn-secondary btn-sm fs-2" >
+                        <button class="btn3d  btn btn-secondary btn-sm fs-2">
                             <i class="ti ti-settings fs-7 mx-1"></i>
                             Manage Subscriptions
                         </button>
@@ -469,8 +446,8 @@
                 {% endif %}
             </ul>
 
-            <div class="row my-2 alert alert-info" >
-                <span class="fs-3" >
+            <div class="row my-2 alert alert-info">
+                <span class="fs-3">
                     <i class="ti ti-info-circle fs-6 mx-1"></i>
                     {% trans %}To buy or manage a subscription a user account is not required{% endtrans %}
                 </span>
@@ -480,7 +457,7 @@
     </div>
 </div>
 
-<hr class="row small_none" >
+<hr class="row small_none">
 
 </div>
 

@@ -1,0 +1,35 @@
+(function () {
+  var config = window.WLP_TRACKING_CONFIG || {};
+  if (!config.enable_tracking) {
+    return;
+  }
+
+  var gaMeasurementId = (config.ga_measurement_id || "").trim();
+  if (gaMeasurementId) {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () {
+      window.dataLayer.push(arguments);
+    };
+    window.gtag("js", new Date());
+    window.gtag("config", gaMeasurementId);
+  }
+
+  var twitterPixelId = (config.twitter_pixel_id || "").trim();
+  if (twitterPixelId) {
+    !(function (e, t, n, s, u, a) {
+      e.twq ||
+        ((s = e.twq = function () {
+          s.exe ? s.exe.apply(s, arguments) : s.queue.push(arguments);
+        }),
+        (s.version = "1.1"),
+        (s.queue = []),
+        (u = t.createElement(n)),
+        (u.async = !0),
+        (u.src = "https://static.ads-twitter.com/uwt.js"),
+        (a = t.getElementsByTagName(n)[0]),
+        a.parentNode.insertBefore(u, a));
+    })(window, document, "script");
+
+    window.twq("config", twitterPixelId);
+  }
+})();

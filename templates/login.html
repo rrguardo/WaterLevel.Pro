@@ -4,6 +4,7 @@
 <title>{% trans %}User Login{% endtrans %}</title>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="{{ url_for('static', filename='assets/js/templates/recaptcha-form.js') }}" defer></script>
 {% endblock %}
 
 
@@ -21,9 +22,10 @@
               <img src="{{ url_for('static', filename=SITE_LOGO_FILE) }}" width="180" alt="">
             </a>
             <h4 class="text-center">{% trans %}User Login{% endtrans %}</h4>
-            <form action="{{ url_with_lang('login') }}" method="post" onsubmit="return onSubmit(event)">
+            <form action="{{ url_with_lang('login') }}" method="post" data-recaptcha-form="true"
+              data-recaptcha-msg="{% trans %}Please verify that you are not a robot.{% endtrans %}">
 
-              <div class="mb-3" >
+              <div class="mb-3">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                         {% for category, message in messages %}
@@ -38,11 +40,11 @@
 
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">{% trans %}Email{% endtrans %}</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required >
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" autocomplete="email" required>
               </div>
               <div class="mb-4">
                 <label for="exampleInputPassword1" class="form-label">{% trans %}Password{% endtrans %}</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" name="password" required >
+                <input type="password" class="form-control" id="exampleInputPassword1" name="password" autocomplete="current-password" required>
               </div>
 
               <div class="mb-4">
@@ -75,22 +77,21 @@
 
 </div>
 
-
 <script>
-    function onSubmit(event) {
-        var response = grecaptcha.getResponse();
-        if (response.length == 0) {
-            // reCAPTCHA not verified
-            alert('{% trans %}Please verify that you are not a robot.{% endtrans %}');
-            event.preventDefault(); // Prevent form submission
-            return false;
-        }
-        // Form submission can proceed
-        return true;
-    }
+// Section: Login form client-side validation.
+// Step: Let native HTML5 validation block invalid email/password submissions.
+document.addEventListener("DOMContentLoaded", function () {
+  var form = document.querySelector("form[action='{{ url_with_lang('login') }}']");
+  if (!form) {
+    return;
+  }
 
-$(document).ready(function() {
-  document.querySelector('.alert-message').classList.add('alert-info');
+  form.addEventListener("submit", function (event) {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      form.reportValidity();
+    }
+  });
 });
 </script>
 {% endblock %}

@@ -1,0 +1,11 @@
+/* Manual media layout */
+.long-img-area {
+  max-width: 650px;
+  margin: 35px auto;
+}
+
+/* Embedded video wrapper sizing */
+.video-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+}

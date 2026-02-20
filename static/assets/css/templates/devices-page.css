@@ -1,0 +1,4 @@
+/* Keeps Bootstrap toast above page widgets */
+.wlp-toast-container {
+  z-index: 11;
+}

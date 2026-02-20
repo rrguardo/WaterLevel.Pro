@@ -1,0 +1,4 @@
+/* Ensures DataTables wrappers span available width */
+.wlp-table-full {
+  width: 100%;
+}

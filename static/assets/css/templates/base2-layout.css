@@ -1,0 +1,4 @@
+/* Base layout: pending contact state highlight */
+.wlp-contact-pending-bg {
+  background-color: #ffe6e6 !important;
+}

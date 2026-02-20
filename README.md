@@ -178,6 +178,11 @@ See `.env.example` for full list.
 | Core app | `RECAPTCHA_PUBLIC_KEY` | Client-side reCAPTCHA site key rendered in forms. | empty | `your-google-recaptcha-site-key` |
 | Core app | `APP_DOMAIN` | Canonical web app base URL. | `http://localhost` | `https://example.com` |
 | Core app | `API_DOMAIN` | Canonical API base URL. | `http://api.localhost` | `https://api.example.com` |
+| Tracking | `WLP_ENABLE_TRACKING` | Enables optional analytics/pixel bootstrapping in templates. | `false` | `true` |
+| Tracking | `WLP_GA_MEASUREMENT_ID` | Google Analytics 4 measurement ID used when tracking is enabled. | empty | `G-XXXXXXXXXX` |
+| Tracking | `WLP_TWITTER_PIXEL_ID` | X/Twitter pixel ID used when tracking is enabled. | empty | `p00pf` |
+| Tracking | `WLP_ENABLE_ADSENSE` | Enables optional AdSense script injection. | `false` | `true` |
+| Tracking | `WLP_ADSENSE_CLIENT_ID` | AdSense publisher client ID used when AdSense is enabled. | empty | `ca-pub-1234567890123456` |
 | SMTP | `SMTP_TEST` | Enables test mode for outbound email behavior. | follows `DEV_MODE` | `false` |
 | SMTP | `EMAIL_SENDER` | Default sender header for system emails. | `"Water Level .Pro" <no-reply@example.com>` | `"WaterLevel Pro" <no-reply@example.com>` |
 | SMTP | `SMTP_SERVER` | SMTP host used by mail helpers. | `127.0.0.1` | `smtp.mailprovider.com` |

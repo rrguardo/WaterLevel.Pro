@@ -75,14 +75,7 @@
 }
 </script>
 
-
-
-<style>
-.long-img-area {
-  max-width: 650px;
-  margin: 35px auto;
-}
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/index-page.css') }}" />
 {% endblock %}
 
 
@@ -92,10 +85,10 @@
 
   <div class="row mb-4">
       <div class="unlimited-access-title me-3 text-center">
-        <h3 class="fw-semibold mb-6 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >WiFi Water Level S1</h3>
+        <h3 class="fw-semibold mb-6 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">WiFi Water Level S1</h3>
         <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" target="_self" class="btn btn-sm btn-primary fs-2 fw-semibold lh-sm mb-2"><i class="ti ti-list-details"></i>{% trans %}Features{% endtrans %}</a>
         <a href="/manuals/WiFi-Water-Level-S1" target="_self" class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mb-2"><i class="ti ti-help"></i> {% trans %}Manual{% endtrans %}</a>
-        <a class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mb-2 d-none" href="https://www.paypal.com/ncp/payment/6UTKDZ88UVF9G" target="_blank" ><i class="ti ti-shopping-cart"></i>
+        <a class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mb-2 d-none" href="https://www.paypal.com/ncp/payment/6UTKDZ88UVF9G" target="_blank"><i class="ti ti-shopping-cart"></i>
           Buy
         </a>
 
@@ -103,14 +96,14 @@
 
           <div id="carouselExampleAutoplaying" class="carousel slide long-img-area" data-bs-ride="carousel">
             <div class="carousel-inner">
-              <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" >
+              <a href="{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}">
               <div class="carousel-item active" data-bs-interval="7000">
 
                 <img src="{{ url_for('static', filename='manuals/s1_face'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 Features" title="WiFi Water Level S1 Features">
 
               </div>
               <div class="carousel-item" data-bs-interval="7000">
-                <img src="{{ url_for('static', filename='manuals/s1_face2'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - How It Works" title="How WiFi Water Level S1 Works" >
+                <img src="{{ url_for('static', filename='manuals/s1_face2'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Water Level S1 - How It Works" title="How WiFi Water Level S1 Works">
 
               </div>
                 </a>
@@ -124,7 +117,7 @@
               <span class="visually-hidden">Next</span>
             </button>
 
-            <a class="btn btn-sm btn-success ms-4 mt-2" href="/device_info?public_key=demo" >
+            <a class="btn btn-sm btn-success ms-4 mt-2" href="/device_info?public_key=demo">
                 <i class="ti ti-router"></i>
                 {% trans %}UI Demo Device{% endtrans %}
             </a>
@@ -152,10 +145,10 @@
         <a href="{{ url_with_lang('manuals', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" class="btn btn-sm btn-info fs-2 fw-semibold lh-sm mb-2"><i class="ti ti-help"></i> {% trans %}Manual{% endtrans %}</a>
 
         <div class="text-center ">
-          <a href="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self" >
-            <img src="{{ url_for('static', filename='manuals/Smart_Pump_Controller_S1'+g.img_lang+'.png') }}" class="img-thumbnail" alt="WiFi Smart Water Pump Controller S1" title="WiFi Smart Water Pump Controller S1" >
+          <a href="{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" target="_self">
+            <img src="{{ url_for('static', filename='manuals/Smart_Pump_Controller_S1'+g.img_lang+'.png') }}" class="img-thumbnail" alt="WiFi Smart Water Pump Controller S1" title="WiFi Smart Water Pump Controller S1">
           </a>
-          <a class="btn btn-sm btn-success ms-4 mt-2" href="/device_info?public_key=demorelay" >
+          <a class="btn btn-sm btn-success ms-4 mt-2" href="/device_info?public_key=demorelay">
                 <i class="ti ti-router"></i>
                 {% trans %}UI Demo Device{% endtrans %}
           </a>

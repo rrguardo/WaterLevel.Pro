@@ -4,6 +4,7 @@
 <title>{% trans %}Contact Form{% endtrans %}</title>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="{{ url_for('static', filename='assets/js/templates/recaptcha-form.js') }}" defer></script>
 {% endblock %}
 
 
@@ -21,9 +22,10 @@
           <div class="card-body">
 
             <h2 class="text-center">{% trans %}Contact Form{% endtrans %}</h2>
-            <form action="" method="post" onsubmit="return onSubmit(event)">
+            <form action="" method="post" data-recaptcha-form="true"
+              data-recaptcha-msg="{% trans %}Please verify that you are not a robot.{% endtrans %}">
 
-              <div class="mb-3" >
+              <div class="mb-3">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                         {% for category, message in messages %}
@@ -71,7 +73,7 @@
                 <div class="g-recaptcha row my-3 flex-row ms-auto align-items-center justify-content-center" data-sitekey="{{ RECAPTCHA_PUBLIC_KEY }}"></div>
               </div>
 
-            <button class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" type="submit" >
+            <button class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" type="submit">
                 <span>
               <i class="ti ti-send"></i>
             </span> {% trans %}Send{% endtrans %}
@@ -89,20 +91,4 @@
 </div>
 
 </div>
-
-
-<script>
-    function onSubmit(event) {
-        var response = grecaptcha.getResponse();
-        if (response.length == 0) {
-            // reCAPTCHA not verified
-            alert('{% trans %}Please verify that you are not a robot.{% endtrans %}');
-            event.preventDefault(); // Prevent form submission
-            return false;
-        }
-        // Form submission can proceed
-        return true;
-    }
-
-</script>
 {% endblock %}

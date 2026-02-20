@@ -9,8 +9,8 @@
 {% block content %}
 <div class="container-fluid">
 
-    <div class="row" >
-        <div class="mb-3" >
+    <div class="row">
+        <div class="mb-3">
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                     {% for category, message in messages %}
@@ -22,12 +22,12 @@
             {% endwith %}
         </div>
 
-        <div class="mb-3" >
-                <h2>{% trans %}User Settings{% endtrans %} <span class="fs-6" >({{ current_user.username }})</span> </h2>
+        <div class="mb-3">
+                <h2>{% trans %}User Settings{% endtrans %} <span class="fs-6">({{ current_user.username }})</span> </h2>
         </div>
     </div>
 
-    <div class="row" >
+    <div class="row">
         <div class="card bg-light col-md-4">
         <div class="card-body">
           <form method="post" action="{{ url_with_lang('user_settings') }}">
@@ -56,18 +56,18 @@
       </div>
 
 
-        <div class="card bg-light mx-3 col-md-4 ps-2" >
+        <div class="card bg-light mx-3 col-md-4 ps-2">
 
-            <div class="card-body " >
+            <div class="card-body ">
                 <div class="mb-3">
                   <h5 class="form-label">{% trans %}Developer Zone{% endtrans %}</h5>
                 </div>
-                <div class=" mt-1" >
+                <div class=" mt-1">
                     <p>
                         {% trans %}Use this feature to register a new hardware. It will allow to generate a new public and private keys, that could be flashed inside the hardware controller.{% endtrans %}
                     </p>
-                    <a href="{{ url_for('add_sensor') }}" target="_self" class="btn btn-success my-2" >{% trans %}Register S1 Sensor{% endtrans %}</a>
-                    <a href="{{ url_for('add_relay') }}" target="_self" class="btn btn-info" >{% trans %}Register Pump Controller{% endtrans %}</a>
+                    <a href="{{ url_for('add_sensor') }}" target="_self" class="btn btn-success my-2">{% trans %}Register S1 Sensor{% endtrans %}</a>
+                    <a href="{{ url_for('add_relay') }}" target="_self" class="btn btn-info">{% trans %}Register Pump Controller{% endtrans %}</a>
                 </div>
             </div>
 
@@ -75,8 +75,8 @@
 
 
 
-        <div class="card bg-light mx-3 col-md-4 d-none" >
-            <div class="card-body " >
+        <div class="card bg-light mx-3 col-md-4 d-none">
+            <div class="card-body ">
                 <form method="post" action="{{ url_with_lang('user_settings') }}">
                     <input type="hidden" name="action" value="update-phone">
 

@@ -69,36 +69,9 @@
 }
 </script>
 
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/products-r1.css') }}" />
 
-<style>
-.long-img-area {
-  max-width: 850px;
-  margin: 35px auto;
-}
-
-.carousel-inner-ratio img {
-  width: 100%; /* Ensure image fills full width */
-  height: auto; /* Keep image aspect ratio */
-  aspect-ratio: 16 / 9; /* Adjust this to the desired ratio */
-  object-fit: cover; /* Optional: control how image fits the box */
-}
-
-.carousel-fit img {
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
-  max-width: 700px; /* Adjust this value to your desired limit */
-  margin: 0 auto; /* Center image if it does not take full width */
-}
-
-</style>
-
-<!-- Google tag (gtag.js) event -->
-<script>
-  gtag('event', 'conversion_event_page_view', {
-    // <event_parameters>
-  });
-</script>
+<script src="{{ url_for('static', filename='assets/js/templates/products-r1-page.js') }}" defer></script>
 
 {% endblock %}
 
@@ -109,7 +82,7 @@
 
   <div class="d-flex">
     <div class="p-2">
-        <h1 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5 mb-3" >WiFi Smart Water Pump Controller S1 - {% trans %}Features{% endtrans %}</h1>
+        <h1 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5 mb-3">WiFi Smart Water Pump Controller S1 - {% trans %}Features{% endtrans %}</h1>
     </div>
 
       <div class="ms-auto">
@@ -129,10 +102,10 @@
               <img src="{{ url_for('static', filename='manuals/Smart_Pump_Controller_S1'+g.img_lang+'.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1">
             </div>
             <div class="carousel-item" data-bs-interval="7000">
-              <img src="{{ url_for('static', filename='manuals/WiFi_Smart_Pump_Controller_S1.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1" >
+              <img src="{{ url_for('static', filename='manuals/WiFi_Smart_Pump_Controller_S1.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1">
             </div>
             <div class="carousel-item" data-bs-interval="7000">
-              <img src="{{ url_for('static', filename='manuals/r1_face.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1" >
+              <img src="{{ url_for('static', filename='manuals/r1_face.png') }}" class="d-block w-100" alt="WiFi Smart Pump Controller S1 - Product Image" title="WiFi Smart Pump Controller S1">
             </div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
@@ -145,7 +118,7 @@
           </button>
         </div>
 
-        <a class="btn btn-sm btn-success mb-2" href="/device_info?public_key=demorelay" >
+        <a class="btn btn-sm btn-success mb-2" href="/device_info?public_key=demorelay">
             <i class="ti ti-router"></i>
             {% trans %}UI Demo Device{% endtrans %}
        </a>
@@ -166,7 +139,7 @@
 
       </div>
 
-    <h2 class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5" >{% trans %}Features List{% endtrans %} </h2>
+    <h2 class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-5">{% trans %}Features List{% endtrans %} </h2>
     <ul class="list-group">
 
         <li class="list-group-item list-group-item-action list-group-item-success active">
@@ -177,11 +150,11 @@
             </p>
             {% endtrans %}
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <li class="list-group-item list-group-item-action list-group-item-primary">
             <b>{% trans %}Integration with S1 Sensor{% endtrans %}</b><br>
 
             <div class="text-center my-3">
-              <img src="{{ url_for('static', filename='manuals/HowWorksS1Controller'+g.img_lang+'.png') }}" class="img-thumbnail" alt="How Works S1 Pump Controller" title="How Works S1 Pump Controller" >
+              <img src="{{ url_for('static', filename='manuals/HowWorksS1Controller'+g.img_lang+'.png') }}" class="img-thumbnail" alt="How Works S1 Pump Controller" title="How Works S1 Pump Controller">
             </div>
 
             {% trans %}
@@ -199,7 +172,7 @@
                 or shut off, enhancing efficiency and minimizing manual supervision.</p>
         </li>
 
-        <li class="list-group-item list-group-item-action list-group-item-primary" >
+        <li class="list-group-item list-group-item-action list-group-item-primary">
         <b>Customizable Settings</b><br>
             <p>Users can define precise thresholds for pump operation, specifying when to start the pump if the
                 water level falls below a set percentage and when to stop it once the tank reaches a defined fill level.
@@ -223,7 +196,7 @@
                 Compatible with pumps up to a <b>maximum of 10 amps</b>. Optional <b>ground connection</b> for added safety.
             </p>
         </li>
-        <li class="list-group-item list-group-item-action list-group-item-primary active" >
+        <li class="list-group-item list-group-item-action list-group-item-primary active">
             <b>External 2.4GHz WiFi Antenna (3dBi or 5dBi)</b><br>
             <p>
                 Offers outdoor ranges of <b>100-150 meters</b> with a <b>3dBi</b> antenna and up to <b>200 meters</b> with a <b>5dBi</b> antenna, depending on line-of-sight.<br>
@@ -239,7 +212,7 @@
             it creates an eco-friendly water management system that conserves both water and energy.</p>
         </li>
 
-        <li class="list-group-item list-group-item-action list-group-item-success active" >
+        <li class="list-group-item list-group-item-action list-group-item-success active">
             <b>Easy-to-Manufacture Design</b>
             <p>
                The energy module is integrated into a single PCB. The sensor connects easily via a plug-in,
@@ -248,7 +221,7 @@
             </p>
         </li>
 
-        <li class="list-group-item list-group-item-action list-group-item-secondary" >
+        <li class="list-group-item list-group-item-action list-group-item-secondary">
         <b>Open Hardware and Software</b><br>
         <p>With open hardware and software, the controller embraces transparency and innovation.
             Users have access to its schematics, firmware, and software, allowing for customization and
@@ -264,12 +237,12 @@
             {% endtrans %}
 
             <div class="text-center my-3">
-              <img src="{{ url_for('static', filename='logos/open-hardware.jpg') }}" class="img-thumbnail" alt="Solar Power Module P1" title="Solar Power Module P1 For S1" >
-              <img src="{{ url_for('static', filename='logos/gpl3.png') }}" class="img-thumbnail" alt="Solar Power Module P1" title="Solar Power Module P1 For S1" >
-                <div class="ms-2" >
+              <img src="{{ url_for('static', filename='logos/open-hardware.jpg') }}" class="img-thumbnail" alt="Solar Power Module P1" title="Solar Power Module P1 For S1">
+              <img src="{{ url_for('static', filename='logos/gpl3.png') }}" class="img-thumbnail" alt="Solar Power Module P1" title="Solar Power Module P1 For S1">
+                <div class="ms-2">
                     <hr>
-                    | <a href="https://oshwlab.com/rrguardo83/automatic-water-pump-for-s1" target="_blank" >Schematic PCB</a> |
-                    <a href="https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1" target="_blank" >GitHub (3D Case, ...)</a> |
+                    | <a href="https://oshwlab.com/rrguardo83/automatic-water-pump-for-s1" target="_blank">Schematic PCB</a> |
+                    <a href="https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1" target="_blank">GitHub (3D Case, ...)</a> |
                     <hr>
                 </div>
             </div>
@@ -277,7 +250,7 @@
 
     </ul>
 
-    <hr class="row small_none" >
+    <hr class="row small_none">
 
 
 <div class="row  justify-content-center" id="order_now_c1">
@@ -309,11 +282,8 @@
             <hr>
             <p><strong>By using this device, you acknowledge and accept that:</strong></p>
             <ul class="list-group list-group-numbered ms-1">
-              <li class="list-group-item list-group-item-action" >You assume all risks associated with its use, including but not limited to potential damage to property, personal injury, or any other unintended consequences.</li>
-              <li class="list-group-item list-group-item-action" >This device is not certified for commercial, industrial, or safety-critical applications. It is intended solely for developers, hobbyists, and other users with appropriate technical expertise.</li>
-              <li class="list-group-item list-group-item-action" >The creators and distributors of this project are not liable for any damages, losses, or inconveniences resulting from its use, modification, or integration into other systems.</li>
-            </ul>
-            <p class="my-3" >
+              <li class="list-group-item list-group-item-action">You assume all risks associated with its use, including but not limited to potential damage to property, personal injury, or any other unintended consequences.</li>              <li class="list-group-item list-group-item-action">This device is not certified for commercial, industrial, or safety-critical applications. It is intended solely for developers, hobbyists, and other users with appropriate technical expertise.</li>              <li class="list-group-item list-group-item-action">The creators and distributors of this project are not liable for any damages, losses, or inconveniences resulting from its use, modification, or integration into other systems.</li>            </ul>
+            <p class="my-3">
               Users are solely responsible for ensuring that the use of this device complies with local laws, regulations, and safety standards in their region.
             </p>
             {% endtrans %}
@@ -328,7 +298,7 @@
 
 </div>
 
-<hr class="row small_none" >
+<hr class="row small_none">
 
 </div>
 
