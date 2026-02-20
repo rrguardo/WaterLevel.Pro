@@ -12,6 +12,8 @@ jobs:
   unit-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -37,6 +39,7 @@ jobs:
           coverage run -m unittest discover -s tests/unit -p 'test_*_unit.py' -v
           coverage report -m
           coverage xml
+          coverage json -o coverage.json
           coverage html
 
       - name: Upload coverage XML artifact
@@ -46,13 +49,50 @@ jobs:
           name: unit-coverage-xml-py${{ matrix.python-version }}
           path: coverage.xml
 
-      - name: Upload coverage to Codecov
-        if: always()
-        uses: codecov/codecov-action@v4
+        - name: Build coverage badge payload
+        if: always() && matrix.python-version == '3.14'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          coverage = json.loads(Path("coverage.json").read_text())
+          pct = float(coverage.get("totals", {}).get("percent_covered", 0.0))
+
+          if pct >= 90:
+            color = "brightgreen"
+          elif pct >= 75:
+            color = "green"
+          elif pct >= 60:
+            color = "yellowgreen"
+          elif pct >= 50:
+            color = "yellow"
+          elif pct >= 35:
+            color = "orange"
+          else:
+            color = "red"
+
+          badge = {
+            "schemaVersion": 1,
+            "label": "coverage",
+            "message": f"{pct:.1f}%",
+            "color": color,
+          }
+
+          out = Path(".badge")
+          out.mkdir(exist_ok=True)
+          (out / "coverage.json").write_text(json.dumps(badge))
+          print(json.dumps(badge))
+          PY
+
+        - name: Publish coverage badge to gh-pages
+        if: always() && github.event_name != 'pull_request' && matrix.python-version == '3.14'
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          files: coverage.xml
-          flags: unit,py${{ matrix.python-version }}
-          fail_ci_if_error: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .badge
+          destination_dir: badges
+          keep_files: true
 
       - name: Upload coverage HTML artifact
         if: always()
