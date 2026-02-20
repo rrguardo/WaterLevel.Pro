@@ -1,0 +1,111 @@
+schema_version: 1
+kind: deploy-agent-input
+project:
+  name: WaterLevel.Pro
+  repo_url: https://github.com/rrguardo/WaterLevel.Pro.git
+  default_branch: main
+
+minimal_input:
+  domain:
+    web: example.com
+    api: api.example.com
+  server:
+    ip: 203.0.113.10
+    ssh_port: 22
+    ssh_user: root
+    auth_method: password # password | ssh_key
+    ssh_password: CHANGE_ME
+  vps_admin:
+    username: root
+    password: CHANGE_ME
+    sudo_password: CHANGE_ME_IF_DIFFERENT
+
+deploy_contract:
+  runtime: docker-compose
+  compose_file: docker/docker-compose.yml
+  required_env_map:
+    APP_DOMAIN: https://example.com
+    API_DOMAIN: https://api.example.com
+    WLP_SERVER_NAME: example.com
+    WLP_API_SERVER_NAME: api.example.com
+    WLP_WEB_UPSTREAM: app:8000
+    WLP_API_UPSTREAM: app:8001
+    WLP_SSL_CERT_PATH: /etc/nginx/certs/fullchain.pem
+    WLP_SSL_KEY_PATH: /etc/nginx/certs/privkey.pem
+    SMTP_TEST: false
+    EMAIL_SENDER: '"WaterLevel.Pro" <no-reply@example.com>'
+    SMTP_SERVER: smtp.mailprovider.com
+    SMTP_PORT: 587
+    SMTP_USERNAME: smtp-user@example.com
+    SMTP_PASSWORD: CHANGE_ME
+    SMTP_USE_STARTTLS: true
+    SMTP_USE_SSL: false
+    SMTP_TIMEOUT_SECONDS: 20
+  optional_tracking_env:
+    WLP_ENABLE_TRACKING: false
+    WLP_GA_MEASUREMENT_ID: ""
+    WLP_TWITTER_PIXEL_ID: ""
+    WLP_ENABLE_ADSENSE: false
+    WLP_ADSENSE_CLIENT_ID: ""
+
+security_baseline:
+  firewall:
+    model: default-deny-incoming
+    inbound_allow:
+      - tcp/22   # SSH management
+      - tcp/80   # HTTP redirect to HTTPS
+      - tcp/443  # Public TLS ingress
+    inbound_block:
+      - tcp/8000 # Internal web upstream, keep private
+      - tcp/8001 # Internal API upstream, keep private
+      - tcp/6379 # Redis internal only
+    egress_allow:
+      - dns
+      - https
+      - smtp-submission # 587 (or 465 when SMTP_USE_SSL=true)
+  docker:
+    expose_only_nginx_ports: true
+    keep_internal_upstreams_private: true
+
+agent_steps:
+  - name: clone_or_update_repo
+    command: git pull --ff-only
+  - name: ensure_env
+    command: cp -n .env.example .env
+  - name: apply_env_values
+    command: update .env using required_env_map and optional_tracking_env
+  - name: deploy
+    command: docker compose -f docker/docker-compose.yml up -d --build
+  - name: apply_firewall
+    command: |
+      ufw default deny incoming
+      ufw default allow outgoing
+      ufw allow 22/tcp
+      ufw allow 80/tcp
+      ufw allow 443/tcp
+      ufw --force enable
+  - name: post_deploy_sync
+    command: ./docker/resync.sh --full
+  - name: health_check
+    command: ./scripts/docker_smoke_test.sh
+
+verification:
+  web_ping:
+    url: https://example.com/ping
+    host_header: example.com
+    expect_contains: PONG
+  api_link:
+    url: https://api.example.com/link
+    host_header: api.example.com
+    expect_contains: FAIL
+
+guardrails:
+  - Keep API on subdomain of same base domain.
+  - Keep ingress centralized in Nginx (ports 80/443 only).
+  - Do not expose internal app ports (8000/8001) publicly.
+  - Do not commit real credentials to git.
+
+notes:
+  - This file is a template. Create a private copy outside git for real secrets.
+  - If cron schedule changes, rebuild cron service:
+      docker compose -f docker/docker-compose.yml up -d --build cron

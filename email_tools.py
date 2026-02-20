@@ -1,5 +1,6 @@
 import hmac
 import hashlib
+import ssl
 
 import smtplib
 import random
@@ -8,8 +9,68 @@ from email.mime.text import MIMEText
 from email.message import EmailMessage
 from flask_babel import _
 
-from settings import EMAIL_SENDER, SMTP_PORT, SMTP_SERVER, SMTP_TEST, APP_SEC_KEY, APP_DOMAIN
+from settings import (
+    EMAIL_SENDER,
+    SMTP_PORT,
+    SMTP_SERVER,
+    SMTP_TEST,
+    SMTP_USERNAME,
+    SMTP_PASSWORD,
+    SMTP_USE_STARTTLS,
+    SMTP_USE_SSL,
+    SMTP_TIMEOUT_SECONDS,
+    APP_SEC_KEY,
+    APP_DOMAIN,
+)
 from urllib.parse import quote
+
+
+def _deliver_message(message):
+    """Deliver an email using secure SMTP settings from environment.
+
+    Behavior:
+    - Test mode prints message and skips network delivery.
+    - Supports implicit TLS (SMTP_SSL) and STARTTLS.
+    - Supports authenticated SMTP when username/password are provided.
+
+    Args:
+        message: EmailMessage instance ready to send.
+
+    Returns:
+        None.
+    """
+    if SMTP_TEST:
+        print(message)
+        return
+
+    has_user = bool(SMTP_USERNAME)
+    has_pass = bool(SMTP_PASSWORD)
+    if has_user != has_pass:
+        raise ValueError("SMTP auth requires both SMTP_USERNAME and SMTP_PASSWORD.")
+
+    tls_context = ssl.create_default_context()
+
+    if SMTP_USE_SSL:
+        with smtplib.SMTP_SSL(
+            SMTP_SERVER,
+            SMTP_PORT,
+            timeout=SMTP_TIMEOUT_SECONDS,
+            context=tls_context,
+        ) as server:
+            server.ehlo()
+            if has_user:
+                server.login(SMTP_USERNAME, SMTP_PASSWORD)
+            server.send_message(message)
+        return
+
+    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=SMTP_TIMEOUT_SECONDS) as server:
+        server.ehlo()
+        if SMTP_USE_STARTTLS:
+            server.starttls(context=tls_context)
+            server.ehlo()
+        if has_user:
+            server.login(SMTP_USERNAME, SMTP_PASSWORD)
+        server.send_message(message)
 
 
 def send_device_added(to_email, public_key, device_type='Water Level S1 Sensor'):
@@ -72,13 +133,7 @@ def send_device_added(to_email, public_key, device_type='Water Level S1 Sensor')
             </html>
             """, subtype='html')
 
-    if SMTP_TEST:
-        print(message)
-        return
-
-    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-        server.send_message(message)
-        server.quit()
+    _deliver_message(message)
 
 
 def send_register_email(to_email, lang='en'):
@@ -136,13 +191,7 @@ def send_register_email(to_email, lang='en'):
         </html>
         """, subtype='html')
 
-    if SMTP_TEST:
-        print(message)
-        return
-
-    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-        server.send_message(message)
-        server.quit()
+    _deliver_message(message)
 
 
 def send_alert_email(to_email, alert_subject, alert_body):
@@ -190,13 +239,7 @@ def send_alert_email(to_email, alert_subject, alert_body):
         </html>
         """, subtype='html')
 
-    if SMTP_TEST:
-        print(message)
-        return
-
-    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-        server.send_message(message)
-        server.quit()
+    _deliver_message(message)
 
 
 def generate_confirmation_code(to_email):
@@ -276,13 +319,7 @@ def support_email(to_email, message_reply):
         </html>
         """, subtype='html')
 
-    if SMTP_TEST:
-        print(message)
-        return
-
-    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-        server.send_message(message)
-        server.quit()
+    _deliver_message(message)
 
 
 if __name__ == "__main__":

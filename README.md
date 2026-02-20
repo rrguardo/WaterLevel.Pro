@@ -187,6 +187,11 @@ See `.env.example` for full list.
 | SMTP | `EMAIL_SENDER` | Default sender header for system emails. | `"Water Level .Pro" <no-reply@example.com>` | `"WaterLevel Pro" <no-reply@example.com>` |
 | SMTP | `SMTP_SERVER` | SMTP host used by mail helpers. | `127.0.0.1` | `smtp.mailprovider.com` |
 | SMTP | `SMTP_PORT` | SMTP TCP port. | `25` | `587` |
+| SMTP | `SMTP_USERNAME` | SMTP account username for authenticated relays/providers. | empty | `smtp-user@example.com` |
+| SMTP | `SMTP_PASSWORD` | SMTP account password/token (store as secret). | empty | `app-password-or-token` |
+| SMTP | `SMTP_USE_STARTTLS` | Enables STARTTLS upgrade for plaintext SMTP connections. | `true` | `true` |
+| SMTP | `SMTP_USE_SSL` | Enables implicit TLS (`SMTP_SSL`, usually port `465`). | `false` | `false` |
+| SMTP | `SMTP_TIMEOUT_SECONDS` | Network timeout for SMTP connect/send operations. | `20` | `20` |
 | Redis runtime | `REDIS_HOST` | Redis host used by web/API runtime clients. | `127.0.0.1` | `redis` |
 | Redis runtime | `REDIS_PORT` | Redis port used by web/API runtime clients. | `6379` | `6379` |
 | Redis runtime | `WEB_REDIS_DB` | Redis DB index used by web runtime keys. | `0` | `0` |

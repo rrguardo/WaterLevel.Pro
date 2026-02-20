@@ -37,6 +37,11 @@ SMTP_TEST = env_bool("SMTP_TEST", DEV_MODE)
 EMAIL_SENDER = os.getenv("EMAIL_SENDER", '"Water Level .Pro" <no-reply@example.com>')
 SMTP_SERVER = os.getenv("SMTP_SERVER", "127.0.0.1")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "25"))
+SMTP_USERNAME = os.getenv("SMTP_USERNAME", "")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+SMTP_USE_STARTTLS = env_bool("SMTP_USE_STARTTLS", True)
+SMTP_USE_SSL = env_bool("SMTP_USE_SSL", False)
+SMTP_TIMEOUT_SECONDS = int(os.getenv("SMTP_TIMEOUT_SECONDS", "20"))
 #  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # API CACHE Settings
 API_CACHE_SETT = {
