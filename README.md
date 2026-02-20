@@ -2,11 +2,66 @@
 
 [![Unit Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml) [![Docker Integration Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/integration-tests.yml) [![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/rrguardo/WaterLevel.Pro/gh-pages/badges/coverage.json)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml) [![Docker Smoke Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml) [![Docker Publish](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml) [![Docker Hub Version](https://img.shields.io/docker/v/rguardo/waterlevel-pro?label=Docker%20Hub&sort=semver)](https://hub.docker.com/r/rguardo/waterlevel-pro) [![Docker Hub Pulls](https://img.shields.io/docker/pulls/rguardo/waterlevel-pro?label=Pulls)](https://hub.docker.com/r/rguardo/waterlevel-pro)
 
-Water level monitoring platform with:
-- Web app (`app.py`)
-- Device/API service (`api.py`)
-- Alert workers (email/SMS cron scripts)
-- Redis caching + SQLite storage
+Open-source server-side platform for:
+- [WiFi-Water-Level-S1](https://github.com/rrguardo/WiFi-Water-Level-S1) (smart tank/cistern water level monitoring)
+- [WiFi-Smart-Water-Pump-Controller-S1](https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1) (smart water pump relay control)
+
+This repository is the backend + web dashboard that devices connect to in production and self-hosted deployments. It provides a Flask-based web UI, device API endpoints, alert automation, and Docker runtime orchestration for low-cost VPS hosting.
+
+Free online demo: [https://waterlevel.pro/](https://waterlevel.pro/)
+
+<p align="center">
+   <img src="https://waterlevel.pro/static/prod_img/tab.png" alt="WaterLevel.Pro tablet dashboard preview" width="340" />
+   <img src="https://waterlevel.pro/static/prod_img/cel.png" alt="WaterLevel.Pro mobile dashboard preview" width="180" />
+</p>
+
+SEO keywords: IoT water level monitoring, smart water pump controller, Flask backend API, ESP8266/ESP32 telemetry ingestion, self-hosted water tank dashboard, SMS/email water alerts.
+
+## Table of contents
+
+- [What this server-side includes today](#what-this-server-side-includes-today)
+   - [Web UI features (`app.py`)](#web-ui-features-apppy)
+   - [Device/API service features (`api.py`)](#deviceapi-service-features-apipy)
+   - [Platform/runtime features](#platformruntime-features)
+- [Project structure](#project-structure)
+- [Quick start (local Python)](#quick-start-local-python)
+- [Quick start (Docker)](#quick-start-docker)
+- [Minimal server requirements (low-cost VPS)](#minimal-server-requirements-low-cost-vps)
+- [What unit tests represent (and what CI runs here)](#what-unit-tests-represent-and-what-ci-runs-here)
+- [S1 demo device simulator (Python service)](#s1-demo-device-simulator-python-service)
+- [R1 demo relay simulator (Python service)](#r1-demo-relay-simulator-python-service)
+- [Open-source safe configuration](#open-source-safe-configuration)
+- [Environment variables reference (`settings.py`)](#environment-variables-reference-settingspy)
+- [Demo database](#demo-database)
+- [i18n workflow (Flask-Babel)](#i18n-workflow-flask-babel)
+- [Contributing](#contributing)
+- [Security](#security)
+
+## What this server-side includes today
+
+### Web UI features (`app.py`)
+
+- User account flows (register/login/verification/recovery patterns)
+- Device management pages for sensor + relay devices
+- Dashboard views for level, relay state, and account settings
+- Admin/dashboard templates and localized routes (`/<lang>/...`)
+- Flask-Babel translation support (`translations/`)
+- Optional tracking integrations controlled by environment variables
+
+### Device/API service features (`api.py`)
+
+- Sensor ingestion endpoint: `GET /update` (`key`, `distance`, `voltage`)
+- Relay ingestion/control endpoint: `GET /relay-update` (`key`, `status`, events)
+- Firmware response headers for runtime control (`wpl`, `pool-time`, `ACTION`, safety/config fields)
+- Device/link and validation flows used by hardware onboarding
+- Redis-backed transient runtime state + SQLite persistence
+
+### Platform/runtime features
+
+- Dockerized deployment with Nginx host-based routing (web + API subdomain split)
+- Gunicorn runtime for both Flask surfaces in one `app` container
+- Cron automation for email alerts, SMS alerts, and GoAccess report generation
+- Smoke-test contract for deployment validation ([`scripts/docker_smoke_test.sh`](scripts/docker_smoke_test.sh))
 
 ## Project structure
 
@@ -86,7 +141,7 @@ In this repository, CI runs both layers in separate jobs:
    - `tests/integration/test_api_integration.py`
    - `tests/integration/docker_integration.py`
 
-This keeps quick feedback from unit tests and realistic runtime validation from integration tests. `scripts/docker_smoke_test.sh` remains the fast deployment contract check.
+This keeps quick feedback from unit tests and realistic runtime validation from integration tests. [`scripts/docker_smoke_test.sh`](scripts/docker_smoke_test.sh) remains the fast deployment contract check.
 
 ## S1 demo device simulator (Python service)
 
@@ -183,7 +238,7 @@ Important variables:
 - `REDIS_HOST`
 - `REDIS_PORT`
 
-See `.env.example` for full list.
+See [`.env.example`](.env.example) for full list.
 
 ## Environment variables reference (`settings.py`)
 
@@ -263,8 +318,8 @@ In Python:
 
 ## Contributing
 
-See `CONTRIBUTING.md`.
+See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Security
 
-See `SECURITY.md`.
+See [`SECURITY.md`](SECURITY.md).
