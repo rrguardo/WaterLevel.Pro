@@ -1,5 +1,41 @@
 stages:
+  - unit
+  - integration
   - test
+
+unit_tests:
+  stage: unit
+  image: $PYTHON_IMAGE
+  parallel:
+    matrix:
+      - PYTHON_IMAGE: ["python:3.14", "python:3.15-rc"]
+  before_script:
+    - python -m pip install --upgrade pip
+    - python -m pip install -r requirements.txt
+  script:
+    - python -m unittest discover -s tests/unit -p 'test_*_unit.py' -v
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
+docker_integration_tests:
+  stage: integration
+  image: $PYTHON_IMAGE
+  parallel:
+    matrix:
+      - PYTHON_IMAGE: ["python:3.14", "python:3.15-rc"]
+  before_script:
+    - python -m pip install --upgrade pip
+    - python -m pip install -r requirements.txt
+    - docker --version
+    - docker compose version
+  script:
+    - python -m unittest discover -s tests/integration -p 'test_*_integration.py' -v
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
 
 docker_smoke_test:
   stage: test

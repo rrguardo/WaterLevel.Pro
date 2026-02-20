@@ -1,6 +1,6 @@
 # WaterLevel.Pro (Open Source)
 
-[![Docker Smoke Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml) [![Docker Publish](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml) [![Docker Hub Version](https://img.shields.io/docker/v/rguardo/waterlevel-pro?label=Docker%20Hub&sort=semver)](https://hub.docker.com/r/rguardo/waterlevel-pro) [![Docker Hub Pulls](https://img.shields.io/docker/pulls/rguardo/waterlevel-pro?label=Pulls)](https://hub.docker.com/r/rguardo/waterlevel-pro)
+[![Unit Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml) [![Docker Integration Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/integration-tests.yml) [![Coverage](https://codecov.io/gh/rrguardo/WaterLevel.Pro/graph/badge.svg)](https://codecov.io/gh/rrguardo/WaterLevel.Pro) [![Docker Smoke Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml) [![Docker Publish](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml) [![Docker Hub Version](https://img.shields.io/docker/v/rguardo/waterlevel-pro?label=Docker%20Hub&sort=semver)](https://hub.docker.com/r/rguardo/waterlevel-pro) [![Docker Hub Pulls](https://img.shields.io/docker/pulls/rguardo/waterlevel-pro?label=Pulls)](https://hub.docker.com/r/rguardo/waterlevel-pro)
 
 Water level monitoring platform with:
 - Web app (`app.py`)
@@ -70,6 +70,23 @@ separates traffic by hostname.
 
 Smoke test local (Docker + services):
 - `./scripts/docker_smoke_test.sh`
+
+## What unit tests represent (and what CI runs here)
+
+- **Unit tests** validate one small unit of logic in isolation (for example a single function), usually with dependencies mocked/stubbed.
+- **Integration tests** validate that multiple real components work together (for example Nginx + Flask + Redis + SQLite via real HTTP).
+
+In this repository, CI runs both layers in separate jobs:
+
+- **Unit Tests** (fast, isolated):
+   - `tests/unit/test_app_unit.py`
+   - `tests/unit/test_api_unit.py`
+- **Docker Integration Tests** (real stack, no mocks):
+   - `tests/integration/test_app_integration.py`
+   - `tests/integration/test_api_integration.py`
+   - `tests/integration/docker_integration.py`
+
+This keeps quick feedback from unit tests and realistic runtime validation from integration tests. `scripts/docker_smoke_test.sh` remains the fast deployment contract check.
 
 ## S1 demo device simulator (Python service)
 
