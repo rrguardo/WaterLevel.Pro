@@ -25,6 +25,9 @@ services:
 
   cron:
     image: ${WLP_APP_IMAGE:-rguardo/waterlevel-pro:latest}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     restart: unless-stopped
     env_file:
       - ../.env
