@@ -1,0 +1,168 @@
+schema_version: 1
+kind: deploy-agent-user-input
+
+project:
+  name: WaterLevel.Pro
+  repo_url: https://github.com/rrguardo/WaterLevel.Pro.git
+  branch: main
+  deploy_path: /opt/wlp
+
+server:
+  ip: 203.0.113.10
+  ssh_port: 22
+  ssh_user: root
+  ssh_auth_method: ssh_key # ssh_key | password
+  ssh_key_path: ~/.ssh/id_rsa
+  ssh_password: "" # only when ssh_auth_method=password
+  os_family: ubuntu # ubuntu | debian | almalinux-10 | rocky-9 | centos-stream-9
+
+domain:
+  web: example.com
+  api: api.example.com
+
+dns_edge:
+  provider: cloudflare # cloudflare | other | none
+  mode: proxied # disabled | dns_only | proxied
+  cloudflare:
+    zone_id: ""
+    api_token: "" # custom API Token (recommended), optional if DNS is managed manually
+    api_token_type: custom_token # custom_token | global_api_key (avoid global key)
+    api_token_permissions:
+      - Zone.DNS.Edit
+      - Zone.Zone.Read
+    ssl_mode: full_strict # off | flexible | full | full_strict
+    always_use_https: true
+    proxy_web_record: true
+    proxy_api_record: true
+
+tls:
+  source: cloudflare_origin_cert # letsencrypt | cloudflare_origin_cert | provided_files
+  cert_path: /etc/nginx/certs/fullchain.pem
+  key_path: /etc/nginx/certs/privkey.pem
+  letsencrypt_email: admin@example.com
+
+deploy_contract:
+  runtime: docker-compose
+  compose_file: docker/docker-compose.yml
+  app_image: rguardo/waterlevel-pro:latest
+  firewalld_or_ufw: ufw
+  open_ports:
+    - 22
+    - 80
+    - 443
+  blocked_public_ports:
+    - 8000
+    - 8001
+    - 6379
+
+env_required:
+  APP_SEC_KEY: CHANGE_ME_STRONG_SECRET
+  # Domain/runtime host values are derived from `domain.web` and `domain.api` above.
+  DATABASE_URL: sqlite:///database.db?journal_mode=WAL2
+  WLP_WEB_UPSTREAM: app:8000
+  WLP_API_UPSTREAM: app:8001
+  WLP_SSL_CERT_PATH: /etc/nginx/certs/fullchain.pem
+  WLP_SSL_KEY_PATH: /etc/nginx/certs/privkey.pem
+
+  SMTP_TEST: true
+  EMAIL_SENDER: '"Water Level .Pro" <no-reply@example.com>'
+  SMTP_SERVER: 127.0.0.1
+  SMTP_PORT: 25
+  SMTP_USERNAME: ""
+  SMTP_PASSWORD: ""
+  SMTP_USE_STARTTLS: true
+  SMTP_USE_SSL: false
+  SMTP_TIMEOUT_SECONDS: 20
+
+env_optional:
+  WLP_ENABLE_TRACKING: false
+  WLP_GA_MEASUREMENT_ID: ""
+  WLP_TWITTER_PIXEL_ID: ""
+  WLP_ENABLE_ADSENSE: false
+  WLP_ADSENSE_CLIENT_ID: ""
+  TWILIO_ACCOUNT_SID: ""
+  TWILIO_AUTH_TOKEN: ""
+  TWILIO_NUMBER: ""
+
+verification_targets:
+  web_ping:
+    url: https://example.com/ping
+    host_header: example.com
+    expect_contains: PONG
+  api_link:
+    url: https://api.example.com/link
+    host_header: api.example.com
+    expect_contains: FAIL
+
+constraints:
+  api_must_be_subdomain_of_web: true
+  keep_nginx_as_only_public_ingress: true
+  do_not_commit_real_secrets: true
+  sqlite_single_node_expected: true
+
+notes:
+  - Fill this file completely before asking the AI agent to deploy.
+  - Keep a private copy outside git history for real secrets.
+
+# ------------------------------
+# SAMPLES (copy/adapt as needed)
+# ------------------------------
+
+# sample_server_almalinux_10:
+#   ip: 203.0.113.20
+#   ssh_port: 22
+#   ssh_user: root
+#   ssh_auth_method: ssh_key
+#   ssh_key_path: ~/.ssh/id_ed25519
+#   ssh_password: ""
+#   os_family: almalinux-10
+
+# sample_domain_production:
+#   web: mydomain.com
+#   api: api.mydomain.com
+
+# sample_cloudflare_proxied:
+#   provider: cloudflare
+#   mode: proxied
+#   cloudflare:
+#     zone_id: "your-zone-id"
+#     api_token: "paste-custom-token-if-automation-is-needed"
+#     api_token_type: custom_token
+#     api_token_permissions:
+#       - Zone.DNS.Edit
+#       - Zone.Zone.Read
+#       - Zone.SSLAndCertificates.Edit # optional
+#       - Zone.ZoneSettings.Edit # optional
+#     ssl_mode: full_strict
+#     always_use_https: true
+#     proxy_web_record: true
+#     proxy_api_record: true
+
+# sample_tls_cloudflare_origin:
+#   source: cloudflare_origin_cert
+#   cert_path: /etc/nginx/certs/fullchain.pem
+#   key_path: /etc/nginx/certs/privkey.pem
+#   letsencrypt_email: admin@mydomain.com
+
+# sample_tls_letsencrypt:
+#   source: letsencrypt
+#   cert_path: /etc/letsencrypt/live/mydomain.com/fullchain.pem
+#   key_path: /etc/letsencrypt/live/mydomain.com/privkey.pem
+#   letsencrypt_email: admin@mydomain.com
+
+# sample_env_required_production:
+#   APP_SEC_KEY: "replace-with-long-random-secret"
+#   DATABASE_URL: sqlite:///database.db?journal_mode=WAL2
+#   WLP_WEB_UPSTREAM: app:8000
+#   WLP_API_UPSTREAM: app:8001
+#   WLP_SSL_CERT_PATH: /etc/nginx/certs/fullchain.pem
+#   WLP_SSL_KEY_PATH: /etc/nginx/certs/privkey.pem
+#   SMTP_TEST: false
+#   EMAIL_SENDER: '"WaterLevel.Pro" <no-reply@mydomain.com>'
+#   SMTP_SERVER: smtp.mailprovider.com
+#   SMTP_PORT: 587
+#   SMTP_USERNAME: smtp-user@mydomain.com
+#   SMTP_PASSWORD: ""
+#   SMTP_USE_STARTTLS: true
+#   SMTP_USE_SSL: false
+#   SMTP_TIMEOUT_SECONDS: 20

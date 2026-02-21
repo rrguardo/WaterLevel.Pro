@@ -15,7 +15,7 @@
 ## Data and runtime behavior
 - Persistence is SQLite on shared volume (`/app/data/database.db`), configured through `DATABASE_URL` (see `settings.py`).
 - On first container boot, `docker/entrypoint.sh` seeds `/app/data/database.db` from `database.opensource.db`.
-- Redis is used for transient state/cache; web and API use separate DB indexes (`WEB_REDIS_DB`, `API_REDIS_DB`).
+- Redis is used for transient state/cache; DB indexes are fixed internally for minimal setup (runtime `0`, web cache `1`, api cache `2`).
 - Background jobs run in `cron` container from `ext_conf/crontab.ini` (alerts + GoAccess report generation/retention).
 
 ## Developer workflows that matter

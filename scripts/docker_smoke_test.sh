@@ -28,11 +28,31 @@ cd "$ROOT_DIR"
 # Use a known env baseline for smoke checks.
 cp .env.example .env
 
+read_env_value() {
+  key="$1"
+  grep -E "^${key}=" .env | tail -n 1 | cut -d= -f2- || true
+}
+
 # Load host headers from env file to match nginx domain routing.
-WEB_HOST_HEADER="$(grep -E '^WLP_SERVER_NAME=' .env | tail -n 1 | cut -d= -f2- || true)"
-API_HOST_HEADER="$(grep -E '^WLP_API_SERVER_NAME=' .env | tail -n 1 | cut -d= -f2- || true)"
-WEB_HOST_HEADER="${WEB_HOST_HEADER:-localhost}"
-API_HOST_HEADER="${API_HOST_HEADER:-api.localhost}"
+BASE_DOMAIN="$(read_env_value WLP_BASE_DOMAIN)"
+API_SUBDOMAIN="$(read_env_value WLP_API_SUBDOMAIN)"
+BASE_DOMAIN="${BASE_DOMAIN:-localhost}"
+API_SUBDOMAIN="${API_SUBDOMAIN:-api}"
+
+WEB_HOST_HEADER="$(read_env_value WLP_SERVER_NAME)"
+API_HOST_HEADER="$(read_env_value WLP_API_SERVER_NAME)"
+
+if [ -z "${WEB_HOST_HEADER}" ]; then
+  WEB_HOST_HEADER="${BASE_DOMAIN}"
+fi
+
+if [ -z "${API_HOST_HEADER}" ]; then
+  if [ "${API_SUBDOMAIN}" = "@" ] || [ -z "${API_SUBDOMAIN}" ]; then
+    API_HOST_HEADER="${BASE_DOMAIN}"
+  else
+    API_HOST_HEADER="${API_SUBDOMAIN}.${BASE_DOMAIN}"
+  fi
+fi
 
 cleanup() {
   exit_status=$?

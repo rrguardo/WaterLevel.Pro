@@ -4,6 +4,31 @@ This guide is for developers with little Docker experience.
 
 Goal: run WaterLevel.Pro in minutes with Docker, verify it works, and understand what each step does.
 
+## Table of contents
+
+- [Production VPS handoff (AI-agent, fastest path)](#production-vps-handoff-ai-agent-fastest-path)
+- [0) What you need before starting](#0-what-you-need-before-starting)
+- [1) Clone the repository (required)](#1-clone-the-repository-required)
+- [2) Create `.env` from the template](#2-create-env-from-the-template)
+- [3) Choose your setup scenario](#3-choose-your-setup-scenario)
+- [4) Start services](#4-start-services)
+- [5) Verify everything works](#5-verify-everything-works)
+- [6) Useful day-to-day commands](#6-useful-day-to-day-commands)
+- [7) Common issues (quick fixes)](#7-common-issues-quick-fixes)
+- [8) Note about public image](#8-note-about-public-image)
+
+---
+
+## Production VPS handoff (AI-agent, fastest path)
+
+If your goal is a real VPS deployment (including Cloudflare options), use the dedicated handoff flow:
+
+- Guide: [`docs/DEPLOY_VPS_AI_AGENT_README.md`](DEPLOY_VPS_AI_AGENT_README.md)
+- Fillable input template: [`docs/ai/DEPLOY_AGENT_INPUT_TEMPLATE.yaml`](ai/DEPLOY_AGENT_INPUT_TEMPLATE.yaml)
+- Ready-to-paste chat prompt: [`docs/ai/DEPLOY_CHAT_PROMPT_TEMPLATE.md`](ai/DEPLOY_CHAT_PROMPT_TEMPLATE.md)
+
+This Docker quick-start remains focused on local/initial runtime bring-up.
+
 ---
 
 ## 0) What you need before starting
@@ -71,10 +96,8 @@ This creates your local environment variable file.
 In `.env`, keep these values:
 
 ```dotenv
-APP_DOMAIN=https://localhost
-API_DOMAIN=https://api.localhost
-WLP_SERVER_NAME=localhost
-WLP_API_SERVER_NAME=api.localhost
+WLP_BASE_DOMAIN=localhost
+WLP_API_SUBDOMAIN=api
 WLP_SSL_CERT_PATH=/etc/nginx/certs/localhost.crt
 WLP_SSL_KEY_PATH=/etc/nginx/certs/localhost.key
 ```
@@ -101,10 +124,8 @@ Checklist:
 Example values:
 
 ```dotenv
-APP_DOMAIN=https://example.com
-API_DOMAIN=https://api.example.com
-WLP_SERVER_NAME=example.com
-WLP_API_SERVER_NAME=api.example.com
+WLP_BASE_DOMAIN=example.com
+WLP_API_SUBDOMAIN=api
 WLP_SSL_CERT_PATH=/etc/nginx/certs/fullchain.pem
 WLP_SSL_KEY_PATH=/etc/nginx/certs/privkey.pem
 ```

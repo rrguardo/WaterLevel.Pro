@@ -100,6 +100,8 @@ Docker setup and operational notes are documented in:
 - [`docker/README.md`](docker/README.md)
 - Fast setup for test/real domain:
    - [`docs/SETUP_DOCKER_FAST.md`](docs/SETUP_DOCKER_FAST.md)
+- AI-agent-ready VPS deployment handoff (including Cloudflare option):
+   - [`docs/DEPLOY_VPS_AI_AGENT_README.md`](docs/DEPLOY_VPS_AI_AGENT_README.md)
 
 Basic run:
 1. Copy `.env.example` to `.env`
@@ -115,9 +117,10 @@ This project is tuned for low-resource single-node deployment (SQLite + Redis em
 - Recommended: `1 vCPU`, `2 GB RAM`, ~`12 GB` free disk (more stable with cron + logs + reports).
 - For very small VPS (`3-5 USD` tier), keep background load low and monitor disk growth in Docker volumes/logs.
 
-DNS setup for Docker is fully env-driven (`APP_DOMAIN`, `API_DOMAIN`,
-`WLP_SERVER_NAME`, `WLP_API_SERVER_NAME`). Keep API under a subdomain of the
-same base domain (for example `api.example.com`) to preserve a minimal
+DNS setup for Docker is env-driven and can be configured with one main input:
+`WLP_BASE_DOMAIN` (plus `WLP_API_SUBDOMAIN`, default `api`).
+Keep API under a
+subdomain of the same base domain (for example `api.example.com`) to preserve a minimal
 single-node setup aligned with SQLite usage.
 
 Nginx receives both web/api on the same public ports (`80` and `443`) and
@@ -214,7 +217,10 @@ Docker cron integration:
 
 Redis runtime note:
 
-- Keep `WEB_REDIS_DB` and `API_REDIS_DB` aligned (same DB index) so live device keys written by API are visible to web endpoints that read Redis state.
+- Redis DB indexes are fixed internally for minimal setup:
+   - runtime keys: DB `0`
+   - web cache: DB `1`
+   - api cache: DB `2`
 
 Run CI locally with gitlab-ci-local:
 1. Install `gitlab-ci-local` (for example: `npm i -g gitlab-ci-local`)
@@ -248,8 +254,8 @@ See [`.env.example`](.env.example) for full list.
 | Core app | `APP_SEC_KEY` | Flask secret key used for sessions/signing. | `CHANGE_ME_IN_PRODUCTION` | `use-a-64-char-random-secret` |
 | Core app | `APP_RECAPTCHA_SECRET_KEY` | Server-side key used to verify reCAPTCHA tokens. | empty | `your-google-recaptcha-secret` |
 | Core app | `RECAPTCHA_PUBLIC_KEY` | Client-side reCAPTCHA site key rendered in forms. | empty | `your-google-recaptcha-site-key` |
-| Core app | `APP_DOMAIN` | Canonical web app base URL. | `http://localhost` | `https://example.com` |
-| Core app | `API_DOMAIN` | Canonical API base URL. | `http://api.localhost` | `https://api.example.com` |
+| Core app | `WLP_BASE_DOMAIN` | Single base domain used to derive hostnames/URLs. | `localhost` | `example.com` |
+| Core app | `WLP_API_SUBDOMAIN` | API subdomain prefix used with `WLP_BASE_DOMAIN`. | `api` | `api` |
 | Tracking | `WLP_ENABLE_TRACKING` | Enables optional analytics/pixel bootstrapping in templates. | `false` | `true` |
 | Tracking | `WLP_GA_MEASUREMENT_ID` | Google Analytics 4 measurement ID used when tracking is enabled. | empty | `G-XXXXXXXXXX` |
 | Tracking | `WLP_TWITTER_PIXEL_ID` | X/Twitter pixel ID used when tracking is enabled. | empty | `p00pf` |
@@ -266,14 +272,10 @@ See [`.env.example`](.env.example) for full list.
 | SMTP | `SMTP_TIMEOUT_SECONDS` | Network timeout for SMTP connect/send operations. | `20` | `20` |
 | Redis runtime | `REDIS_HOST` | Redis host used by web/API runtime clients. | `127.0.0.1` | `redis` |
 | Redis runtime | `REDIS_PORT` | Redis port used by web/API runtime clients. | `6379` | `6379` |
-| Redis runtime | `WEB_REDIS_DB` | Redis DB index used by web runtime keys. | `0` | `0` |
-| Redis runtime | `API_REDIS_DB` | Redis DB index used by API runtime keys. | `WEB_REDIS_DB` | `0` |
 | Redis cache | `API_CACHE_REDIS_HOST` | Redis host used by API Flask-Caching backend. | `127.0.0.1` | `redis` |
 | Redis cache | `API_CACHE_DEFAULT_TIMEOUT` | Default TTL (seconds) for API cache entries. | `30` | `30` |
-| Redis cache | `API_CACHE_REDIS_DB` | Redis DB index for API cache. | `2` | `2` |
 | Redis cache | `WEB_CACHE_REDIS_HOST` | Redis host used by web Flask-Caching backend. | `127.0.0.1` | `redis` |
 | Redis cache | `WEB_CACHE_DEFAULT_TIMEOUT` | Default TTL (seconds) for web cache entries. | `30` | `30` |
-| Redis cache | `WEB_CACHE_REDIS_DB` | Redis DB index for web cache. | `1` | `1` |
 | Persistence | `DATABASE_URL` | SQLAlchemy database URL (SQLite WAL2 by default). | `sqlite:///database.db?journal_mode=WAL2` | `sqlite:////app/data/database.db?journal_mode=WAL2` |
 | Twilio | `TWILIO_ACCOUNT_SID` | Twilio account identifier. | empty | `ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` |
 | Twilio | `TWILIO_AUTH_TOKEN` | Twilio authentication token. | empty | `set-in-secret-store` |

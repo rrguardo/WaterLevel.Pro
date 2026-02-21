@@ -1,6 +1,21 @@
 #!/bin/sh
 set -eu
 
+: "${WLP_BASE_DOMAIN:=localhost}"
+: "${WLP_API_SUBDOMAIN:=api}"
+: "${WLP_SERVER_NAME:=${WLP_BASE_DOMAIN}}"
+
+if [ -z "${WLP_API_SERVER_NAME:-}" ]; then
+  if [ "${WLP_API_SUBDOMAIN}" = "@" ] || [ -z "${WLP_API_SUBDOMAIN}" ]; then
+    WLP_API_SERVER_NAME="${WLP_BASE_DOMAIN}"
+  else
+    WLP_API_SERVER_NAME="${WLP_API_SUBDOMAIN}.${WLP_BASE_DOMAIN}"
+  fi
+fi
+
+export WLP_SERVER_NAME
+export WLP_API_SERVER_NAME
+
 if [ ! -f "${WLP_SSL_CERT_PATH}" ] || [ ! -f "${WLP_SSL_KEY_PATH}" ]; then
   echo "[nginx-entrypoint] TLS cert or key not found at configured paths. Generating temporary self-signed cert."
 

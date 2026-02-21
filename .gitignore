@@ -163,3 +163,5 @@ cython_debug/
 .idea/
 ext_conf/docker/certs/*.key
 ext_conf/docker/certs/*.crt
+docs/ai/DEPLOY_AGENT_INPUT.private.yaml
+docs/ai/DEPLOY_AGENT_INPUT_TEMPLATE.private.yaml

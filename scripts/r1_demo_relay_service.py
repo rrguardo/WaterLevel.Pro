@@ -164,7 +164,10 @@ def parse_args():
     Returns:
         argparse.Namespace: Parsed command-line options.
     """
-    env_api_domain = os.getenv("API_DOMAIN", "https://api.localhost")
+    base_domain = os.getenv("WLP_BASE_DOMAIN", "localhost")
+    api_subdomain = os.getenv("WLP_API_SUBDOMAIN", "api")
+    derived_api_host = base_domain if api_subdomain in {"", "@"} else f"{api_subdomain}.{base_domain}"
+    env_api_domain = os.getenv("API_DOMAIN", f"https://{derived_api_host}")
     env_demo_pub = os.getenv("DEMO_RELAY_PUB_KEY", "3pubDEMO_RELAY_R1")
     env_demo_prv = os.getenv("DEMO_RELAY_PRV_KEY", "3prvDEMO_RELAY_R1")
 

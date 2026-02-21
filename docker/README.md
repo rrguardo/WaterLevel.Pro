@@ -4,6 +4,7 @@ This folder contains Docker-related configuration and runtime scripts.
 
 Fast setup from zero (test/real domain):
 - [`docs/SETUP_DOCKER_FAST.md`](../docs/SETUP_DOCKER_FAST.md)
+- AI-agent deploy handoff (real VPS + Cloudflare options): [`docs/DEPLOY_VPS_AI_AGENT_README.md`](../docs/DEPLOY_VPS_AI_AGENT_README.md)
 
 ## Quick start
 
@@ -49,16 +50,17 @@ Cron jobs in Docker include:
 
 Runtime Redis note:
 
-- Keep `WEB_REDIS_DB` and `API_REDIS_DB` on the same DB index if web routes need to read live device keys written by API updates.
+- Redis DB indexes are fixed internally for minimal setup:
+	- runtime keys: DB `0`
+	- web cache: DB `1`
+	- api cache: DB `2`
 
 ## Networking and hostnames
 
 Nginx hostnames/upstreams are configurable through `.env`:
 
-- `APP_DOMAIN` (default: `https://localhost`)
-- `API_DOMAIN` (default: `https://api.localhost`)
-- `WLP_SERVER_NAME` (default: `localhost`)
-- `WLP_API_SERVER_NAME` (default: `api.localhost`)
+- `WLP_BASE_DOMAIN` (default: `localhost`)
+- `WLP_API_SUBDOMAIN` (default: `api`)
 - `WLP_WEB_UPSTREAM` (default: `app:8000`)
 - `WLP_API_UPSTREAM` (default: `app:8001`)
 - `WLP_SSL_CERT_PATH` (default: `/etc/nginx/certs/localhost.crt`)
@@ -92,10 +94,8 @@ Nginx behavior in Docker:
 
 Example `.env` for production:
 
-- `APP_DOMAIN=https://example.com`
-- `API_DOMAIN=https://api.example.com`
-- `WLP_SERVER_NAME=example.com`
-- `WLP_API_SERVER_NAME=api.example.com`
+- `WLP_BASE_DOMAIN=example.com`
+- `WLP_API_SUBDOMAIN=api`
 
 After changing DNS values, recreate the stack:
 
