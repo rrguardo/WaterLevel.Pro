@@ -13,6 +13,13 @@ if [[ ! -f "$ROOT_DIR/.env" ]]; then
   fi
 fi
 
+# Compose variable interpolation does NOT use env_file; it uses the process environment.
+# Load .env so values like WLP_SERVER_NAME/WLP_API_SERVER_NAME are available for interpolation.
+set -a
+# shellcheck disable=SC1090
+. "$ROOT_DIR/.env"
+set +a
+
 docker compose \
   -f "$ROOT_DIR/docker/docker-compose.yml" \
   up --build "$@"
