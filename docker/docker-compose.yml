@@ -55,6 +55,11 @@ services:
     restart: unless-stopped
     depends_on:
       - app
+    networks:
+      default:
+        aliases:
+          - ${WLP_SERVER_NAME:-localhost}
+          - ${WLP_API_SERVER_NAME:-api.localhost}
     env_file:
       - ../.env
     ports:
