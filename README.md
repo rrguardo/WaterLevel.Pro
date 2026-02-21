@@ -103,6 +103,17 @@ Docker setup and operational notes are documented in:
 - AI-agent-ready VPS deployment handoff (including Cloudflare option):
    - [`docs/DEPLOY_VPS_AI_AGENT_README.md`](docs/DEPLOY_VPS_AI_AGENT_README.md)
 
+What the AI-agent deploy does (brief):
+- Uses `docs/ai/DEPLOY_AGENT_INPUT.private.yaml` as the single source of truth for a real VPS deploy.
+- Installs/validates Docker + Compose, writes `.env`, and starts the stack from `docker/docker-compose.yml`.
+- Keeps Nginx as the only public ingress (`80/443`) and applies a firewall baseline.
+- Optionally automates Cloudflare DNS (and Cloudflare Origin CA TLS for `Full (strict)`).
+- Optionally applies SMTP DNS records (SPF/DKIM/DMARC) and supports direct-send SMTP mode (`SMTP_SERVER=127.0.0.1`, port `25`).
+- Runs post-deploy checks (smoke test + `/ping` + `/link`).
+
+Tested deployment profile (real VPS):
+- AlmaLinux 10, 1 vCPU / 1 GB RAM, `firewalld`, Cloudflare proxied + `Full (strict)`, and direct-send SMTP mode.
+
 Basic run:
 1. Copy `.env.example` to `.env`
 2. Pull public image (optional but recommended for fast deploy): `docker pull rguardo/waterlevel-pro:latest`

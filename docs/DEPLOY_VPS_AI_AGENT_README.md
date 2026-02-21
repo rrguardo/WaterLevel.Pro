@@ -7,6 +7,12 @@ It is designed for:
 - Minimal back-and-forth in chat
 - Clear Cloudflare-enabled or non-Cloudflare paths
 
+Tested (real deployment profile):
+- AlmaLinux 10, 1 vCPU / 1 GB RAM
+- Firewall: `firewalld` with default-deny inbound (allow only `22/80/443`)
+- Cloudflare proxied with SSL mode `Full (strict)` using Cloudflare Origin CA certificate
+- Email: direct-send SMTP mode configured (`SMTP_SERVER=127.0.0.1`, port `25`) plus SPF/DKIM/DMARC DNS applied
+
 ## Table of contents
 
 - [Scope](#scope)
@@ -29,6 +35,14 @@ This guide targets the current WLP runtime model:
    - web host derived from `domain.web`
    - api host derived from `domain.api`
 - Single-node SQLite + Redis model
+
+What the AI agent deploy does (brief):
+- Provisions the VPS for WLP (Docker, Compose plugin, repo sync to `project.deploy_path`).
+- Generates/updates runtime `.env` from the handoff input and keeps secrets out of git.
+- Applies the firewall baseline and preserves the “Nginx-only ingress” model.
+- If Cloudflare is enabled, can create/update required DNS records and install a Cloudflare Origin CA cert for `Full (strict)`.
+- If SMTP DNS automation is enabled, can create/update SPF/DKIM/DMARC records.
+- Brings up the stack (`docker compose up -d --build`) and runs validation (`./scripts/docker_smoke_test.sh`, plus `/ping` and `/link`).
 
 ## Files you should use
 
