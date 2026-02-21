@@ -2,6 +2,20 @@
 
 All notable changes to this project are documented in this file.
 
+## v1.0.1 - 2026-02-21
+
+### Added
+- Cron env bootstrap script `docker/cron-env.sh` and updated `ext_conf/crontab.ini` so jobs reliably inherit the container env.
+- Nginx internal network aliases for `${WLP_SERVER_NAME}` and `${WLP_API_SERVER_NAME}` so cron simulator traffic uses correct TLS SNI + host routing.
+
+### Fixed
+- Cron demo simulators routing: jobs now post to `https://${WLP_API_SERVER_NAME}` (not `https://nginx` / HTTP redirect), preventing HTML/502 responses caused by SNI/redirect mismatches.
+- Compose rebuild behavior: `cron` now supports `build:` so repo changes (cron scripts/schedule) can be applied with `docker compose ... up --build`.
+
+### Changed
+- Docker helper scripts now use `docker compose --env-file .env ...` so Compose interpolation always uses the intended env values (no `docker/.env` workaround).
+- Deployment docs updated with Cloudflare/TLS guardrails and a brief “AI-agent deploy” summary, including tested profile (AlmaLinux 10, 1 vCPU / 1 GB RAM, `firewalld`, Cloudflare proxied + Full (strict), direct-send SMTP mode).
+
 ## 2026-02-20
 
 ### Added
