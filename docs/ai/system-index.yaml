@@ -64,7 +64,6 @@ source_of_truth:
   architecture: docs/ai/ARCHITECTURE.md
   operations: docs/ai/OPERATIONS_PLAYBOOK.md
   change_checklist: docs/ai/CHANGE_CHECKLIST.md
-  deploy_agent_template: docs/ai/DEPLOY_AGENT_METADATA_TEMPLATE.yaml
   deploy_user_template: docs/ai/DEPLOY_AGENT_INPUT_TEMPLATE.yaml
   deploy_chat_prompt_template: docs/ai/DEPLOY_CHAT_PROMPT_TEMPLATE.md
   deploy_vps_guide: docs/DEPLOY_VPS_AI_AGENT_README.md

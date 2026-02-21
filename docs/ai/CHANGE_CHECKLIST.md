@@ -17,6 +17,7 @@ Use this checklist before finishing runtime-impacting changes.
 ## 3) Background jobs/reporting
 
 - [ ] `ext_conf/crontab.ini` paths match container paths (`/app`, `/var/log/nginx`)
+- [ ] Cron jobs source `docker/cron-env.sh` (or equivalent) so jobs don't run with a minimal env
 - [ ] `cron` and `goaccess` shared volumes remain aligned
 
 ## 4) Validation

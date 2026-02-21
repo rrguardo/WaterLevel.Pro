@@ -12,6 +12,7 @@ It is designed for:
 - [Scope](#scope)
 - [Files you should use](#files-you-should-use)
 - [Minimal required information](#minimal-required-information)
+- [SMTP for alerts and device flows](#smtp-for-alerts-and-device-flows)
 - [Cloudflare deployment choices](#cloudflare-deployment-choices)
 - [Cloudflare API token (Free plan)](#cloudflare-api-token-free-plan)
 - [Cloudflare dashboard (click-by-click, Free plan)](#cloudflare-dashboard-click-by-click-free-plan)
@@ -71,6 +72,41 @@ This guide targets the current WLP runtime model:
 ### 6) Email mode
 - Test mode (`SMTP_TEST=true`) or production SMTP (`SMTP_TEST=false` + provider details)
 
+## SMTP for alerts and device flows
+
+SMTP is operationally important in WLP because it is used by alerting and device/account email flows.
+
+Use this default for real deployments:
+- `SMTP_TEST=false`
+- Minimal direct-send mode from VPS (default):
+   - `SMTP_SERVER=127.0.0.1`
+   - `SMTP_PORT=25`
+   - `SMTP_USE_STARTTLS=false`
+   - `SMTP_USE_SSL=false`
+   - `SMTP_USERNAME` and `SMTP_PASSWORD` empty
+
+### Required DNS for reliable sending
+
+At minimum configure:
+- SPF (`TXT` at root): authorize sender IP (`server.ip`)
+- DKIM (`TXT` at selector host): provider-supplied key
+- DMARC (`TXT` at `_dmarc.<domain>`)
+
+Optional but recommended:
+- `MX` records (if you also want inbound mailbox on same domain)
+
+### Cloudflare API automation for SMTP DNS
+
+If `dns_edge.provider=cloudflare` and DNS automation is enabled in template input:
+- Agent can create/update SPF, DKIM, and DMARC records automatically via Cloudflare API.
+- For minimal direct-send mode, SPF is generated from `server.ip`.
+- Required token permissions remain minimal:
+   - `Zone / DNS / Edit`
+   - `Zone / Zone / Read`
+
+Important:
+- Keep mail-auth records as `DNS only` (not proxied).
+
 ## Cloudflare deployment choices
 
 Assumed baseline in this guide: **Cloudflare Free plan**.
@@ -89,6 +125,12 @@ All required items below are compatible with Free.
 - Cloudflare proxies traffic to VPS
 - Recommended SSL mode: `Full (strict)`
 - Use valid origin certificate on VPS (`cloudflare_origin_cert` or public cert)
+
+Origin cert note (important for `Full (strict)`):
+- When using Cloudflare Origin CA, deploy the origin certificate as a *chain* at the path used by Nginx.
+- Practical rule: set `WLP_SSL_CERT_PATH` to a file that contains:
+   1) the Origin CA leaf certificate
+   2) plus the Cloudflare Origin CA root appended (so strict chain validation succeeds)
 
 ## Cloudflare API token (Free plan)
 
@@ -114,6 +156,14 @@ Use a **custom API Token** (not Global API Key).
 - Required if the agent should create/update DNS records through Cloudflare API.
 - Not required if you manage DNS and Cloudflare settings manually in dashboard.
 
+### Token validation in automation (important)
+
+- Do not rely only on `GET /user/tokens/verify`.
+- Validate with real zone-scoped checks:
+   - `GET /zones/{zone_id}/dns_records` (read)
+   - create+delete temporary TXT record (write)
+- This prevents false negatives where token verify endpoint fails but zone DNS permissions are valid.
+
 ### Recommended Cloudflare Free settings
 
 - Proxy status for `@` and `api`: `Proxied` (orange cloud) for edge protection.
@@ -121,6 +171,14 @@ Use a **custom API Token** (not Global API Key).
 - Always Use HTTPS: `On`.
 - TLS cert on VPS: Cloudflare Origin Certificate or publicly trusted cert.
 - Keep VPS firewall restricted to `22/80/443` only.
+
+### TLS hostname coverage caveat (Cloudflare Universal SSL)
+
+- Cloudflare Universal SSL commonly covers apex + one-level wildcard (for example: `example.com`, `*.example.com`).
+- Hostnames like `api.sub.example.com` may not be covered on Free plan by default.
+- If using deeper hostnames, choose one:
+   - enable Advanced Certificate Manager and include required SANs/wildcards, or
+   - use one-level hosts (for example: `sub.example.com` + `api.example.com`) and keep same base domain policy.
 
 ## Cloudflare dashboard (click-by-click, Free plan)
 

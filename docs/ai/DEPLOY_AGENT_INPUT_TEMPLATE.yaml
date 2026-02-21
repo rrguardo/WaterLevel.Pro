@@ -20,6 +20,10 @@ domain:
   web: example.com
   api: api.example.com
 
+# Cloudflare Universal SSL coverage note:
+# - Prefer one-level hosts like `api.example.com`.
+# - Deep hosts like `api.sub.example.com` may require Cloudflare Advanced Certificate Manager.
+
 dns_edge:
   provider: cloudflare # cloudflare | other | none
   mode: proxied # disabled | dns_only | proxied
@@ -40,6 +44,9 @@ tls:
   cert_path: /etc/nginx/certs/fullchain.pem
   key_path: /etc/nginx/certs/privkey.pem
   letsencrypt_email: admin@example.com
+
+# If using `cloudflare_origin_cert` with Cloudflare SSL mode `full_strict`:
+# - Ensure `cert_path` points to a PEM that includes the Origin CA leaf cert AND the Cloudflare Origin CA root appended.
 
 deploy_contract:
   runtime: docker-compose
@@ -64,15 +71,35 @@ env_required:
   WLP_SSL_CERT_PATH: /etc/nginx/certs/fullchain.pem
   WLP_SSL_KEY_PATH: /etc/nginx/certs/privkey.pem
 
-  SMTP_TEST: true
+  SMTP_TEST: false
   EMAIL_SENDER: '"Water Level .Pro" <no-reply@example.com>'
   SMTP_SERVER: 127.0.0.1
   SMTP_PORT: 25
   SMTP_USERNAME: ""
   SMTP_PASSWORD: ""
-  SMTP_USE_STARTTLS: true
+  SMTP_USE_STARTTLS: false
   SMTP_USE_SSL: false
   SMTP_TIMEOUT_SECONDS: 20
+
+smtp_dns:
+  mode: provider_managed # provider_managed | cloudflare_api_managed
+  sender_domain: example.com
+  dkim_auto_generate_on_vps: false
+  dkim_selector: selector1
+  records:
+    spf:
+      host: "@"
+      type: TXT
+      value: "v=spf1 ip4:<server.ip> -all" # replace <server.ip> using server.ip above
+    dkim:
+      host: "selector1._domainkey"
+      type: TXT
+      value: "v=DKIM1; k=rsa; p=REPLACE_WITH_PROVIDER_KEY"
+    dmarc:
+      host: "_dmarc"
+      type: TXT
+      value: "v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com"
+  cloudflare_apply_dns_only: true
 
 env_optional:
   WLP_ENABLE_TRACKING: false
@@ -166,3 +193,23 @@ notes:
 #   SMTP_USE_STARTTLS: true
 #   SMTP_USE_SSL: false
 #   SMTP_TIMEOUT_SECONDS: 20
+
+# sample_smtp_dns_cloudflare_api_managed:
+#   mode: cloudflare_api_managed
+#   sender_domain: mydomain.com
+#   dkim_auto_generate_on_vps: true
+#   dkim_selector: selector1
+#   records:
+#     spf:
+#       host: "@"
+#       type: TXT
+#       value: "v=spf1 ip4:203.0.113.20 -all" # usually server.ip
+#     dkim:
+#       host: "selector1._domainkey"
+#       type: TXT
+#       value: "AUTO_FROM_VPS_GENERATED_PUBLIC_KEY"
+#     dmarc:
+#       host: "_dmarc"
+#       type: TXT
+#       value: "v=DMARC1; p=quarantine; rua=mailto:dmarc@mydomain.com"
+#   cloudflare_apply_dns_only: true

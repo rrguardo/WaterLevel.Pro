@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 ## 2026-02-20
 
 ### Added
-- AI deploy metadata template for low-input agents in `docs/ai/DEPLOY_AGENT_METADATA_TEMPLATE.yaml`.
+- AI deploy input template for low-input agents in `docs/ai/DEPLOY_AGENT_INPUT_TEMPLATE.yaml`.
 - Local Docker resync helper script `docker/resync.sh` for rebuilding/recreating runtime services without removing volumes.
 - Environment-driven tracking controls (`WLP_ENABLE_TRACKING`, `WLP_GA_MEASUREMENT_ID`, `WLP_TWITTER_PIXEL_ID`, `WLP_ENABLE_ADSENSE`, `WLP_ADSENSE_CLIENT_ID`).
 - Secure SMTP configuration knobs (`SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_USE_STARTTLS`, `SMTP_USE_SSL`, `SMTP_TIMEOUT_SECONDS`).

@@ -53,6 +53,11 @@ Demo simulators (cron-managed):
 - `scripts/r1_demo_relay_service.py`
 - In Docker cron, both target `https://nginx` with host header `${WLP_API_SERVER_NAME}` and run every 30 seconds.
 
+Cron env note:
+- Some cron implementations run jobs with a minimal environment.
+- If `${WLP_API_SERVER_NAME}` is missing at job runtime, the simulator can default to `api.localhost` and hit the wrong virtual host (web HTML instead of API `OK`).
+- The runtime uses `docker/cron-env.sh` (sourced by cron jobs in `ext_conf/crontab.ini`) to re-import the container env from PID 1 so the correct API host header is always applied.
+
 ## Domain/TLS config knobs
 
 - `WLP_SERVER_NAME`

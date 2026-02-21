@@ -25,7 +25,16 @@ Required behavior:
     - If DNS automation is requested, require Custom API Token with at least:
        - Zone.DNS.Edit
        - Zone.Zone.Read
-9) Return a concise execution report with:
+   - Validate Cloudflare credentials using real zone operations (list DNS records and create/delete a temporary TXT), not only `/user/tokens/verify`.
+   - Enforce Cloudflare edge cert coverage for all requested public hosts; if hostnames are deeper than one label (example: `api.sub.example.com`), require Advanced Certificate Manager or adjust hostnames to cert-covered pattern before finalizing.
+   - If `tls.source=cloudflare_origin_cert` and `ssl_mode=full_strict`, ensure the origin `fullchain.pem` includes the Cloudflare Origin CA root appended (leaf + Origin CA root) to avoid Cloudflare 526 errors.
+9) Enforce production SMTP readiness for alerts/device flows:
+   - default to SMTP_TEST=false unless explicitly marked test-only
+   - verify SPF, DKIM, DMARC records are configured
+   - for minimal direct-send mode, SPF must include server.ip (ip4)
+   - if smtp_dns.dkim_auto_generate_on_vps=true, generate DKIM keypair on VPS, set selector from smtp_dns.dkim_selector, and publish TXT via Cloudflare API
+   - if smtp_dns.mode=cloudflare_api_managed, create/update those DNS records via Cloudflare API as DNS-only
+10) Return a concise execution report with:
    - completed steps
    - failed steps
    - exact commands used
