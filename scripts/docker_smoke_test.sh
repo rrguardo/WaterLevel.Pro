@@ -77,8 +77,8 @@ fail() {
 }
 
 # Build application image and start runtime services.
-docker compose -f "$COMPOSE_FILE" build app
-GOACCESS_REFRESH_SECONDS=5 docker compose -f "$COMPOSE_FILE" up -d app nginx cron goaccess
+docker compose --env-file "$ROOT_DIR/.env" -f "$COMPOSE_FILE" build app
+GOACCESS_REFRESH_SECONDS=5 docker compose --env-file "$ROOT_DIR/.env" -f "$COMPOSE_FILE" up -d app nginx cron goaccess
 
 # Wait until all expected services are in running state.
 for i in $(seq 1 "$START_RETRIES"); do

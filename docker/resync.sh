@@ -14,12 +14,6 @@ if [[ ! -f "$ROOT_DIR/.env" ]]; then
   fi
 fi
 
-# Compose variable interpolation does NOT use env_file; it uses the process environment.
-set -a
-# shellcheck disable=SC1090
-. "$ROOT_DIR/.env"
-set +a
-
 BUILD_FLAG="--build"
 FORCE_RECREATE_FLAG="--force-recreate"
 INCLUDE_GOACCESS="0"
@@ -66,6 +60,7 @@ fi
 echo "[wlp] Resync services: ${SERVICES[*]}"
 
 docker compose \
+  --env-file "$ROOT_DIR/.env" \
   -f "$COMPOSE_FILE" \
   up -d $BUILD_FLAG $FORCE_RECREATE_FLAG "${SERVICES[@]}"
 
