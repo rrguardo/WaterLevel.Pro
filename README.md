@@ -1,6 +1,6 @@
 # WaterLevel.Pro (Open Source)
 
-[![Unit Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml) [![Docker Integration Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/integration-tests.yml) [![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/rrguardo/WaterLevel.Pro/gh-pages/badges/coverage.json)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml) [![Docker Smoke Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml) [![Docker Publish](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml) [![Docker Hub Version](https://img.shields.io/docker/v/rguardo/waterlevel-pro?label=Docker%20Hub&sort=semver)](https://hub.docker.com/r/rguardo/waterlevel-pro) [![Docker Hub Pulls](https://img.shields.io/docker/pulls/rguardo/waterlevel-pro?label=Pulls)](https://hub.docker.com/r/rguardo/waterlevel-pro)
+[![Unit Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml) [![Docker Integration Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/integration-tests.yml) [![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/rrguardo/WaterLevel.Pro/gh-pages/badges/coverage.json)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/unit-tests.yml) [![Docker Smoke Tests](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-smoke.yml) [![Docker Publish](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/rrguardo/WaterLevel.Pro/actions/workflows/docker-publish.yml) [![Docker Hub Version](https://img.shields.io/docker/v/rguardo/waterlevel-pro?label=Docker%20Hub&sort=semver)](https://hub.docker.com/r/rguardo/waterlevel-pro) [![Docker Hub Pulls](https://img.shields.io/docker/pulls/rguardo/waterlevel-pro?label=Pulls)](https://hub.docker.com/r/rguardo/waterlevel-pro) [![GitHub Copilot: AI capable](https://img.shields.io/badge/GitHub%20Copilot-AI%20capable-6e40c9?logo=githubcopilot&logoColor=white)](https://github.com/features/copilot)
 
 Open-source server-side platform for:
 - [WiFi-Water-Level-S1](https://github.com/rrguardo/WiFi-Water-Level-S1) (smart tank/cistern water level monitoring)
@@ -62,6 +62,7 @@ SEO keywords: IoT water level monitoring, smart water pump controller, Flask bac
 - Gunicorn runtime for both Flask surfaces in one `app` container
 - Cron automation for email alerts, SMS alerts, and GoAccess report generation
 - Smoke-test contract for deployment validation ([`scripts/docker_smoke_test.sh`](scripts/docker_smoke_test.sh))
+- Copilot-friendly workflow for requesting new features in VS Code (even for non-developers): [`docs/COPILOT_FEATURE_REQUESTS.md`](docs/COPILOT_FEATURE_REQUESTS.md)
 
 ## Project structure
 
@@ -332,6 +333,9 @@ In Python:
 ## Contributing
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+New to development and want Copilot to implement a feature for you?
+Start here: [`docs/COPILOT_FEATURE_REQUESTS.md`](docs/COPILOT_FEATURE_REQUESTS.md).
 
 ## Security
 
