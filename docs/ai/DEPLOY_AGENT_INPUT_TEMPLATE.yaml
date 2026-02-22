@@ -64,6 +64,11 @@ deploy_contract:
 
 env_required:
   APP_SEC_KEY: CHANGE_ME_STRONG_SECRET
+  # reCAPTCHA keys (recommended for production web auth flows)
+  # - APP_RECAPTCHA_SECRET_KEY: Google reCAPTCHA secret key
+  # - RECAPTCHA_PUBLIC_KEY: Google reCAPTCHA site key
+  APP_RECAPTCHA_SECRET_KEY: ""
+  RECAPTCHA_PUBLIC_KEY: ""
   # Domain/runtime host values are derived from `domain.web` and `domain.api` above.
   DATABASE_URL: sqlite:///database.db?journal_mode=WAL2
   WLP_WEB_UPSTREAM: app:8000
@@ -87,6 +92,9 @@ smtp_dns:
   dkim_auto_generate_on_vps: false
   dkim_selector: selector1
   records:
+    # TXT record note:
+    # - The content/value field of TXT records must be in quotation marks.
+    # - Cloudflare may add quotation marks on your behalf, which will not affect how the record works.
     spf:
       host: "@"
       type: TXT
@@ -111,15 +119,13 @@ env_optional:
   TWILIO_AUTH_TOKEN: ""
   TWILIO_NUMBER: ""
 
-verification_targets:
-  web_ping:
-    url: https://example.com/ping
-    host_header: example.com
-    expect_contains: PONG
-  api_link:
-    url: https://api.example.com/link
-    host_header: api.example.com
-    expect_contains: FAIL
+# verification_targets is OPTIONAL.
+# By default, the agent can derive these from `domain.web` and `domain.api`:
+# - web_ping: https://<domain.web>/ping (expect: PONG)
+# - api_link: https://<domain.api>/link (expect: FAIL)
+#
+# Only provide `verification_targets` if you need to override where checks run
+# (for example validating through `https://localhost/...`, `https://<server.ip>/...`, or `https://nginx/...` inside Docker).
 
 constraints:
   api_must_be_subdomain_of_web: true
@@ -213,3 +219,13 @@ notes:
 #       type: TXT
 #       value: "v=DMARC1; p=quarantine; rua=mailto:dmarc@mydomain.com"
 #   cloudflare_apply_dns_only: true
+
+# sample_verification_targets_via_localhost:
+#   web_ping:
+#     url: https://localhost/ping
+#     host_header: example.com
+#     expect_contains: PONG
+#   api_link:
+#     url: https://localhost/link
+#     host_header: api.example.com
+#     expect_contains: FAIL

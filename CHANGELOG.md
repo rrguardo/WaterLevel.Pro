@@ -2,6 +2,25 @@
 
 All notable changes to this project are documented in this file.
 
+## Unreleased
+
+- (no changes)
+
+## v1.0.2 - 2026-02-22
+
+### Added
+- Deployment agent input template: add optional reCAPTCHA env keys (`APP_RECAPTCHA_SECRET_KEY`, `RECAPTCHA_PUBLIC_KEY`).
+- CI docker smoke tests: allow optional reCAPTCHA keys via GitHub Secrets; smoke script persists provided env overrides into `.env`.
+- Deployment agent input template: document that `verification_targets` is optional and provide a localhost override example.
+
+### Fixed
+- Relay UI: restore the rocker-style ON/OFF switch styling so it no longer renders as a plain checkbox.
+
+### Changed
+- Device embed mode (`smallversion=1`): hide the global open-source attribution footer in the embedded iframe view.
+- Docker Compose: remove default `DEMO_*` env overrides from the `cron` service so runtime keys come from `.env`.
+- Deployment docs: explicitly note that `TXT` record values should be in quotation marks (Cloudflare may auto-add quotes; behavior is unchanged).
+
 ## v1.0.1 - 2026-02-21
 
 ### Added

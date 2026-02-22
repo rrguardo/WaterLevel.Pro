@@ -106,6 +106,10 @@ At minimum configure:
 - DKIM (`TXT` at selector host): provider-supplied key
 - DMARC (`TXT` at `_dmarc.<domain>`)
 
+TXT record note:
+- The content/value field of `TXT` records must be in quotation marks.
+- Cloudflare may add quotation marks on your behalf, which will not affect how the record works.
+
 Optional but recommended:
 - `MX` records (if you also want inbound mailbox on same domain)
 

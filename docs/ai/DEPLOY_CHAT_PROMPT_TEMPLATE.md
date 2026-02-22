@@ -31,6 +31,7 @@ Required behavior:
 9) Enforce production SMTP readiness for alerts/device flows:
    - default to SMTP_TEST=false unless explicitly marked test-only
    - verify SPF, DKIM, DMARC records are configured
+   - TXT record content must be in quotation marks (Cloudflare may auto-add quotes; it does not change behavior)
    - for minimal direct-send mode, SPF must include server.ip (ip4)
    - if smtp_dns.dkim_auto_generate_on_vps=true, generate DKIM keypair on VPS, set selector from smtp_dns.dkim_selector, and publish TXT via Cloudflare API
    - if smtp_dns.mode=cloudflare_api_managed, create/update those DNS records via Cloudflare API as DNS-only

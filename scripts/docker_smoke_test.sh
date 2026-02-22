@@ -28,6 +28,29 @@ cd "$ROOT_DIR"
 # Use a known env baseline for smoke checks.
 cp .env.example .env
 
+# Optional overrides from CI secrets.
+# If APP_RECAPTCHA_SECRET_KEY / RECAPTCHA_PUBLIC_KEY are provided as environment
+# variables, persist them into .env so docker compose env_file picks them up.
+persist_env_override() {
+  key="$1"
+  value="${!key:-}"
+  if [ -z "$value" ]; then
+    return
+  fi
+
+  # Remove any existing definition, then append a safely-quoted value.
+  grep -v -E "^${key}=" .env > .env.tmp || true
+  mv .env.tmp .env
+
+  escaped="$value"
+  escaped="${escaped//\\/\\\\}"
+  escaped="${escaped//\"/\\\"}"
+  printf '%s="%s"\n' "$key" "$escaped" >> .env
+}
+
+persist_env_override APP_RECAPTCHA_SECRET_KEY
+persist_env_override RECAPTCHA_PUBLIC_KEY
+
 read_env_value() {
   key="$1"
   grep -E "^${key}=" .env | tail -n 1 | cut -d= -f2- || true

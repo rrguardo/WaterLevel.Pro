@@ -12,6 +12,11 @@ jobs:
   docker-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      # Optional: define these in GitHub Secrets to validate production-like reCAPTCHA wiring.
+      # If unset, smoke tests continue using values from .env.example.
+      APP_RECAPTCHA_SECRET_KEY: ${{ secrets.APP_RECAPTCHA_SECRET_KEY }}
+      RECAPTCHA_PUBLIC_KEY: ${{ secrets.RECAPTCHA_PUBLIC_KEY }}
 
     steps:
       - name: Checkout repository
