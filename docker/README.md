@@ -67,6 +67,10 @@ Nginx hostnames/upstreams are configurable through `.env`:
 - `WLP_SSL_KEY_PATH` (default: `/etc/nginx/certs/localhost.key`)
 - `WLP_APP_IMAGE` (default: `rguardo/waterlevel-pro:latest`)
 
+Timezone in Docker:
+
+- `WLP_TZ` (default: `America/Santo_Domingo`, UTC-4 no DST)
+
 Optional tracking and ads (disabled by default, app service only):
 
 - `WLP_ENABLE_TRACKING` (default: `false`)

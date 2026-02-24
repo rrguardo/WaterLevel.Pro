@@ -1,6 +1,18 @@
 #!/bin/sh
 set -eu
 
+if [ -n "${TZ:-}" ]; then
+  if [ ! -d /usr/share/zoneinfo ]; then
+    apk add --no-cache tzdata >/dev/null || true
+  fi
+
+  ZONEINFO="/usr/share/zoneinfo/${TZ}"
+  if [ -f "${ZONEINFO}" ]; then
+    ln -snf "${ZONEINFO}" /etc/localtime
+    echo "${TZ}" > /etc/timezone || true
+  fi
+fi
+
 : "${WLP_BASE_DOMAIN:=localhost}"
 : "${WLP_API_SUBDOMAIN:=api}"
 : "${WLP_SERVER_NAME:=${WLP_BASE_DOMAIN}}"

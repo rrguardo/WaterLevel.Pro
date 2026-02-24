@@ -8,6 +8,7 @@ services:
     env_file:
       - ../.env
     environment:
+      TZ: ${WLP_TZ:-America/Santo_Domingo}
       REDIS_HOST: 127.0.0.1
       REDIS_PORT: 6379
       API_CACHE_REDIS_HOST: 127.0.0.1
@@ -32,6 +33,7 @@ services:
     env_file:
       - ../.env
     environment:
+      TZ: ${WLP_TZ:-America/Santo_Domingo}
       REDIS_HOST: app
       REDIS_PORT: 6379
       API_CACHE_REDIS_HOST: app
@@ -58,6 +60,8 @@ services:
           - ${WLP_API_SERVER_NAME:-api.localhost}
     env_file:
       - ../.env
+    environment:
+      TZ: ${WLP_TZ:-America/Santo_Domingo}
     ports:
       - "80:80"
       - "443:443"
@@ -75,6 +79,7 @@ services:
     depends_on:
       - nginx
     environment:
+      TZ: ${WLP_TZ:-America/Santo_Domingo}
       GOACCESS_REFRESH_SECONDS: ${GOACCESS_REFRESH_SECONDS:-600}
     volumes:
       - ../ext_conf/docker/goaccess-runner.sh:/goaccess-runner.sh:ro

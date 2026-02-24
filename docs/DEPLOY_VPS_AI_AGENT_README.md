@@ -80,6 +80,7 @@ What the AI agent deploy does (brief):
 
 ### 5) Runtime env values
 - Domain runtime values are derived from `domain.web` and `domain.api`
+- `WLP_TZ` (container timezone; default `America/Santo_Domingo`, UTC-4 no DST)
 - `WLP_WEB_UPSTREAM`, `WLP_API_UPSTREAM`
 - `WLP_SSL_CERT_PATH`, `WLP_SSL_KEY_PATH`
 

@@ -1,6 +1,14 @@
 #!/bin/sh
 set -eu
 
+if [ -n "${TZ:-}" ]; then
+  ZONEINFO="/usr/share/zoneinfo/${TZ}"
+  if [ -f "${ZONEINFO}" ]; then
+    ln -snf "${ZONEINFO}" /etc/localtime
+    echo "${TZ}" > /etc/timezone || true
+  fi
+fi
+
 DB_TARGET="/app/data/database.db"
 
 if [ ! -f "$DB_TARGET" ] && [ -f database.opensource.db ]; then
