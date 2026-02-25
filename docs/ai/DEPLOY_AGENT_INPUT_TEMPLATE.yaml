@@ -64,6 +64,8 @@ deploy_contract:
 
 env_required:
   APP_SEC_KEY: CHANGE_ME_STRONG_SECRET
+  # Container timezone (default: Dominican Republic, UTC-4 no DST)
+  WLP_TZ: America/Santo_Domingo
   # reCAPTCHA keys (recommended for production web auth flows)
   # - APP_RECAPTCHA_SECRET_KEY: Google reCAPTCHA secret key
   # - RECAPTCHA_PUBLIC_KEY: Google reCAPTCHA site key
@@ -115,6 +117,12 @@ env_optional:
   WLP_TWITTER_PIXEL_ID: ""
   WLP_ENABLE_ADSENSE: false
   WLP_ADSENSE_CLIENT_ID: ""
+  # Demo device keys (optional). If you run demo simulators via cron, keep these aligned
+  # with the rows in SQLite `devices` table (public_key/private_key).
+  DEMO_S1_PUB_KEY: "1pubDEMO_SENSOR_S1"
+  DEMO_S1_PRV_KEY: "1prvDEMO_SENSOR_S1"
+  DEMO_RELAY_PUB_KEY: "3pubDEMO_RELAY_R1"
+  DEMO_RELAY_PRV_KEY: "3prvDEMO_RELAY_R1"
   TWILIO_ACCOUNT_SID: ""
   TWILIO_AUTH_TOKEN: ""
   TWILIO_NUMBER: ""

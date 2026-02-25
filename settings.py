@@ -42,6 +42,7 @@ APP_RECAPTCHA_SECRET_KEY = os.getenv("APP_RECAPTCHA_SECRET_KEY", "")
 RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY", "")
 WLP_BASE_DOMAIN = env_str("WLP_BASE_DOMAIN", "localhost")
 WLP_API_SUBDOMAIN = env_str("WLP_API_SUBDOMAIN", "api")
+WLP_TZ = env_str("WLP_TZ", "America/Santo_Domingo")
 
 WLP_SERVER_NAME = env_str("WLP_SERVER_NAME", WLP_BASE_DOMAIN)
 default_api_server_name = (

@@ -2,13 +2,17 @@
 
 All notable changes to this project are documented in this file.
 
-## Unreleased
+
+## v1.0.3 - 2026-02-25
 
 ### Added
 - Copilot feature-request guide for non-developers: `docs/COPILOT_FEATURE_REQUESTS.md`.
 
 ### Changed
 - README: add GitHub Copilot “AI capable” badge and link the feature-request guide.
+
+### Fixed
+- Docker entrypoint now always compiles Flask-Babel translations at container startup, fixing missing .mo files and restoring Spanish UI translations after rebuilds.
 
 ## v1.0.2 - 2026-02-22
 

@@ -66,6 +66,7 @@ Cron env note:
 - `WLP_API_UPSTREAM`
 - `WLP_SSL_CERT_PATH`
 - `WLP_SSL_KEY_PATH`
+- `WLP_TZ` (container timezone; default `America/Santo_Domingo`)
 
 ## Common failure signatures
 
