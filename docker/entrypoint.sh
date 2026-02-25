@@ -9,6 +9,10 @@ if [ -n "${TZ:-}" ]; then
   fi
 fi
 
+if [ -d /app/translations ]; then
+  pybabel compile -d /app/translations || true
+fi
+
 DB_TARGET="/app/data/database.db"
 
 if [ ! -f "$DB_TARGET" ] && [ -f database.opensource.db ]; then
