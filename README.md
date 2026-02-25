@@ -103,6 +103,8 @@ Docker setup and operational notes are documented in:
    - [`docs/SETUP_DOCKER_FAST.md`](docs/SETUP_DOCKER_FAST.md)
 - AI-agent-ready VPS deployment handoff (including Cloudflare option):
    - [`docs/DEPLOY_VPS_AI_AGENT_README.md`](docs/DEPLOY_VPS_AI_AGENT_README.md)
+   - New: safe production update prompt template:
+      - [`docs/ai/PROD_UPDATE_CHAT_PROMPT_TEMPLATE.md`](docs/ai/PROD_UPDATE_CHAT_PROMPT_TEMPLATE.md)
 
 What the AI-agent deploy does (brief):
 - Uses `docs/ai/DEPLOY_AGENT_INPUT.private.yaml` as the single source of truth for a real VPS deploy.

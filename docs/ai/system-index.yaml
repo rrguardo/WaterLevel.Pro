@@ -66,6 +66,7 @@ source_of_truth:
   change_checklist: docs/ai/CHANGE_CHECKLIST.md
   deploy_user_template: docs/ai/DEPLOY_AGENT_INPUT_TEMPLATE.yaml
   deploy_chat_prompt_template: docs/ai/DEPLOY_CHAT_PROMPT_TEMPLATE.md
+  prod_update_chat_prompt_template: docs/ai/PROD_UPDATE_CHAT_PROMPT_TEMPLATE.md
   deploy_vps_guide: docs/DEPLOY_VPS_AI_AGENT_README.md
   compose: docker/docker-compose.yml
   nginx_template: ext_conf/docker/nginx.conf.template

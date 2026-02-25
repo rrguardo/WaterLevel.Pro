@@ -282,7 +282,9 @@ After deploy, verify:
    - `cp docs/ai/DEPLOY_AGENT_INPUT_TEMPLATE.yaml docs/ai/DEPLOY_AGENT_INPUT.private.yaml`
 2. Fill all fields in the private file
 3. Use prompt from [docs/ai/DEPLOY_CHAT_PROMPT_TEMPLATE.md](ai/DEPLOY_CHAT_PROMPT_TEMPLATE.md)
-4. In chat, include:
+4. For LIVE production updates (safe mode), use:
+   - [docs/ai/PROD_UPDATE_CHAT_PROMPT_TEMPLATE.md](ai/PROD_UPDATE_CHAT_PROMPT_TEMPLATE.md)
+5. In chat, include:
    - path to your filled private file
    - explicit permission to run real deploy commands
 
