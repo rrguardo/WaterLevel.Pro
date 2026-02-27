@@ -3,6 +3,24 @@
 All notable changes to this project are documented in this file.
 
 
+## v1.0.4 - 2026-02-27
+
+### Added
+- New Water Volume card on the device page showing liters and a vertical fill bar.
+
+### Changed
+- Removed the inline "Current Volume" numeric display from the device header; numeric liters now presented only in the Water Volume card.
+
+### Fixed
+- Database compatibility: migrated legacy `litros_por_cm` -> `liters_per_cm` in demo seed DB and added safe migration SQL (`scripts/migrate_remove_litros_por_cm_from_sensor_settings.sql`).
+- `db.py`: return value for `load_device_settings` now supports attribute access and `.get()` (helps avoid runtime 500s).
+- `app.py`: `device_admin` now accepts and validates `LITERS_PER_CM` from sensor settings and persists it via `DevicesDB.update_sensor_settings`.
+
+### Notes
+- UI and templates updated: `templates/sensor_device_info.html` + related CSS and JS changes to support the Water Volume card.
+- Recommended: run integration tests and apply the same DB migration to the runtime DB (`/app/data/database.db`) if present.
+
+
 ## v1.0.3 - 2026-02-25
 
 ### Added

@@ -175,3 +175,34 @@
 .wlp-progress-initial {
   width: 0%;
 }
+
+/* Liters bar */
+.liters-bar-container {
+	width: 110px;
+}
+.liters-bar-outer {
+	width: 36px;
+	height: 160px;
+	border-radius: 6px;
+	background: linear-gradient(to top, #e74c3c 0%, #e74c3c 100%); /* red empty */
+	position: relative;
+	overflow: hidden;
+	margin: 0 auto;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.12) inset;
+}
+.liters-fill {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 0%;
+	background: linear-gradient(to top, #0d6efd 0%, #40a9ff 100%); /* blue water */
+	transition: height 600ms ease;
+}
+.liters-bar-labels {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.75rem;
+}
+

@@ -7,6 +7,19 @@ from flask_login import UserMixin
 from flask_caching import Cache
 import settings
 import logging
+class AttrDict(dict):
+    """Dictionary that supports attribute access and `.get()` like a normal dict.
+
+    Accessing missing attributes returns None (via dict.get).
+    """
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            return None
+
+    def __setattr__(self, name, value):
+        self[name] = value
 
 
 # Create a database engine using WAL2 mode (Write-Ahead Logging 2)
@@ -403,7 +416,14 @@ class DevicesDB:
         result.close()
         connection.close()
         if row:
-            return row
+            # Ensure liters_per_cm is present and has default if None
+            row_dict = dict(row._mapping) if hasattr(row, '_mapping') else dict(row)
+            # Ensure `liters_per_cm` exists with a sensible default
+            if 'liters_per_cm' not in row_dict or row_dict['liters_per_cm'] is None:
+                row_dict['liters_per_cm'] = 10.0
+            # Return a dict-like object that supports attribute access and `.get()`
+            return AttrDict(row_dict)
+        return None
 
     @staticmethod
     def load_s1_info(device_id):
@@ -440,21 +460,28 @@ class DevicesDB:
             return row
 
     @staticmethod
-    def update_sensor_settings(device_id, EMPTY_LEVEL=None, TOP_MARGIN=None, WIFI_POOL_TIME=None):
-        sql_query = """
-            INSERT OR REPLACE INTO sensor_settings (device, EMPTY_LEVEL, TOP_MARGIN, WIFI_POOL_TIME) 
-                VALUES (:device, :EMPTY_LEVEL, :TOP_MARGIN, :WIFI_POOL_TIME)
+    def update_sensor_settings(device_id, EMPTY_LEVEL=None, TOP_MARGIN=None, WIFI_POOL_TIME=None, LITERS_PER_CM=None):
+        # Build dynamic query based on present fields
+        fields = ["device"]
+        values = {"device": device_id}
+        if EMPTY_LEVEL is not None:
+            fields.append("EMPTY_LEVEL")
+            values["EMPTY_LEVEL"] = EMPTY_LEVEL
+        if TOP_MARGIN is not None:
+            fields.append("TOP_MARGIN")
+            values["TOP_MARGIN"] = TOP_MARGIN
+        if WIFI_POOL_TIME is not None:
+            fields.append("WIFI_POOL_TIME")
+            values["WIFI_POOL_TIME"] = WIFI_POOL_TIME
+        if LITERS_PER_CM is not None:
+            fields.append('liters_per_cm')
+            values['liters_per_cm'] = LITERS_PER_CM
+        sql_query = f"""
+            INSERT OR REPLACE INTO sensor_settings ({', '.join(fields)})
+                VALUES ({', '.join(':' + f for f in fields)})
         """
-        # use default from database
-        if not EMPTY_LEVEL and not TOP_MARGIN and not WIFI_POOL_TIME:
-            sql_query = """
-                INSERT OR REPLACE INTO sensor_settings (device) 
-                    VALUES (:device)
-            """
         with engine.connect() as connection:
-            result = connection.execute(text(sql_query), {
-                "device": device_id, "EMPTY_LEVEL": EMPTY_LEVEL, "TOP_MARGIN": TOP_MARGIN,
-                "WIFI_POOL_TIME": WIFI_POOL_TIME})
+            result = connection.execute(text(sql_query), values)
             connection.commit()
             if result:
                 cache.delete_memoized(DevicesDB.load_device_settings, device_id, 1)

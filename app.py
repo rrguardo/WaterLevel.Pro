@@ -917,8 +917,19 @@ def device_admin():
                 if WIFI_POOL_TIME > 432000:
                     flash("WIFI_POOL_TIME can't be bigger than 5 days (432000 seconds).", category='danger')
                     return redirect(url_for('device_info') + '?public_key=' + public_key)
+                # Parse optional liters-per-cm field from the form and validate
+                LITERS_PER_CM = request.form.get("LITERS_PER_CM")
+                if LITERS_PER_CM is not None and LITERS_PER_CM != '':
+                    try:
+                        LITERS_PER_CM = float(LITERS_PER_CM)
+                        if LITERS_PER_CM <= 0:
+                            flash("LITERS_PER_CM must be greater than 0", category='danger')
+                            return redirect(url_for('device_info') + '?public_key=' + public_key)
+                    except Exception:
+                        flash("Invalid LITERS_PER_CM value", category='danger')
+                        return redirect(url_for('device_info') + '?public_key=' + public_key)
 
-                if db.DevicesDB.update_sensor_settings(device_id, EMPTY_LEVEL, TOP_MARGIN, WIFI_POOL_TIME):
+                if db.DevicesDB.update_sensor_settings(device_id, EMPTY_LEVEL, TOP_MARGIN, WIFI_POOL_TIME, LITERS_PER_CM):
                     flash("Setting update success", category='success')
                     return redirect(url_for('device_info')+'?public_key='+public_key)
                 else:
@@ -938,22 +949,69 @@ def get_device_data():
         flask.Response: JSON response with device metrics.
     """
     key = request.args.get('key')
+    if not key:
+        return jsonify({'error': 'missing key'}), 400
 
     cache_key = f'tin-keys/{key}'
     result = redis_client.get(cache_key)
-    distance = 0
-    rtime = 0
-    rssi = 0
-    if result:
+    if not result:
+        return jsonify({'error': 'invalid key'}), 404
+
+    # Parse cached tuple: distance|rtime|voltage|rssi
+    try:
         distance, rtime, voltage, rssi = result.split("|")
         voltage = float(voltage) / 100.0
         diff_time = int(time.time()) - int(rtime)
-    else:
-        return jsonify({'error': 'invalid key'}), 404
+    except Exception:
+        return jsonify({'error': 'invalid cache format'}), 500
+
     setting_key = f'tin-sett-keys/{key}'
     srv_sett = redis_client.get(setting_key)
     if srv_sett:
         srv_sett = srv_sett.split("|")
+
+    # Try to enrich with DB sensor settings (new liters_per_cm field)
+    liters_per_cm = 10.0
+    empty_level = None
+    top_margin = None
+    try:
+        device = db.DevicesDB.load_device_by_public_key(key)
+        if device:
+            sensor_settings = db.DevicesDB.load_device_settings(device.id, device.type)
+            if sensor_settings:
+                liters_per_cm = float(sensor_settings.get('liters_per_cm', liters_per_cm))
+                if sensor_settings.get('EMPTY_LEVEL') is not None:
+                    empty_level = int(sensor_settings.get('EMPTY_LEVEL'))
+                if sensor_settings.get('TOP_MARGIN') is not None:
+                    top_margin = int(sensor_settings.get('TOP_MARGIN'))
+    except Exception:
+        logging.exception('Failed loading sensor settings from DB')
+
+    # Fallback to redis srv_sett format if DB settings not available
+    if empty_level is None and srv_sett and len(srv_sett) >= 2:
+        try:
+            empty_level = int(srv_sett[0])
+            top_margin = int(srv_sett[1])
+        except Exception:
+            pass
+
+    # Compute current liters if we have the necessary values
+    current_liters = None
+    water_height_cm = None
+    try:
+        dist_val = float(distance)
+        if empty_level is not None and top_margin is not None:
+            if dist_val > empty_level:
+                dist_val = empty_level
+            if dist_val < top_margin:
+                dist_val = top_margin
+            water_height_cm = empty_level - dist_val
+            if water_height_cm < 0:
+                water_height_cm = 0
+            current_liters = round(water_height_cm * liters_per_cm, 2)
+    except Exception:
+        # keep current_liters as None if parsing fails
+        pass
 
     data = {
         'distance': distance,
@@ -962,7 +1020,12 @@ def get_device_data():
         'device_setting': srv_sett,
         'diff_time': diff_time,
         'voltage': round(voltage, 2),
-        'rssi': rssi
+        'rssi': rssi,
+        'liters_per_cm': liters_per_cm,
+        'empty_level': empty_level,
+        'top_margin': top_margin,
+        'water_height_cm': water_height_cm,
+        'current_liters': current_liters
     }
     return jsonify(data)
 
