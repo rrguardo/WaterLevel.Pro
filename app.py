@@ -1013,6 +1013,10 @@ def get_device_data():
     if not key:
         return jsonify({'error': 'missing key'}), 400
 
+    # Support shorthand demo alias used by the public UI: map 'demo' to configured demo public key
+    if key == 'demo':
+        key = settings.DEMO_S1_PUB_KEY
+
     cache_key = f'tin-keys/{key}'
     result = redis_client.get(cache_key)
     if not result:
