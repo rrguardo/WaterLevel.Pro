@@ -7,9 +7,14 @@ All notable changes to this project are documented in this file.
 
 ### Added
 - New Water Volume card on the device page showing liters and a vertical fill bar.
+- New API endpoint `/sensor_stats` that returns 24 hourly aggregated buckets (average fill percent and reported voltage) for a sensor, based on Redis history points.
+- Two hourly charts on the device page: hourly fill percent (bar) and hourly voltage with computed battery charge (line + columns).
 
 ### Changed
 - Removed the inline "Current Volume" numeric display from the device header; numeric liters now presented only in the Water Volume card.
+- `templates/sensor_device_info.html`: moved hourly stats into two dedicated cards, restored English UI text for titles/labels, removed `:00` suffix from hour labels, improved tooltip wording and offline display handling.
+- Chart rendering polish: per-bar offline coloring, distributed bars for offline markers, and shared tooltips for mixed-series voltage/charge chart.
+- `api.py`: persisting per-update history points to Redis sorted set `tin-history/{pubkey}` as `"percent|voltage"` with epoch score; retention trimmed to recent days.
 
 ### Fixed
 - Database compatibility: migrated legacy `litros_por_cm` -> `liters_per_cm` in demo seed DB and added safe migration SQL (`scripts/migrate_remove_litros_por_cm_from_sensor_settings.sql`).
@@ -17,6 +22,8 @@ All notable changes to this project are documented in this file.
 - `app.py`: `device_admin` now accepts and validates `LITERS_PER_CM` from sensor settings and persists it via `DevicesDB.update_sensor_settings`.
 
 ### Notes
+- Redis history key retention is short-lived (~3 days) by default; for persistent history across restarts enable Redis persistence in Docker Compose.
+- Included `.gitlab-ci.yml` in the commit so CI config aligns with recent test/stack changes.
 - UI and templates updated: `templates/sensor_device_info.html` + related CSS and JS changes to support the Water Volume card.
 - Recommended: run integration tests and apply the same DB migration to the runtime DB (`/app/data/database.db`) if present.
 

@@ -17,11 +17,12 @@ services:
     volumes:
       - wlp_data:/app/data
       - wlp_reports:/app/reports
+      - wlp_redis:/data
     command:
       [
         "/bin/sh",
         "-c",
-        "redis-server --bind 0.0.0.0 --port 6379 --save '' --appendonly no --protected-mode no & gunicorn --workers 2 --bind 0.0.0.0:8000 app:app & gunicorn --workers 2 --bind 0.0.0.0:8001 api:app & wait"
+        "redis-server --bind 0.0.0.0 --port 6379 --appendonly yes --dir /data --protected-mode no & gunicorn --workers 2 --bind 0.0.0.0:8000 app:app & gunicorn --workers 2 --bind 0.0.0.0:8001 api:app & wait"
       ]
 
   cron:
@@ -91,3 +92,4 @@ volumes:
   wlp_data:
   wlp_reports:
   wlp_nginx_logs:
+  wlp_redis:

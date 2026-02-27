@@ -262,6 +262,67 @@ def admin_login_required(func):
     return decorated_view
 
 
+@app.route('/sensor_stats', methods=['GET'])
+def sensor_stats():
+    """Return hourly aggregated stats (last 24 hours) for a given sensor public key.
+
+    Query params:
+    - public_key: sensor public key or 'demo'
+
+    Returns JSON with 24 hourly buckets (oldest first) containing either
+    `percent` and `voltage` (averages) or `offline: true` when no data.
+    """
+    key = request.args.get('public_key')
+    if not key:
+        return jsonify({'error': 'missing public_key'}), 400
+
+    if key == 'demo':
+        key = settings.DEMO_S1_PUB_KEY
+
+    history_key = f'tin-history/{key}'
+    now = int(time.time())
+    start = now - 24 * 3600
+
+    buckets = []
+    for i in range(24):
+        bucket_start = start + i * 3600
+        bucket_end = bucket_start + 3599
+        try:
+            items = redis_client.zrangebyscore(history_key, bucket_start, bucket_end)
+        except Exception:
+            items = []
+
+        if not items:
+            buckets.append({
+                'hour_start': bucket_start,
+                'offline': True
+            })
+            continue
+
+        # parse items "percent|voltage"
+        percents = []
+        volts = []
+        for it in items:
+            try:
+                p, v = it.split('|')
+                percents.append(float(p))
+                volts.append(float(v))
+            except Exception:
+                continue
+
+        avg_percent = round(sum(percents) / len(percents), 1) if percents else None
+        avg_voltage = round(sum(volts) / len(volts), 2) if volts else None
+
+        buckets.append({
+            'hour_start': bucket_start,
+            'offline': False,
+            'percent': avg_percent,
+            'voltage': avg_voltage
+        })
+
+    return jsonify({'buckets': buckets})
+
+
 def validate_recaptcha(response):
     """Verify a reCAPTCHA token against Google verification endpoint.
 

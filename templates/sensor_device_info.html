@@ -418,6 +418,25 @@
 
 <hr class="row small_none">
 
+<!-- New: Hourly stats charts (last 24h) inserted before Add Alert -->
+<div class="row d-flex justify-content-center mb-3 small_none">
+    <div class="col-12">
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Fill percent last 24 hours</h5>
+                <div id="hourly-percent-chart" style="height:260px"></div>
+            </div>
+        </div>
+
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Battery charge last 24 hours</h5>
+                <div id="hourly-voltage-chart" style="height:260px"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row d-flex justify-content-center mb-3 small_none">
 
     <div class="card bg-light">
@@ -1403,6 +1422,87 @@ $(document).ready(function() {
 
     // Step: Initialize shared device-page interactions.
     window.WLPDevicePage.init(window.WLP_DEVICE_PAGE_CONFIG);
+});
+</script>
+
+<script>
+// -----------------------------------------------------------------------------
+// Section: Hourly stats fetching and charting
+// -----------------------------------------------------------------------------
+function renderHourlyCharts(publicKey) {
+    $.getJSON('/sensor_stats', { public_key: publicKey })
+      .done(function(resp) {
+          if(!resp || !resp.buckets) return;
+          var labels = [];
+          var percentData = [];
+          var voltageData = [];
+
+          resp.buckets.forEach(function(b) {
+              var d = new Date(b.hour_start * 1000);
+              var hh = d.getHours().toString().padStart(2,'0');
+              labels.push(hh);
+              if(b.offline) {
+                  percentData.push(null);
+                  voltageData.push(null);
+              } else {
+                  percentData.push(b.percent);
+                  voltageData.push(b.voltage);
+              }
+          });
+
+          // Percent chart (bar)
+                    var percentColors = percentData.map(function(v){ return (v === null ? '#e0e0e0' : '#00bfff'); });
+                    var optionsPercent = {
+                        series: [{ name: 'Fill %', data: percentData }],
+                        chart: { type: 'bar', height: 260 },
+                        plotOptions: { bar: { borderRadius: 4, distributed: true } },
+                        xaxis: { categories: labels },
+                        yaxis: { max: 100 },
+                        noData: { text: 'No data' },
+                        colors: percentColors,
+                        tooltip: { y: { formatter: function(val){ return val === null ? 'offline' : val + '%'; } } }
+                    };
+          if(window.hourlyPercentChart){
+              try{ window.hourlyPercentChart.destroy(); }catch(e){}
+          }
+          window.hourlyPercentChart = new ApexCharts(document.querySelector('#hourly-percent-chart'), optionsPercent);
+          window.hourlyPercentChart.render();
+
+          // Voltage chart (line)
+                    // Build battery percent series from voltage using existing mapVoltageToPercentage()
+                    var batteryPercentData = voltageData.map(function(v){
+                            if(v === null || v === undefined) return null;
+                            try { return mapVoltageToPercentage(parseFloat(v)); } catch(e) { return null; }
+                    });
+
+                    var optionsVolt = {
+                        series: [
+                                { name: 'Voltage (V)', type: 'line', data: voltageData },
+                                { name: 'Charge %', type: 'column', data: batteryPercentData }
+                        ],
+                        chart: { type: 'line', height: 260 },
+                        stroke: { width: [2, 0], curve: 'smooth' },
+                        plotOptions: { bar: { columnWidth: '50%', borderRadius: 4 } },
+                        xaxis: { categories: labels },
+                        yaxis: [{ title: { text: 'Voltage (V)' } }, { opposite: true, max: 100, title: { text: 'Charge %' } }],
+                        colors: ['#ff9900', '#00b050'],
+                        tooltip: { shared: true, y: { formatter: function(val, opts){ return val === null ? 'offline' : (opts.seriesIndex===0 ? val + ' V' : val + ' %'); } } }
+                    };
+          if(window.hourlyVoltChart){
+              try{ window.hourlyVoltChart.destroy(); }catch(e){}
+          }
+          window.hourlyVoltChart = new ApexCharts(document.querySelector('#hourly-voltage-chart'), optionsVolt);
+          window.hourlyVoltChart.render();
+
+      });
+}
+
+$(document).ready(function(){
+    try {
+        renderHourlyCharts("{{ key_used }}");
+    } catch(e) {
+        console.error(e);
+    }
 });
 </script>
 {% endblock %}

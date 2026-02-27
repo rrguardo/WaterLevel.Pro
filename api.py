@@ -307,6 +307,42 @@ def update():
     if can_update:
         cache_key = f'tin-keys/{key}'
         redis_client.set(cache_key, f"{distance}|{int(time.time())}|{voltage}|{rssi}")
+
+        # Persist history point for hourly aggregation (percent, voltage)
+        try:
+            db_device_settings = db.DevicesDB.load_device_settings(device_id=device_id, device_type=1)
+            # Compute percent fill using same logic as frontend
+            try:
+                EMPTY_LEVEL = float(db_device_settings.EMPTY_LEVEL)
+                TOP_MARGIN = float(db_device_settings.TOP_MARGIN)
+                dval = float(distance)
+                if EMPTY_LEVEL > 0 and EMPTY_LEVEL <= dval:
+                    percent = 0
+                else:
+                    if EMPTY_LEVEL == 0:
+                        EMPTY_LEVEL = 1.0
+                    usable = (EMPTY_LEVEL - TOP_MARGIN) if (EMPTY_LEVEL - TOP_MARGIN) != 0 else 1.0
+                    pct = 100.0 - ((dval - TOP_MARGIN) * 100.0 / usable)
+                    percent = int(max(0, min(100, pct)))
+            except Exception:
+                percent = 0
+
+            # voltage reported by device is integer-scaled (centi-volts), normalize
+            try:
+                voltage_val = float(voltage) / 100.0
+            except Exception:
+                voltage_val = 0.0
+
+            history_key = f'tin-history/{key}'
+            score = int(time.time())
+            # Store as "percent|voltage" string
+            redis_client.zadd(history_key, {f"{percent}|{voltage_val}": score})
+            # Keep recent history only (trim older than 3 days)
+            redis_client.zremrangebyscore(history_key, 0, score - 60 * 60 * 24 * 3)
+            # Optional TTL for the zset key (3 days)
+            redis_client.expire(history_key, 60 * 60 * 24 * 3)
+        except Exception:
+            logging.exception("failed to persist history point")
     else:
         logging.warning(f"This device can't update, id: {device_id}")
 
