@@ -92,6 +92,14 @@ class AppIntegrationTestCase(unittest.TestCase):
         self.assertEqual(200, ads_lower.status_code)
         self.assertEqual(200, ads_upper.status_code)
 
+    def test_sensor_stats_endpoint_integration(self):
+        # Call sensor_stats for demo public key and expect 24 buckets
+        response = self._get('/sensor_stats', params={'public_key': 'demo'}, host=self.runtime['web_host'])
+        self.assertEqual(200, response.status_code)
+        payload = response.json()
+        self.assertIn('buckets', payload)
+        self.assertEqual(24, len(payload['buckets']))
+
 
 if __name__ == "__main__":
     unittest.main()

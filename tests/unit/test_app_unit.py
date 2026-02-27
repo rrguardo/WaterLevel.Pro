@@ -113,6 +113,41 @@ class AppUnitTestCase(unittest.TestCase):
             self.assertEqual("99", payload["distance"])
             self.assertEqual(3.8, payload["voltage"])
 
+    def test_get_device_data_demo_alias(self):
+        # Ensure demo alias maps to configured demo public key
+        demo_pub = "1pubDEMO_TEST"
+        web_app.redis_client.set(f"tin-keys/{demo_pub}", "50|1700000000|370|-65")
+        with patch.object(web_app.settings, "DEMO_S1_PUB_KEY", demo_pub):
+            with patch("app.time.time", return_value=1700000030):
+                response = self.client.get("/data-api", query_string={"key": "demo"})
+                payload = response.get_json()
+                self.assertEqual(200, response.status_code)
+                self.assertEqual("50", payload["distance"])
+                self.assertAlmostEqual(3.7, payload["voltage"])
+
+    def test_sensor_stats_endpoint_unit(self):
+        # Patch redis zrangebyscore to return sample entries for aggregation
+        demo_pub = "1pubDEMO_TEST"
+        sample_items = ["60|3.8"]
+        fake_redis = web_app.redis_client
+        def fake_zrange(key, lo, hi):
+            return sample_items
+
+        with patch.object(web_app, 'redis_client') as rc:
+            rc.zrangebyscore = MagicMock(side_effect=fake_zrange)
+            with patch.object(web_app.settings, 'DEMO_S1_PUB_KEY', demo_pub):
+                with patch('app.time.time', return_value=1700003600):
+                    response = self.client.get('/sensor_stats', query_string={'public_key': 'demo'})
+                    self.assertEqual(200, response.status_code)
+                    payload = response.get_json()
+                    self.assertIn('buckets', payload)
+                    self.assertEqual(24, len(payload['buckets']))
+                    # first bucket should contain averaged values
+                    first = payload['buckets'][0]
+                    self.assertFalse(first.get('offline'))
+                    self.assertEqual(60.0, first.get('percent'))
+                    self.assertEqual(3.8, first.get('voltage'))
+
     def test_devices_post_paths(self):
         with patch.object(web_app, "current_user", SimpleNamespace(is_authenticated=False)):
             response_fail = self.client.post("/devices", data={"action": "add", "public_key": "1pubX"})

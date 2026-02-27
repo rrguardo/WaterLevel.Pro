@@ -163,6 +163,24 @@ class ApiUnitTestCase(unittest.TestCase):
         self.assertGreater(api.LAST_SENSOR_FW_VERSION, 0)
         self.assertGreater(api.LAST_RELAY_FW_VERSION, 0)
 
+    def test_update_persists_history_point(self):
+        # Ensure update() calls redis zadd/zremrangebyscore/expire when persisting history
+        fake_redis = MagicMock()
+        fake_redis.get.return_value = None
+        with patch.object(api, 'redis_client', fake_redis), \
+            patch('api.db.DevicesDB.valid_private_key', return_value='1pubSENSOR'), \
+            patch('api.db.DevicesDB.load_device_id_by_public_key', return_value=9), \
+            patch('api.db.DevicesDB.record_uptime'), \
+            patch('api.db.DevicesDB.load_device_settings', return_value=SimpleNamespace(EMPTY_LEVEL=100, TOP_MARGIN=0, WIFI_POOL_TIME=30)), \
+            patch('api.time.time', return_value=1700000100):
+
+            response = self.client.get('/update', query_string={'key': '1prvSENSOR', 'distance': '80', 'voltage': '375'}, headers={'RSSI':'-70'})
+            self.assertEqual(200, response.status_code)
+            # zadd should be called to store history point
+            self.assertTrue(fake_redis.zadd.called)
+            self.assertTrue(fake_redis.zremrangebyscore.called)
+            self.assertTrue(fake_redis.expire.called)
+
 
 if __name__ == "__main__":
     unittest.main()
