@@ -377,8 +377,8 @@
                                             <div id="liters-fill" class="liters-fill" style="height:0%"></div>
                                         </div>
                                         <div class="liters-bar-labels mt-2">
-                                            <span id="liters-value">- L</span>
-                                            <span class="ms-3 text-muted" id="liters-percent">0%</span>
+                                            <span id="liters-filled" class="text-primary fw-bold">- L</span>
+                                            <span class="ms-3 text-danger fw-bold" id="liters-empty">- L</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1057,30 +1057,43 @@ function fetchData() {
          updateBatteryChart(data.voltage);
 
         // Fetch computed liters from web endpoint and update liters card
-         $.get("/data-api?key={{ key_used }}", function(ld) {
-             if(ld && ld.current_liters !== null && ld.current_liters !== undefined){
-                 // Update numeric liters
-                 $('#liters-value').text(ld.current_liters + ' L');
+        $.get("/data-api?key={{ key_used }}", function(ld) {
+            if(ld && ld.current_liters !== null && ld.current_liters !== undefined){
+                // Use liters_per_cm from payload if present, otherwise fall back to server setting
+                var litersPerCm = ld.liters_per_cm || {{ device_setting.liters_per_cm if device_setting and device_setting.liters_per_cm else 10.0 }};
 
-                 // Compute percent based on usable tank height (do not count top margin)
-                 var percent = 0;
-                 if(ld.empty_level != null && ld.top_margin != null){
-                     var usable = (ld.empty_level - ld.top_margin);
-                     if(usable > 0 && ld.water_height_cm != null){
-                         percent = Math.round((ld.water_height_cm / usable) * 100);
-                         percent = Math.max(0, Math.min(100, percent));
-                     }
-                 }
-                 $('#liters-percent').text(percent + '%');
-                 $('#liters-fill').css('height', percent + '%');
-             } else {
-                 $('#liters-value').text('- L');
-                 $('#liters-percent').text('0%');
-                 $('#liters-fill').css('height', '0%');
-             }
+                // Update numeric liters (filled)
+                var filledLiters = Number(ld.current_liters) || 0;
+                $('#liters-filled').text(filledLiters + ' L').removeClass('text-danger').addClass('text-primary');
+
+                // Compute usable tank height and total capacity in liters
+                var emptyL = '- L';
+                var percent = 0;
+                if(ld.empty_level != null && ld.top_margin != null){
+                    var usable = (ld.empty_level - ld.top_margin);
+                    if(usable > 0){
+                        var totalLiters = usable * litersPerCm;
+                        var emptyLiters = Math.max(0, Math.round((totalLiters - filledLiters) * 100) / 100);
+                        emptyL = emptyLiters + ' L';
+
+                        // update fill bar by percent of usable height (water_height_cm / usable)
+                        if(ld.water_height_cm != null){
+                            percent = Math.round((ld.water_height_cm / usable) * 100);
+                            percent = Math.max(0, Math.min(100, percent));
+                        }
+                    }
+                }
+
+                $('#liters-empty').text(emptyL).removeClass('text-primary').addClass('text-danger');
+                $('#liters-fill').css('height', percent + '%');
+            } else {
+                $('#liters-filled').text('- L').removeClass('text-primary').addClass('text-muted');
+                $('#liters-empty').text('- L').removeClass('text-danger').addClass('text-muted');
+                $('#liters-fill').css('height', '0%');
+            }
         }).fail(function(){
-            $('#liters-value').text('- L');
-            $('#liters-percent').text('0%');
+            $('#liters-filled').text('- L').removeClass('text-primary').addClass('text-muted');
+            $('#liters-empty').text('- L').removeClass('text-danger').addClass('text-muted');
             $('#liters-fill').css('height', '0%');
         });
     });
