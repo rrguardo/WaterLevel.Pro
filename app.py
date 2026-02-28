@@ -281,7 +281,11 @@ def sensor_stats():
 
     history_key = f'tin-history/{key}'
     now = int(time.time())
-    start = now - 24 * 3600
+    # Align buckets to hour boundaries and include the current hour
+    # Use the next hour boundary as the end so the 24 buckets cover the
+    # last 24 one-hour windows including the current hour.
+    end = (now - (now % 3600)) + 3600
+    start = end - 24 * 3600
 
     buckets = []
     for i in range(24):
@@ -310,7 +314,8 @@ def sensor_stats():
             except Exception:
                 continue
 
-        avg_percent = round(sum(percents) / len(percents), 1) if percents else None
+        # Return integer percent values (no decimals) for frontend charts
+        avg_percent = int(round(sum(percents) / len(percents))) if percents else None
         avg_voltage = round(sum(volts) / len(volts), 2) if volts else None
 
         buckets.append({
@@ -321,6 +326,55 @@ def sensor_stats():
         })
 
     return jsonify({'buckets': buckets})
+
+
+@app.route('/sensor_stats_hour', methods=['GET'])
+def sensor_stats_hour():
+    """Return raw samples for a single hour bucket for a given sensor.
+
+    Query params:
+    - public_key: sensor public key or 'demo'
+    - hour_start: epoch seconds for the bucket start
+
+    Response: JSON with `samples`: list of { ts, percent, voltage }
+    """
+    key = request.args.get('public_key')
+    hour_start = request.args.get('hour_start')
+    if not key or hour_start is None:
+        return jsonify({'error': 'missing parameters'}), 400
+
+    try:
+        hour_start = int(hour_start)
+    except Exception:
+        return jsonify({'error': 'invalid hour_start'}), 400
+
+    if key == 'demo':
+        key = settings.DEMO_S1_PUB_KEY
+
+    history_key = f'tin-history/{key}'
+    bucket_start = hour_start
+    bucket_end = bucket_start + 3599
+
+    try:
+        items = redis_client.zrangebyscore(history_key, bucket_start, bucket_end, withscores=True)
+    except Exception:
+        items = []
+
+    samples = []
+    for member, score in items:
+        try:
+            p, v = member.split('|')
+            samples.append({
+                'ts': int(score),
+                'percent': float(p),
+                'voltage': float(v)
+            })
+        except Exception:
+            continue
+
+    # sort by timestamp ascending
+    samples.sort(key=lambda x: x['ts'])
+    return jsonify({'samples': samples})
 
 
 def validate_recaptcha(response):

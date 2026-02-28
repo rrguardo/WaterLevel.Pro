@@ -6,12 +6,18 @@ stages:
 unit_tests:
   stage: unit
   image: $PYTHON_IMAGE
+  variables:
+    REDIS_HOST: "127.0.0.1"
+    REDIS_PORT: "6379"
   parallel:
     matrix:
       - PYTHON_IMAGE: ["python:3.14", "python:3.15-rc"]
   before_script:
     - python -m pip install --upgrade pip
     - python -m pip install -r requirements.txt
+    # Install and start redis-server locally so tests can connect to 127.0.0.1
+    - apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y redis-server
+    - redis-server --save "" --appendonly no --daemonize yes || true
   script:
     - python -m unittest discover -s tests/unit -p 'test_*_unit.py' -v
   rules:
@@ -21,8 +27,14 @@ unit_tests:
 
 docker_smoke_and_integration_test:
   stage: test
+  variables:
+    REDIS_HOST: "127.0.0.1"
+    REDIS_PORT: "6379"
   before_script:
     - chmod +x scripts/docker_smoke_test.sh
+    # ensure a local redis is available for integration tests that expect 127.0.0.1
+    - apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y redis-server || true
+    - redis-server --save "" --appendonly no --daemonize yes || true
   script:
     - ./scripts/docker_smoke_test.sh
     - python -m unittest discover -s tests/integration -p 'test_*_integration.py' -v

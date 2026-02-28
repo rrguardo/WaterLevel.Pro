@@ -1429,6 +1429,13 @@ $(document).ready(function() {
 // -----------------------------------------------------------------------------
 // Section: Hourly stats fetching and charting
 // -----------------------------------------------------------------------------
+// Modal for hourly drilldown (inserted near charts)
+var hourlyDrillModalHtml = '\n<div class="modal fade" id="HourlyDrillModal" tabindex="-1" aria-hidden="true">\n  <div class="modal-dialog modal-xl">\n    <div class="modal-content">\n      <div class="modal-header">\n        <h5 class="modal-title">Hour details</h5>\n        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n      </div>\n      <div class="modal-body">\n        <div id="drill-percent-chart" style="height:300px"></div>\n        <hr/>\n        <div id="drill-voltage-chart" style="height:300px"></div>\n      </div>\n    </div>\n  </div>\n</div>\n';
+// Append modal to body once
+if(!document.getElementById('HourlyDrillModal')){
+    document.body.insertAdjacentHTML('beforeend', hourlyDrillModalHtml);
+}
+
 function renderHourlyCharts(publicKey) {
     $.getJSON('/sensor_stats', { public_key: publicKey })
       .done(function(resp) {
@@ -1438,62 +1445,122 @@ function renderHourlyCharts(publicKey) {
           var voltageData = [];
 
           resp.buckets.forEach(function(b) {
-              var d = new Date(b.hour_start * 1000);
+              var d = new Date((b.hour_start + 3600) * 1000);
               var hh = d.getHours().toString().padStart(2,'0');
               labels.push(hh);
               if(b.offline) {
                   percentData.push(null);
                   voltageData.push(null);
               } else {
-                  percentData.push(b.percent);
+                  percentData.push(Math.round(b.percent));
                   voltageData.push(b.voltage);
               }
           });
 
-          // Percent chart (bar)
-                    var percentColors = percentData.map(function(v){ return (v === null ? '#e0e0e0' : '#00bfff'); });
-                    var optionsPercent = {
-                        series: [{ name: 'Fill %', data: percentData }],
-                        chart: { type: 'bar', height: 260 },
-                        plotOptions: { bar: { borderRadius: 4, distributed: true } },
-                        xaxis: { categories: labels },
-                        yaxis: { max: 100 },
-                        noData: { text: 'No data' },
-                        colors: percentColors,
-                        tooltip: { y: { formatter: function(val){ return val === null ? 'offline' : val + '%'; } } }
-                    };
-          if(window.hourlyPercentChart){
-              try{ window.hourlyPercentChart.destroy(); }catch(e){}
-          }
+          // Percent chart (bar) with dataPointSelection handler for drilldown
+          var percentColors = percentData.map(function(v){ return (v === null ? '#e0e0e0' : '#00bfff'); });
+          var optionsPercent = {
+              series: [{ name: 'Fill %', data: percentData }],
+              chart: {
+                  type: 'bar', height: 260,
+                  events: {
+                      dataPointSelection: function(event, chartContext, config){
+                          var idx = config.dataPointIndex;
+                          if(typeof idx === 'number' && idx >= 0){
+                              var bucket = resp.buckets[idx];
+                              renderHourlyDrill(publicKey, bucket.hour_start);
+                          }
+                      }
+                  }
+              },
+              plotOptions: { bar: { borderRadius: 4, distributed: true } },
+              xaxis: { categories: labels },
+              yaxis: { max: 100 },
+              noData: { text: 'No data' },
+              colors: percentColors,
+              tooltip: { y: { formatter: function(val){ return val === null ? 'offline' : Math.round(val) + '%'; } } }
+          };
+          if(window.hourlyPercentChart){ try{ window.hourlyPercentChart.destroy(); }catch(e){} }
           window.hourlyPercentChart = new ApexCharts(document.querySelector('#hourly-percent-chart'), optionsPercent);
           window.hourlyPercentChart.render();
 
-          // Voltage chart (line)
-                    // Build battery percent series from voltage using existing mapVoltageToPercentage()
-                    var batteryPercentData = voltageData.map(function(v){
-                            if(v === null || v === undefined) return null;
-                            try { return mapVoltageToPercentage(parseFloat(v)); } catch(e) { return null; }
-                    });
-
-                    var optionsVolt = {
-                        series: [
-                                { name: 'Voltage (V)', type: 'line', data: voltageData },
-                                { name: 'Charge %', type: 'column', data: batteryPercentData }
-                        ],
-                        chart: { type: 'line', height: 260 },
-                        stroke: { width: [2, 0], curve: 'smooth' },
-                        plotOptions: { bar: { columnWidth: '50%', borderRadius: 4 } },
-                        xaxis: { categories: labels },
-                        yaxis: [{ title: { text: 'Voltage (V)' } }, { opposite: true, max: 100, title: { text: 'Charge %' } }],
-                        colors: ['#ff9900', '#00b050'],
-                        tooltip: { shared: true, y: { formatter: function(val, opts){ return val === null ? 'offline' : (opts.seriesIndex===0 ? val + ' V' : val + ' %'); } } }
-                    };
-          if(window.hourlyVoltChart){
-              try{ window.hourlyVoltChart.destroy(); }catch(e){}
-          }
+          // Voltage chart (line) — allow click on column (Charge %) to drilldown too
+          var batteryPercentData = voltageData.map(function(v){ if(v === null || v === undefined) return null; try { return Math.round(mapVoltageToPercentage(parseFloat(v))); } catch(e) { return null; } });
+          var optionsVolt = {
+              series: [
+                  { name: 'Voltage (V)', type: 'line', data: voltageData },
+                  { name: 'Charge %', type: 'column', data: batteryPercentData }
+              ],
+              chart: {
+                  type: 'line', height: 260,
+                  events: {
+                      dataPointSelection: function(event, chartContext, config){
+                          var idx = config.dataPointIndex;
+                          if(typeof idx === 'number' && idx >= 0){
+                              var bucket = resp.buckets[idx];
+                              renderHourlyDrill(publicKey, bucket.hour_start);
+                          }
+                      }
+                  }
+              },
+              stroke: { width: [2, 0], curve: 'smooth' },
+              plotOptions: { bar: { columnWidth: '50%', borderRadius: 4 } },
+              xaxis: { categories: labels },
+              yaxis: [{ title: { text: 'Voltage (V)' } }, { opposite: true, max: 100, title: { text: 'Charge %' } }],
+              colors: ['#ff9900', '#00b050'],
+              tooltip: { shared: true, y: { formatter: function(val, opts){ return val === null ? 'offline' : (opts.seriesIndex===0 ? val + ' V' : Math.round(val) + ' %'); } } }
+          };
+          if(window.hourlyVoltChart){ try{ window.hourlyVoltChart.destroy(); }catch(e){} }
           window.hourlyVoltChart = new ApexCharts(document.querySelector('#hourly-voltage-chart'), optionsVolt);
           window.hourlyVoltChart.render();
 
+      });
+}
+
+// Drilldown: fetch raw samples for the selected hour and show modal charts
+function renderHourlyDrill(publicKey, hour_start) {
+    $.getJSON('/sensor_stats_hour', { public_key: publicKey, hour_start: hour_start })
+      .done(function(resp){
+          if(!resp || !resp.samples) return;
+
+          var labels = resp.samples.map(function(s){
+              var d = new Date(s.ts * 1000);
+              return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+          });
+          var percentData = resp.samples.map(function(s){ return Math.round(s.percent); });
+          var voltageData = resp.samples.map(function(s){ return s.voltage; });
+
+          // Percent time-series chart
+          var optionsDrillP = {
+              series: [{ name: 'Fill %', data: percentData }],
+              chart: { type: 'line', height: 300 },
+              stroke: { curve: 'smooth' },
+              xaxis: { categories: labels },
+              yaxis: { max: 100 },
+              tooltip: { y: { formatter: function(v){ return v + ' %'; } } }
+          };
+          if(window.drillPercentChart){ try{ window.drillPercentChart.destroy(); }catch(e){} }
+          window.drillPercentChart = new ApexCharts(document.querySelector('#drill-percent-chart'), optionsDrillP);
+          window.drillPercentChart.render();
+
+          // Voltage time-series chart
+          var optionsDrillV = {
+              series: [{ name: 'Voltage', data: voltageData }],
+              chart: { type: 'line', height: 300 },
+              stroke: { curve: 'smooth' },
+              xaxis: { categories: labels },
+              yaxis: { title: { text: 'Voltage (V)' } },
+              tooltip: { y: { formatter: function(v){ return v + ' V'; } } }
+          };
+          if(window.drillVoltChart){ try{ window.drillVoltChart.destroy(); }catch(e){} }
+          window.drillVoltChart = new ApexCharts(document.querySelector('#drill-voltage-chart'), optionsDrillV);
+          window.drillVoltChart.render();
+
+          var modalEl = document.getElementById('HourlyDrillModal');
+          var modal = new bootstrap.Modal(modalEl);
+          modal.show();
+      }).fail(function(){
+          console.error('Failed to fetch hourly samples');
       });
 }
 
