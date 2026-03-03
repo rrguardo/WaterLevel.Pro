@@ -2,8 +2,24 @@
 
 All notable changes to this project are documented in this file.
 
+## v1.0.5 - 2026-02-28
 
-## v1.0.4 - 2026-02-27
+### Added
+- New endpoint `/sensor_stats_hour` to return raw per-sample data for a single hourly bucket (used for UI drilldowns).
+- Frontend drilldown modal on the device page: click an hourly bar/point to open a detailed per-sample percent and voltage chart.
+- Documentation: `docs/ai/SENSOR_STATS.md` describing ingestion, Redis storage, server-side hourly aggregation and frontend charting.
+
+### Changed
+- `app.py`: align server-side hourly buckets to hour boundaries so current-hour samples map to the appropriate bucket.
+- `templates/sensor_device_info.html`: ensure fill % and battery charge values are displayed as integers, and fix hourly labels to use bucket end times.
+- `.gitlab-ci.yml`: start `redis-server` in CI job containers and set `REDIS_HOST`/`REDIS_PORT` so unit tests can run against `127.0.0.1`.
+
+### Added tests
+- Unit tests for `/sensor_stats` and `/sensor_stats_hour` added under `tests/unit/test_sensor_stats_unit.py`.
+
+### Notes
+- The new drilldown depends on the `/sensor_stats_hour` endpoint and expects Redis history in `tin-history/{public_key}`. Run unit/integration tests or start a local Redis instance when validating UI behavior.
+
 
 ### Added
 - New Water Volume card on the device page showing liters and a vertical fill bar.
