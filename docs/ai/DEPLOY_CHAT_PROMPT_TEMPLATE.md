@@ -17,6 +17,10 @@ Required behavior:
 4) Keep Nginx as the only public ingress (80/443).
 5) Keep API on subdomain of same base domain.
 6) Apply firewall baseline (allow 22/80/443; keep 8000/8001/6379 private).
+   - If Cloudflare mode is `proxied`, restrict inbound `80/443` in `firewalld` to Cloudflare IP ranges only, keep `22` open, and install a weekly auto-refresh job for Cloudflare IPs.
+   - Apply host-level hardening from `firewall_hardening` in deploy input:
+      - if `block_icmp=true`, block ICMP/ICMPv6 in `firewalld` public zone
+      - if `ssh_fail2ban.enabled=true`, configure `fail2ban` (with `firewalld` banaction) for SSH using configured `maxretry/findtime/bantime/ignoreip`
 7) Configure timezone:
    - Set VPS timezone via `timedatectl` to match `WLP_TZ`.
    - Ensure Docker services run with `TZ` from `WLP_TZ` and verify with `date` inside containers.
@@ -43,6 +47,10 @@ Required behavior:
    - failed steps
    - exact commands used
    - current blockers and next actions
+   - firewall proof points:
+      - `firewall-cmd --zone=public --list-rich-rules`
+      - `systemctl status wlp-cloudflare-firewall-sync.timer --no-pager` (if proxied)
+      - `fail2ban-client status sshd` (if ssh_fail2ban enabled)
 
 Do not switch to unittest-only validation.
 Proceed with real deployment flow.

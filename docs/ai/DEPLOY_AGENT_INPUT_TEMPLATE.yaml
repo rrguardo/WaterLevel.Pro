@@ -62,6 +62,18 @@ deploy_contract:
     - 8001
     - 6379
 
+firewall_hardening:
+  cloudflare_only_http_https_when_proxied: true
+  block_icmp: false
+  ssh_fail2ban:
+    enabled: true
+    maxretry: 4
+    findtime: 10m
+    bantime: 24h
+    ignoreip:
+      - 127.0.0.1/8
+      - ::1
+
 env_required:
   APP_SEC_KEY: CHANGE_ME_STRONG_SECRET
   # Container timezone (default: Dominican Republic, UTC-4 no DST)

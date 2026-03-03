@@ -38,10 +38,14 @@ WLP is a water-level platform with:
 - `scripts/docker_smoke_test.sh` (CI/local health contract)
 - `settings.py` (env-driven settings for app/api)
 - `ext_conf/crontab.ini` (cron contract)
+- `scripts/firewall/sync_cloudflare_firewalld.sh` (Cloudflare IP allowlist for host firewalld)
+- `scripts/firewall/install_cloudflare_firewalld_timer.sh` (weekly Cloudflare IP sync automation)
+- `scripts/firewall/install_fail2ban_ssh_firewalld.sh` (SSH brute-force protection with fail2ban)
 
 ## Guardrails for changes
 
 - Preserve host-based split between web and api at Nginx level.
 - Keep SQLite single-node assumptions unless explicitly requested otherwise.
 - Do not expose internal app upstream ports publicly unless required.
+- Apply firewall changes at VPS host level (`firewalld`), not inside containers.
 - Prefer updating docs + smoke test whenever runtime behavior changes.

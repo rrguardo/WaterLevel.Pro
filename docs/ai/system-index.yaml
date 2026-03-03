@@ -71,6 +71,9 @@ source_of_truth:
   compose: docker/docker-compose.yml
   nginx_template: ext_conf/docker/nginx.conf.template
   smoke_test: scripts/docker_smoke_test.sh
+  firewall_cf_sync: scripts/firewall/sync_cloudflare_firewalld.sh
+  firewall_cf_timer: scripts/firewall/install_cloudflare_firewalld_timer.sh
+  firewall_ssh_fail2ban: scripts/firewall/install_fail2ban_ssh_firewalld.sh
 env_contract:
   required_high_signal:
     - APP_DOMAIN
@@ -91,3 +94,4 @@ constraints:
   - Keep API under subdomain of same base domain.
   - Keep SQLite single-node assumptions unless explicitly requested.
   - Keep ingress centralized in nginx.
+  - Apply firewall hardening at VPS host level (firewalld), not in containers.

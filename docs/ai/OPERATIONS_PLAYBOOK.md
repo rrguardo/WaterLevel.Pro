@@ -36,6 +36,29 @@ What smoke test checks:
 - Full reset:
   - `docker compose -f docker/docker-compose.yml down -v`
 
+## VPS firewall operations (host-level)
+
+Cloudflare-only ingress for `80/443` (when proxied):
+- One-time sync:
+  - `sudo bash scripts/firewall/sync_cloudflare_firewalld.sh --zone public`
+- Weekly refresh timer install:
+  - `sudo bash scripts/firewall/install_cloudflare_firewalld_timer.sh --zone public`
+- Check timer/service:
+  - `systemctl status wlp-cloudflare-firewall-sync.timer --no-pager`
+  - `systemctl status wlp-cloudflare-firewall-sync.service --no-pager`
+
+Block ICMP/ICMPv6 (optional hardening):
+- `sudo firewall-cmd --permanent --zone=public --add-rich-rule='rule protocol value=icmp drop'`
+- `sudo firewall-cmd --permanent --zone=public --add-rich-rule='rule protocol value=ipv6-icmp drop'`
+- `sudo firewall-cmd --reload`
+
+SSH brute-force protection with fail2ban:
+- Install/configure:
+  - `sudo bash scripts/firewall/install_fail2ban_ssh_firewalld.sh --maxretry 4 --findtime 10m --bantime 24h`
+- Verify:
+  - `fail2ban-client ping`
+  - `fail2ban-client status sshd`
+
 ## Device update API checks
 
 Sensor S1 update contract (`/update`):

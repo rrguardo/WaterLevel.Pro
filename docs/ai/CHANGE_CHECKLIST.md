@@ -28,7 +28,15 @@ Use this checklist before finishing runtime-impacting changes.
 - [ ] Relay update contract still works: `/relay-update` expects `key,status` and returns body `OK` + control headers (including `ACTION`)
 - [ ] Demo simulator jobs (if enabled) still run in cron and route via Nginx API host split
 
-## 5) Documentation updates
+## 5) Firewall hardening (host-level)
+
+- [ ] `firewalld` changes were applied on VPS host (not Docker container shell)
+- [ ] If Cloudflare proxied mode is enabled, `80/443` are restricted to Cloudflare IP ranges and weekly sync timer is active
+- [ ] `22` remains open after firewall changes
+- [ ] If ICMP hardening is enabled, ICMP/ICMPv6 drop rules are present
+- [ ] If SSH brute-force hardening is enabled, `fail2ban` jail `sshd` is active with expected thresholds
+
+## 6) Documentation updates
 
 - [ ] `README.md` updated for user-facing behavior changes
 - [ ] `docker/README.md` updated for runtime/network/TLS changes

@@ -276,6 +276,41 @@ After deploy, verify:
 - Keep ingress centralized in Nginx only
 - Never commit real credentials to git
 
+### Cloudflare-only ingress for `80/443` (recommended when proxied)
+
+If Cloudflare proxy mode is enabled, lock HTTP/HTTPS at the VPS firewall so only Cloudflare source IPs can reach `80/443` while keeping `22` open.
+
+Use these scripts from this repo:
+
+1. One-time apply:
+    - `sudo bash scripts/firewall/sync_cloudflare_firewalld.sh --zone public`
+2. Install weekly auto-refresh (systemd timer):
+    - `sudo bash scripts/firewall/install_cloudflare_firewalld_timer.sh --zone public`
+
+Validation commands on VPS:
+
+- Timer active:
+   - `systemctl status wlp-cloudflare-firewall-sync.timer --no-pager`
+- Last sync status:
+   - `systemctl status wlp-cloudflare-firewall-sync.service --no-pager`
+- Next scheduled execution:
+   - `systemctl list-timers wlp-cloudflare-firewall-sync.timer`
+- Effective firewall state:
+   - `sudo firewall-cmd --zone=public --list-all`
+
+### Optional host firewall hardening
+
+Block ICMP/ICMPv6 in `public` zone:
+
+- `sudo firewall-cmd --permanent --zone=public --add-rich-rule='rule protocol value=icmp drop'`
+- `sudo firewall-cmd --permanent --zone=public --add-rich-rule='rule protocol value=ipv6-icmp drop'`
+- `sudo firewall-cmd --reload`
+
+Protect SSH from brute-force with fail2ban + firewalld:
+
+- `sudo bash scripts/firewall/install_fail2ban_ssh_firewalld.sh --maxretry 4 --findtime 10m --bantime 24h`
+- `fail2ban-client status sshd`
+
 ## Chat handoff workflow (recommended)
 
 1. Copy template to private file:

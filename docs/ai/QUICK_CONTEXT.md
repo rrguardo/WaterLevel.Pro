@@ -21,6 +21,18 @@ The API should remain on a subdomain of the same base domain for minimal setup.
 - Web: `https://<WLP_SERVER_NAME>`
 - API: `https://<WLP_API_SERVER_NAME>`
 
+## Host firewall hardening (deploy)
+
+- Firewall is managed at VPS host level (`firewalld`), not inside Docker containers.
+- For Cloudflare proxied mode, lock `80/443` to Cloudflare IP ranges only and keep `22` open.
+- Optional hardening controls supported by deploy input:
+	- block ICMP/ICMPv6 at host firewall
+	- enable SSH brute-force bans with `fail2ban` (`maxretry/findtime/bantime`)
+- Automation scripts:
+	- `scripts/firewall/sync_cloudflare_firewalld.sh`
+	- `scripts/firewall/install_cloudflare_firewalld_timer.sh`
+	- `scripts/firewall/install_fail2ban_ssh_firewalld.sh`
+
 ## Device update contracts (critical)
 
 ### Sensor S1 update
