@@ -11,6 +11,9 @@ on:
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
+    env:
+      REDIS_HOST: 127.0.0.1
+      REDIS_PORT: 6379
     timeout-minutes: 15
     permissions:
       contents: write
@@ -28,6 +31,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
+
+      - name: Install and start redis-server
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y redis-server
+          # start redis in background with minimal persistence disabled for CI speed
+          sudo redis-server --save "" --appendonly no --daemonize yes || true
 
       - name: Install dependencies
         run: |
