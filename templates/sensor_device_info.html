@@ -1529,6 +1529,17 @@ function renderHourlyCharts(publicKey) {
               .filter(function(v){ return Number.isFinite(v); });
           var minVoltage24h = validVoltages.length ? Math.min.apply(null, validVoltages) : null;
           var maxVoltage24h = validVoltages.length ? Math.max.apply(null, validVoltages) : null;
+          var voltagePadding24h = 0;
+          var yMinVoltage24h;
+          var yMaxVoltage24h;
+          if(minVoltage24h !== null && maxVoltage24h !== null){
+              voltagePadding24h = (maxVoltage24h - minVoltage24h) * 0.1;
+              if(voltagePadding24h === 0){
+                  voltagePadding24h = 0.05;
+              }
+              yMinVoltage24h = Math.max(0, Math.round((minVoltage24h - voltagePadding24h) * 100) / 100);
+              yMaxVoltage24h = Math.round((maxVoltage24h + voltagePadding24h) * 100) / 100;
+          }
           var batteryPercentData = voltageData.map(function(v, idx){
               if(offlineFlags24h[idx]) return 50;
               if(v === null || v === undefined) return null;
@@ -1558,7 +1569,10 @@ function renderHourlyCharts(publicKey) {
               stroke: { width: [2, 0], curve: 'smooth' },
               plotOptions: { bar: { columnWidth: '90%', borderRadius: 6 } },
               xaxis: { categories: labels },
-              yaxis: [{ title: { text: 'Voltage (V)' } }, { opposite: true, max: 100, title: { text: 'Charge %' } }],
+              yaxis: [
+                  { min: yMinVoltage24h, max: yMaxVoltage24h, title: { text: 'Voltage (V)' } },
+                  { opposite: true, max: 100, title: { text: 'Charge %' } }
+              ],
               colors: [
                   function(){ return '#ff9900'; },
                   function(ctx){ return offlineFlags24h[ctx.dataPointIndex] ? '#ff0000' : '#00b050'; }
@@ -1704,6 +1718,17 @@ function renderHourlyDrill(publicKey, hour_start) {
               .filter(function(v){ return Number.isFinite(v); });
           var minVoltageDrill = validVoltagesDrill.length ? Math.min.apply(null, validVoltagesDrill) : null;
           var maxVoltageDrill = validVoltagesDrill.length ? Math.max.apply(null, validVoltagesDrill) : null;
+          var voltagePaddingDrill = 0;
+          var yMinVoltageDrill;
+          var yMaxVoltageDrill;
+          if(minVoltageDrill !== null && maxVoltageDrill !== null){
+              voltagePaddingDrill = (maxVoltageDrill - minVoltageDrill) * 0.1;
+              if(voltagePaddingDrill === 0){
+                  voltagePaddingDrill = 0.05;
+              }
+              yMinVoltageDrill = Math.max(0, Math.round((minVoltageDrill - voltagePaddingDrill) * 100) / 100);
+              yMaxVoltageDrill = Math.round((maxVoltageDrill + voltagePaddingDrill) * 100) / 100;
+          }
           var batteryPercentDataDrill = voltageData.map(function(v, idx){
               if(offlineFlags[idx]) return 50;
               if(v === null || v === undefined) return null;
@@ -1729,7 +1754,7 @@ function renderHourlyDrill(publicKey, hour_start) {
               ],
               xaxis: { categories: labels },
               yaxis: [
-                  { title: { text: 'Voltage (V)' } },
+                  { min: yMinVoltageDrill, max: yMaxVoltageDrill, title: { text: 'Voltage (V)' } },
                   { opposite: true, min: 0, max: 100, title: { text: 'Charge %' } }
               ],
               tooltip: {
