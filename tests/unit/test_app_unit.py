@@ -62,6 +62,13 @@ class AppUnitTestCase(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("PONG", response.get_data(as_text=True))
 
+    def test_release_version_endpoint(self):
+        response = self.client.get("/release-version")
+        self.assertEqual(200, response.status_code)
+        payload = response.get_json()
+        self.assertEqual("web", payload["service"])
+        self.assertEqual(web_app.RELEASE_VERSION, payload["release_version"])
+
     def test_short_unknown_redirects(self):
         response = self.client.get("/short/unknown")
         self.assertIn(response.status_code, {301, 302})
@@ -106,7 +113,8 @@ class AppUnitTestCase(unittest.TestCase):
     def test_get_device_data_success(self):
         web_app.redis_client.set("tin-keys/pub1", "99|1700000000|380|-69")
         web_app.redis_client.set("tin-sett-keys/pub1", "120|20|30")
-        with patch("app.time.time", return_value=1700000030):
+        with patch("app.time.time", return_value=1700000030), \
+            patch("app.db.DevicesDB.load_device_by_public_key", return_value=None):
             response = self.client.get("/data-api", query_string={"key": "pub1"})
             payload = response.get_json()
             self.assertEqual(200, response.status_code)
@@ -117,7 +125,8 @@ class AppUnitTestCase(unittest.TestCase):
         # Ensure demo alias maps to configured demo public key
         demo_pub = "1pubDEMO_TEST"
         web_app.redis_client.set(f"tin-keys/{demo_pub}", "50|1700000000|370|-65")
-        with patch.object(web_app.settings, "DEMO_S1_PUB_KEY", demo_pub):
+        with patch.object(web_app.settings, "DEMO_S1_PUB_KEY", demo_pub), \
+            patch("app.db.DevicesDB.load_device_by_public_key", return_value=None):
             with patch("app.time.time", return_value=1700000030):
                 response = self.client.get("/data-api", query_string={"key": "demo"})
                 payload = response.get_json()
@@ -147,6 +156,40 @@ class AppUnitTestCase(unittest.TestCase):
                     self.assertFalse(first.get('offline'))
                     self.assertEqual(60.0, first.get('percent'))
                     self.assertEqual(3.8, first.get('voltage'))
+
+    def test_relay_consumption_stats_missing_public_key(self):
+        response = self.client.get('/relay_consumption_stats')
+        self.assertEqual(400, response.status_code)
+        self.assertEqual('missing public_key', response.get_json()['error'])
+
+    def test_relay_consumption_stats_invalid_public_key(self):
+        with patch('app.db.DevicesDB.load_device_by_public_key', return_value=None):
+            response = self.client.get('/relay_consumption_stats', query_string={'public_key': 'unknown'})
+            self.assertEqual(404, response.status_code)
+            self.assertEqual('invalid public_key', response.get_json()['error'])
+
+    def test_relay_consumption_stats_rejects_non_relay(self):
+        with patch('app.db.DevicesDB.load_device_by_public_key', return_value=SimpleNamespace(id=7, type=1)):
+            response = self.client.get('/relay_consumption_stats', query_string={'public_key': '1pubS'})
+            self.assertEqual(400, response.status_code)
+            self.assertEqual('public_key is not a relay device', response.get_json()['error'])
+
+    def test_relay_consumption_stats_success(self):
+        fake_rows = [{'day': '2026-03-01', 'on_minutes': 15, 'liters': 120.5}]
+        with patch('app.db.DevicesDB.load_device_by_public_key', return_value=SimpleNamespace(id=22, type=3)), \
+            patch('app.db.DevicesDB.get_relay_daily_stats', return_value=fake_rows):
+            response = self.client.get('/relay_consumption_stats', query_string={'public_key': '3pubR'})
+            self.assertEqual(200, response.status_code)
+            self.assertEqual(fake_rows, response.get_json()['days'])
+
+    def test_relay_consumption_stats_demo_alias(self):
+        demo_pub = 'pubDemoRelay'
+        with patch.object(web_app.settings, 'DEMO_RELAY_PUB_KEY', demo_pub), \
+            patch('app.db.DevicesDB.load_device_by_public_key', return_value=SimpleNamespace(id=99, type=3)) as load_device, \
+            patch('app.db.DevicesDB.get_relay_daily_stats', return_value=[]):
+            response = self.client.get('/relay_consumption_stats', query_string={'public_key': 'demorelay'})
+            self.assertEqual(200, response.status_code)
+            load_device.assert_called_once_with(demo_pub)
 
     def test_devices_post_paths(self):
         with patch.object(web_app, "current_user", SimpleNamespace(is_authenticated=False)):

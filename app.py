@@ -165,6 +165,7 @@ redis_client = redis.StrictRedis(
 
 DOMAIN = settings.APP_DOMAIN
 API_URL = settings.API_DOMAIN
+RELEASE_VERSION = "1.0.6"
 
 
 @app.context_processor
@@ -187,6 +188,7 @@ def inject_global_variables():
     return {
         'API_URL': API_URL,
         'DOMAIN': DOMAIN,
+        'RELEASE_VERSION': RELEASE_VERSION,
         "CONTACT_PENDING": CONTACT_PENDING,
         "SITE_LOGO_FILE": SITE_LOGO_FILE,
         "TRACKING_CONFIG": {
@@ -1188,6 +1190,19 @@ def ping():
         str: Health-check marker text.
     """
     return 'PONG'
+
+
+@app.route('/release-version')
+def release_version():
+    """Expose web app release version for diagnostics and deployment checks.
+
+    Returns:
+        flask.Response: JSON metadata with web release version.
+    """
+    return jsonify({
+        "service": "web",
+        "release_version": RELEASE_VERSION
+    })
 
 
 @app.route('/devices', methods=['GET', 'POST'], strict_slashes=False)

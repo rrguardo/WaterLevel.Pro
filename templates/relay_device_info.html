@@ -205,12 +205,9 @@
         <div class="card bg-light">
             <div class="card-body">
                 <h5 class="card-title fw-semibold mb-2">{% trans %}Estimated Daily Consumption (last 15 days){% endtrans %}</h5>
-                <p class="text-muted small mb-3">{% trans %}Based on relay ON runtime and linked S1 liters-per-cm conversion. Assumes added liters are consumed by network demand.{% endtrans %}</p>
                 <div id="relay-consumption-chart" style="height:280px"></div>
                 <div class="small text-muted mt-3" id="relay-consumption-summary">-</div>
-                <div class="small text-muted mt-1">
-                    {% trans %}Estimation: while relay is ON, pumped liters are accumulated as positive deltas of linked S1 tank liters (computed with liters-per-cm). Negative deltas are ignored.{% endtrans %}
-                </div>
+                <div class="small text-muted mt-1">{% trans %}Estimated from relay ON time and linked S1 liters-per-cm; only positive tank-liter increases are counted.{% endtrans %}</div>
             </div>
         </div>
     </div>

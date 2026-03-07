@@ -88,6 +88,30 @@ msgstr "Nota: Esta estimación asume una velocidad de muestreo S1 constante. Des
 msgid "Warning: Multiple offline hours detected. Maintenance: replace batteries, clean solar panel, check internet, and inspect waterproof sealing/wiring."
 msgstr "Advertencia: Se detectaron múltiples horas sin conexión. Mantenimiento recomendado: reemplazar baterías, limpiar el panel solar, verificar internet e inspeccionar el sellado impermeable y el cableado."
 
+msgid "Estimated Daily Consumption (last 15 days)"
+msgstr "Consumo diario estimado (últimos 15 días)"
+
+msgid "Estimated from relay ON time and linked S1 liters-per-cm; only positive tank-liter increases are counted."
+msgstr "Estimado a partir del tiempo en ON del relay y los litros-por-cm del S1 vinculado; solo se cuentan los aumentos positivos de litros en el tanque."
+
+msgid "Consumed (L/day)"
+msgstr "Consumido (L/día)"
+
+msgid "Date (MM-DD)"
+msgstr "Fecha (MM-DD)"
+
+msgid "15-day total:"
+msgstr "Total de 15 días:"
+
+msgid "Today relay ON:"
+msgstr "Relay ON hoy:"
+
+msgid "Unable to load consumption stats"
+msgstr "No se pudieron cargar las estadísticas de consumo"
+
+msgid "min ON"
+msgstr "min ON"
+
 #: app.py:485
 msgid "Sensor reach near the blind area!"
 msgstr "¡El sensor está cerca del área ciega!"

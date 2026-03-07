@@ -2,6 +2,37 @@
 
 All notable changes to this project are documented in this file.
 
+## v1.0.6 - 2026-03-07
+
+### Added
+- Relay daily consumption analytics persisted in SQLite (`relay_daily_stats`) with helper methods in `db.py` to upsert runtime and liters by day.
+- New web endpoint `/relay_consumption_stats` to return the last 15 days of relay usage/consumption for charting.
+- Relay device page chart for estimated daily consumption (last 15 days), including 15-day total and current-day relay ON summary.
+- Web and API endpoint `/release-version` to expose service release metadata in JSON format.
+- Host firewall automation scripts and runbook docs for Cloudflare allowlist sync and fail2ban SSH protection.
+
+### Changed
+- `api.py` relay ingestion flow now sanitizes relay status values and persists ON runtime/liter increments using linked S1 `liters_per_cm` (counting only positive tank-liter increases).
+- Sensor hourly charts (`templates/sensor_device_info.html`) were refined to show offline hours in a single visual flow with clearer styling, improved offline tooltips, and dynamic battery-axis ranges for both 24h and drilldown views.
+- Web app global template context keeps `RELEASE_VERSION` available for UI display (footer and templates).
+- CI behavior improvements for Redis-backed tests and coverage publishing in GitLab (`Coverage: XX%` output plus Cobertura artifact wiring).
+
+### Fixed
+- Battery/hourly chart regressions introduced during offline UX updates were resolved (including offline rendering consistency in drilldown and battery chart compatibility).
+- Test doubles/mocks for Redis and settings-backed objects were aligned with runtime contracts to avoid noisy CI logs and false negatives.
+- Datetime/day handling in relay daily stats persistence was adjusted for safer timezone-aware processing.
+
+### Internationalization
+- Added Spanish and Hindi translations for the new relay consumption chart UI strings and summaries.
+
+### Documentation
+- Updated architecture and runtime docs to describe relay daily stats persistence, chart behavior, and deployment/ops guardrails.
+- Expanded deployment/firewall guidance under `docs/` and `scripts/firewall/README.md`.
+
+### Release Metadata
+- Web `app.py` release version: `1.0.6`
+- API `api.py` release version: `1.0.6`
+
 ## v1.0.5 - 2026-02-28
 
 ### Added

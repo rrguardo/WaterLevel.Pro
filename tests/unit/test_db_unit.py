@@ -1,4 +1,5 @@
 import unittest
+import datetime
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 from flask import Flask
@@ -233,6 +234,70 @@ class DbUnitTestCase(unittest.TestCase):
         fake_conn, _ = self._fake_connection(execute_result=object())
         with patch.object(db.engine, "connect", return_value=_CtxConn(fake_conn)), patch.object(db.cache, "delete_memoized"):
             self.assertTrue(db.Support.add_user_support_record("u@example.com", "hello", support_type=1))
+
+    def test_ensure_relay_daily_stats_table_executes_schema(self):
+        fake_conn = MagicMock()
+        with patch.object(db.engine, 'connect', return_value=_CtxConn(fake_conn)):
+            db.DevicesDB.ensure_relay_daily_stats_table()
+            self.assertGreaterEqual(fake_conn.execute.call_count, 2)
+            fake_conn.commit.assert_called_once()
+
+    def test_add_relay_on_runtime_splits_across_days(self):
+        # 2026-03-07 23:59:30 UTC -> 2026-03-08 00:00:30 UTC
+        start_ts = int(datetime.datetime(2026, 3, 7, 23, 59, 30).timestamp())
+        end_ts = int(datetime.datetime(2026, 3, 8, 0, 0, 30).timestamp())
+
+        with patch('db.DevicesDB._upsert_relay_daily_stats') as upsert:
+            db.DevicesDB.add_relay_on_runtime(12, start_ts, end_ts)
+            self.assertEqual(2, upsert.call_count)
+
+            first = upsert.call_args_list[0]
+            second = upsert.call_args_list[1]
+
+            self.assertEqual(12, first.args[0])
+            self.assertEqual('2026-03-07', first.args[1])
+            self.assertEqual(30, first.kwargs['on_seconds_inc'])
+
+            self.assertEqual(12, second.args[0])
+            self.assertEqual('2026-03-08', second.args[1])
+            self.assertEqual(30, second.kwargs['on_seconds_inc'])
+
+    def test_add_relay_liters_for_day_ignores_non_positive(self):
+        with patch('db.DevicesDB._upsert_relay_daily_stats') as upsert:
+            db.DevicesDB.add_relay_liters_for_day(3, 1700000000, 0)
+            db.DevicesDB.add_relay_liters_for_day(3, 1700000000, -5)
+            upsert.assert_not_called()
+
+    def test_add_relay_liters_for_day_positive(self):
+        with patch('db.DevicesDB._upsert_relay_daily_stats') as upsert:
+            db.DevicesDB.add_relay_liters_for_day(3, 1700000000, 12.75)
+            upsert.assert_called_once()
+            self.assertEqual(3, upsert.call_args.args[0])
+            self.assertEqual(12.75, upsert.call_args.kwargs['liters_added_inc'])
+
+    def test_get_relay_daily_stats_zero_fills_days(self):
+        rows = [SimpleNamespace(day_date='2026-03-06', on_seconds=120, liters_added=8.2)]
+        fake_result = MagicMock()
+        fake_result.fetchall.return_value = rows
+        fake_conn = MagicMock()
+        fake_conn.execute.return_value = fake_result
+
+        class _FixedDateTime(datetime.datetime):
+            @classmethod
+            def utcnow(cls):
+                return cls(2026, 3, 7, 12, 0, 0)
+
+        with patch.object(db.engine, 'connect', return_value=_CtxConn(fake_conn)), \
+            patch('db.DevicesDB.ensure_relay_daily_stats_table'), \
+            patch('db.datetime.datetime', _FixedDateTime):
+            data = db.DevicesDB.get_relay_daily_stats(10, days=2)
+            self.assertEqual(2, len(data))
+            self.assertEqual('2026-03-06', data[0]['day'])
+            self.assertEqual(2, data[0]['on_minutes'])
+            self.assertEqual(8.2, data[0]['liters'])
+            self.assertEqual('2026-03-07', data[1]['day'])
+            self.assertEqual(0, data[1]['on_minutes'])
+            self.assertEqual(0.0, data[1]['liters'])
 
 
 if __name__ == "__main__":

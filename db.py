@@ -763,7 +763,7 @@ class DevicesDB:
 
         cursor = start_ts
         while cursor < end_ts:
-            day_start_dt = datetime.datetime.utcfromtimestamp(cursor).replace(hour=0, minute=0, second=0, microsecond=0)
+            day_start_dt = datetime.datetime.fromtimestamp(cursor, datetime.timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
             next_day_dt = day_start_dt + datetime.timedelta(days=1)
             next_day_ts = int(next_day_dt.timestamp())
             chunk_end = min(end_ts, next_day_ts)
@@ -784,7 +784,7 @@ class DevicesDB:
         if liters_added <= 0:
             return
 
-        day_key = datetime.datetime.utcfromtimestamp(at_ts).strftime("%Y-%m-%d")
+        day_key = datetime.datetime.fromtimestamp(at_ts, datetime.timezone.utc).strftime("%Y-%m-%d")
         DevicesDB._upsert_relay_daily_stats(relay_id, day_key, on_seconds_inc=0, liters_added_inc=liters_added)
 
     @staticmethod

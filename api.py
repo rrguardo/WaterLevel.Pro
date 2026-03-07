@@ -23,6 +23,7 @@ import email_tools
 
 LAST_RELAY_FW_VERSION = 19
 LAST_SENSOR_FW_VERSION = 22
+RELEASE_VERSION = "1.0.6"
 DEVELOPER_MODE = True
 
 RELAY_EVENTS_CODE = {
@@ -159,6 +160,19 @@ def link():
                     except Exception as ex:
                         logging.exception(ex)
     return response
+
+
+@app.route('/release-version', methods=["GET"])
+def release_version():
+    """Expose hardcoded API release version for diagnostics and deployments.
+
+    Returns:
+        flask.Response: JSON with release version metadata.
+    """
+    return jsonify({
+        "service": "api",
+        "release_version": RELEASE_VERSION
+    })
 
 
 @app.route('/relay_view_api', methods=["GET", "POST"])

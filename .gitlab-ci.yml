@@ -6,6 +6,7 @@ stages:
 unit_tests:
   stage: unit
   image: $PYTHON_IMAGE
+  coverage: '/Coverage:\s+(\d+\.\d+%|\d+%)/'
   variables:
     REDIS_HOST: "127.0.0.1"
     REDIS_PORT: "6379"
@@ -14,12 +15,24 @@ unit_tests:
       - PYTHON_IMAGE: ["python:3.14", "python:3.15-rc"]
   before_script:
     - python -m pip install --upgrade pip
-    - python -m pip install -r requirements.txt
+    - python -m pip install -r requirements.txt coverage
     # Install and start redis-server locally so tests can connect to 127.0.0.1
     - apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y redis-server
     - redis-server --save "" --appendonly no --daemonize yes || true
   script:
-    - python -m unittest discover -s tests/unit -p 'test_*_unit.py' -v
+    - coverage run -m unittest discover -s tests/unit -p 'test_*_unit.py' -v
+    - coverage report -m
+    - coverage xml -o coverage.xml
+    - export COVERAGE_PCT=$(coverage report | awk '/TOTAL/{print $4}')
+    - 'echo "Coverage: ${COVERAGE_PCT}"'
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - coverage.xml
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
