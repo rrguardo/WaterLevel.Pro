@@ -10,7 +10,7 @@
 <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
 
 
-<title>Admin Dashboard</title>
+<title>{% trans %}Admin Dashboard{% endtrans %}</title>
 {% endblock %}
 
 
@@ -22,7 +22,7 @@
 
 
         <div class="row mb-3">
-                <h1>Admin Dashboard</h1>
+                <h1>{% trans %}Admin Dashboard{% endtrans %}</h1>
         </div>
         <div class="mb-3">
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -39,25 +39,25 @@
         <div class="row mb-3">
             <form action="{{ url_for('device_admin') }}" method="post">
                 <input type="hidden" name="action" value="cache-clear">
-                <button type="submit" class="btn btn-danger">CLEAR REDIS CACHE</button>
+                <button type="submit" class="btn btn-danger">{% trans %}CLEAR REDIS CACHE{% endtrans %}</button>
             </form>
         </div>
 
         <div class="row card align-items-center justify-content-center bg-light">
             <div class="d-flex align-items-center justify-content-center">
-                <h4>Registered Sensors</h4>
+                <h4>{% trans %}Registered Sensors{% endtrans %}</h4>
                 <a class="btn btn-sm btn-primary ms-4 mb-2" href="{{ url_for('add_sensor') }}">
                     <i class="ti ti-circle-plus fs-4 me-1"></i>
-                    Add Sensor
+                    {% trans %}Add Sensor{% endtrans %}
                 </a>
             </div>
             <table id="sensors_table" class="table table-striped wlp-table-full">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Private Key</th>
-                    <th>Public Key</th>
-                    <th>Note</th>
+                    <th>{% trans %}ID{% endtrans %}</th>
+                    <th>{% trans %}Private Key{% endtrans %}</th>
+                    <th>{% trans %}Public Key{% endtrans %}</th>
+                    <th>{% trans %}Note{% endtrans %}</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -67,19 +67,19 @@
 
         <div class="row card align-items-center justify-content-center bg-light">
             <div class="d-flex align-items-center justify-content-center">
-                <h4>Registered Relays</h4>
+                <h4>{% trans %}Registered Relays{% endtrans %}</h4>
                 <a class="btn btn-sm btn-primary ms-4 mb-2" href="{{ url_for('add_relay') }}">
                     <i class="ti ti-circle-plus fs-4 me-1"></i>
-                    Add Relay
+                    {% trans %}Add Relay{% endtrans %}
                 </a>
             </div>
             <table id="relays_table" class="table table-striped wlp-table-full">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Private Key</th>
-                    <th>Public Key</th>
-                    <th>Note</th>
+                    <th>{% trans %}ID{% endtrans %}</th>
+                    <th>{% trans %}Private Key{% endtrans %}</th>
+                    <th>{% trans %}Public Key{% endtrans %}</th>
+                    <th>{% trans %}Note{% endtrans %}</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -89,15 +89,15 @@
 
         <div class="row card align-items-center justify-content-center bg-light">
             <div class="d-flex align-items-center justify-content-center">
-                <h4>Registered Users</h4>
+                <h4>{% trans %}Registered Users{% endtrans %}</h4>
             </div>
             <table id="users_table" class="table table-striped wlp-table-full">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Confirmed</th>
+                    <th>{% trans %}ID{% endtrans %}</th>
+                    <th>{% trans %}Email{% endtrans %}</th>
+                    <th>{% trans %}Phone{% endtrans %}</th>
+                    <th>{% trans %}Confirmed{% endtrans %}</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -109,21 +109,21 @@
     <div class="row">
         <div class="card bg-light col-auto">
             <div class="card-body">
-                <h5 class="mb-3">Add SMS Credits</h5>
+                <h5 class="mb-3">{% trans %}Add SMS Credits{% endtrans %}</h5>
                 <form action="{{ url_for('admin_dashboard') }}" method="post">
                     <input type="hidden" name="action" value="add-sms-credits">
 
                     <div class="mb-3">
-                    <label class="form-label">User ID:</label>
+                    <label class="form-label">{% trans %}User ID:{% endtrans %}</label>
                     <input type="number" name="user_id"  step="1" min="1" class="form-control">
                     </div>
 
                     <div class="mb-3">
-                    <label class="form-label">Credits Amount:</label>
+                    <label class="form-label">{% trans %}Credits Amount:{% endtrans %}</label>
                     <input type="number" name="credits" value="0.5" step="0.1" min="0.1"  class="form-control">
                     </div>
 
-                    <button type="submit" class="btn btn-danger">Add Credits</button>
+                    <button type="submit" class="btn btn-danger">{% trans %}Add Credits{% endtrans %}</button>
                 </form>
 
             </div>
@@ -136,20 +136,20 @@
 
             <div class="card w-50">
               <div class="card-body">
-                <h3 class="card-title">Direct Support Reply</h3>
+                <h3 class="card-title">{% trans %}Direct Support Reply{% endtrans %}</h3>
                 <form action="{{ url_for('device_admin') }}" method="post">
                     <input type="hidden" name="action" value="admin-support">
 
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">User Email:</label>
+                        <label for="exampleInputEmail1" class="form-label">{% trans %}User Email:{% endtrans %}</label>
                         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="message" class="form-label">Message:</label>
-                        <textarea id="message" name="message" class="form-control" rows="4" required placeholder="Enter your message here..."></textarea>
-                        <p>support html content</p>
+                        <label for="message" class="form-label">{% trans %}Message:{% endtrans %}</label>
+                        <textarea id="message" name="message" class="form-control" rows="4" required placeholder="{{ _('Enter your message here...') }}"></textarea>
+                        <p>{% trans %}support html content{% endtrans %}</p>
                     </div>
-                    <button type="submit" class="btn btn-danger">Send</button>
+                    <button type="submit" class="btn btn-danger">{% trans %}Send{% endtrans %}</button>
                 </form>
               </div>
             </div>
@@ -157,22 +157,22 @@
             <div class="row my-3">
                 <form action="{{ url_for('device_admin') }}" method="post">
                     <input type="hidden" name="action" value="read-support">
-                    <button type="submit" class="btn btn-danger">READ SUPPORT EMAILS</button>
+                    <button type="submit" class="btn btn-danger">{% trans %}READ SUPPORT EMAILS{% endtrans %}</button>
                 </form>
             </div>
 
             <div class="row card align-items-center justify-content-center bg-light">
             <div class="d-flex align-items-center justify-content-center">
-                <h4>Users Support</h4>
+                <h4>{% trans %}Users Support{% endtrans %}</h4>
             </div>
             <table id="users_support" class="table table-striped wlp-table-full">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Email</th>
-                    <th>Message</th>
-                    <th>created_at</th>
-                    <th>support_type</th>
+                    <th>{% trans %}ID{% endtrans %}</th>
+                    <th>{% trans %}Email{% endtrans %}</th>
+                    <th>{% trans %}Message{% endtrans %}</th>
+                    <th>{% trans %}created_at{% endtrans %}</th>
+                    <th>{% trans %}support_type{% endtrans %}</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -188,16 +188,16 @@
 
             <div class="row card align-items-center justify-content-center bg-light">
                 <div class="d-flex align-items-center justify-content-center">
-                    <h4>Users Support</h4>
+                    <h4>{% trans %}Users Support{% endtrans %}</h4>
                 </div>
                 <table id="users_support" class="table table-striped wlp-table-full">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>Message</th>
-                        <th>created_at</th>
-                        <th>support_type</th>
+                        <th>{% trans %}ID{% endtrans %}</th>
+                        <th>{% trans %}Email{% endtrans %}</th>
+                        <th>{% trans %}Message{% endtrans %}</th>
+                        <th>{% trans %}created_at{% endtrans %}</th>
+                        <th>{% trans %}support_type{% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -210,18 +210,18 @@
     <div class="row my-3">
         <div class="card">
           <div class="card-body">
-            <h2 class="card-title">Nginx Reports</h2>
+            <h2 class="card-title">{% trans %}Nginx Reports{% endtrans %}</h2>
               <hr>
               <div class="row">
                   <div class="col-md-6">
-                      <h3>Web App Reports</h3>
+                      <h3>{% trans %}Web App Reports{% endtrans %}</h3>
                       <ul class="list-group ms-1 my-3">
                         {% for file in web_report_files %}
                           <li class="list-group-item list-group-item-action list-group-item-primary"><a href="{{ url_for('view_report', filename=file) }}">{{ file }}</a></li>                        {% endfor %}
                       </ul>
                   </div>
                   <div class="col-md-6">
-                      <h3>HTTP API Reports</h3>
+                      <h3>{% trans %}HTTP API Reports{% endtrans %}</h3>
                       <ul class="list-group ms-1 my-3">
                         {% for file in api_report_files %}
                           <li class="list-group-item list-group-item-action list-group-item-primary"><a href="{{ url_for('view_report', filename=file) }}">{{ file }}</a></li>                        {% endfor %}

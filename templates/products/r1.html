@@ -110,11 +110,11 @@
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="visually-hidden">{% trans %}Previous{% endtrans %}</span>
           </button>
           <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+            <span class="visually-hidden">{% trans %}Next{% endtrans %}</span>
           </button>
         </div>
 
@@ -241,8 +241,8 @@
               <img src="{{ url_for('static', filename='logos/gpl3.png') }}" class="img-thumbnail" alt="Solar Power Module P1" title="Solar Power Module P1 For S1">
                 <div class="ms-2">
                     <hr>
-                    | <a href="https://oshwlab.com/rrguardo83/automatic-water-pump-for-s1" target="_blank">Schematic PCB</a> |
-                    <a href="https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1" target="_blank">GitHub (3D Case, ...)</a> |
+                    | <a href="https://oshwlab.com/rrguardo83/automatic-water-pump-for-s1" target="_blank">{% trans %}Schematic PCB{% endtrans %}</a> |
+                    <a href="https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1" target="_blank">{% trans %}GitHub (3D Case, ...){% endtrans %}</a> |
                     <hr>
                 </div>
             </div>

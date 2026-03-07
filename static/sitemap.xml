@@ -20,6 +20,11 @@
   <priority>1.00</priority>
 </url>
 <url>
+  <loc>https://waterlevel.pro/zh</loc>
+  <lastmod>2024-06-12T16:18:28+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
   <loc>https://waterlevel.pro/devices</loc>
   <lastmod>2024-06-12T16:18:28+00:00</lastmod>
   <priority>0.80</priority>
@@ -31,6 +36,11 @@
 </url>
 <url>
   <loc>https://waterlevel.pro/hi/devices</loc>
+  <lastmod>2024-06-12T16:18:28+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://waterlevel.pro/zh/devices</loc>
   <lastmod>2024-06-12T16:18:28+00:00</lastmod>
   <priority>0.80</priority>
 </url>
@@ -50,6 +60,11 @@
   <priority>0.80</priority>
 </url>
 <url>
+  <loc>https://waterlevel.pro/zh/login</loc>
+  <lastmod>2024-06-12T16:18:28+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
   <loc>https://waterlevel.pro/register</loc>
   <lastmod>2024-06-12T16:18:28+00:00</lastmod>
   <priority>0.80</priority>
@@ -61,6 +76,11 @@
 </url>
 <url>
   <loc>https://waterlevel.pro/hi/register</loc>
+  <lastmod>2024-06-12T16:18:28+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://waterlevel.pro/zh/register</loc>
   <lastmod>2024-06-12T16:18:28+00:00</lastmod>
   <priority>0.80</priority>
 </url>
@@ -80,6 +100,11 @@
   <priority>0.80</priority>
 </url>
 <url>
+  <loc>https://waterlevel.pro/zh/products/WiFi-Water-Level-S1</loc>
+  <lastmod>2024-06-12T16:18:28+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
   <loc>https://waterlevel.pro/manuals/WiFi-Water-Level-S1</loc>
   <lastmod>2024-06-12T16:18:28+00:00</lastmod>
   <priority>0.80</priority>
@@ -91,6 +116,11 @@
 </url>
 <url>
   <loc>https://waterlevel.pro/hi/manuals/WiFi-Water-Level-S1</loc>
+  <lastmod>2024-06-12T16:18:28+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://waterlevel.pro/zh/manuals/WiFi-Water-Level-S1</loc>
   <lastmod>2024-06-12T16:18:28+00:00</lastmod>
   <priority>0.80</priority>
 </url>
@@ -110,6 +140,11 @@
   <priority>0.64</priority>
 </url>
 <url>
+  <loc>https://waterlevel.pro/zh/device_info?public_key=demo</loc>
+  <lastmod>2024-06-12T16:18:28+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
   <loc>https://waterlevel.pro/products/WiFi-Smart-Water-Pump-Controller-S1</loc>
   <lastmod>2024-06-12T16:18:28+00:00</lastmod>
   <priority>0.80</priority>
@@ -121,6 +156,11 @@
 </url>
 <url>
   <loc>https://waterlevel.pro/hi/products/WiFi-Smart-Water-Pump-Controller-S1</loc>
+  <lastmod>2024-06-12T16:18:28+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://waterlevel.pro/zh/products/WiFi-Smart-Water-Pump-Controller-S1</loc>
   <lastmod>2024-06-12T16:18:28+00:00</lastmod>
   <priority>0.80</priority>
 </url>
@@ -140,6 +180,11 @@
   <priority>0.80</priority>
 </url>
 <url>
+  <loc>https://waterlevel.pro/zh/manuals/WiFi-Smart-Water-Pump-Controller-S1</loc>
+  <lastmod>2024-06-12T16:18:28+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
   <loc>https://waterlevel.pro/device_info?public_key=demorelay</loc>
   <lastmod>2024-06-12T16:18:28+00:00</lastmod>
   <priority>0.64</priority>
@@ -151,6 +196,11 @@
 </url>
 <url>
   <loc>https://waterlevel.pro/hi/device_info?public_key=demorelay</loc>
+  <lastmod>2024-06-12T16:18:28+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://waterlevel.pro/zh/device_info?public_key=demorelay</loc>
   <lastmod>2024-06-12T16:18:28+00:00</lastmod>
   <priority>0.64</priority>
 </url>

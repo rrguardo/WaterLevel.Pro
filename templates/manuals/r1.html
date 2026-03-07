@@ -107,11 +107,11 @@
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
+          <span class="visually-hidden">{% trans %}Previous{% endtrans %}</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
+          <span class="visually-hidden">{% trans %}Next{% endtrans %}</span>
         </button>
       </div>
 
@@ -148,7 +148,7 @@
                   <div class="ratio ratio-16x9 video-wrapper my-2">
                         <video autoplay muted loop>
                           <source src="https://github.com/rrguardo/WiFi-Smart-Water-Pump-Controller-S1/raw/refs/heads/main/images/CShow1.mp4" type="video/mp4">
-                          Your browser does not support the video tag.
+                          {% trans %}Your browser does not support the video tag.{% endtrans %}
                         </video>
                   </div>
 
@@ -376,43 +376,38 @@
                       </h2>
                       <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6">
                         <div class="accordion-body">
-                          <h5>Using Smart Functions for Automatic Pump Control</h5>
+                          <h5>{% trans %}Using Smart Functions for Automatic Pump Control{% endtrans %}</h5>
                           <p class="my-3 ms-2">
-                              To enable the smart automatic start and stop features, a <b>Water Level S1</b> sensor
+                              {% trans %}To enable the smart automatic start and stop features, a <b>Water Level S1</b> sensor{% endtrans %}
                               must be installed in the water tank connected to the pump controlled by this device.
-                              Carefully read the <a href="{{ DOMAIN }}{{ url_with_lang('manuals', product_name='WiFi-Water-Level-S1') }}">installation and usage
-                              manual for the <b>Water Level S1</b></a> sensor
-                              and ensure it provides reliable and stable information under your specific conditions before activating the smart functions.
+                              {% trans %}Carefully read the{% endtrans %} <a href="{{ DOMAIN }}{{ url_with_lang('manuals', product_name='WiFi-Water-Level-S1') }}">{% trans %}installation and usage manual for the <b>Water Level S1</b>{% endtrans %}</a> {% trans %}sensor and ensure it provides reliable and stable information under your specific conditions before activating the smart functions.{% endtrans %}
                           </p>
 
-                            <h5>How Enable The Smart Features: </h5>
+                            <h5>{% trans %}How Enable The Smart Features:{% endtrans %}</h5>
                           <ul class="list-group ms-1">
                             <li class="list-group-item list-group-item-action">
-                              <b>1) Log in</b>
+                              <b>{% trans %}1) Log in{% endtrans %}</b>
                               <p class="my-2">
-                              Log in to your <a href="{{ DOMAIN }}{{ url_with_lang('login') }}" target="_blank">account</a>
-                                account using the same email address provided during the device's Wi-Fi setup.
-                                Ensure both emails match for proper account synchronization.
+                              {% trans %}Log in to your{% endtrans %} <a href="{{ DOMAIN }}{{ url_with_lang('login') }}" target="_blank">{% trans %}account{% endtrans %}</a>
+                                {% trans %}account using the same email address provided during the device's Wi-Fi setup. Ensure both emails match for proper account synchronization.{% endtrans %}
                               </p>
                             </li>
                             <li class="list-group-item list-group-item-action">
-                              <b>2) Enable the "Smart Mode" in Device Settings</b>
+                              <b>{% trans %}2) Enable the "Smart Mode" in Device Settings{% endtrans %}</b>
                               <p class="my-2">
-                                After logging in, find your new device in the <a href="{{ DOMAIN }}{{ url_with_lang('devices') }}" target="_blank">"My Devices"</a> list.
-                                Open the device's details page and click the <b>"Device Settings"</b> button at the bottom.
+                                {% trans %}After logging in, find your new device in the{% endtrans %} <a href="{{ DOMAIN }}{{ url_with_lang('devices') }}" target="_blank">{% trans %}"My Devices"{% endtrans %}</a> {% trans %}list. Open the device's details page and click the <b>"Device Settings"</b> button at the bottom.{% endtrans %}
                               </p>
                               <p class="my-2">
-                                In the settings, enable the <b>"Smart Mode"</b>. All the settings are documented at <b>"Device Settings"</b> sections.<br>
+                                {% trans %}In the settings, enable the <b>"Smart Mode"</b>. All the settings are documented at <b>"Device Settings"</b> sections.{% endtrans %}<br>
                                   <a class="btn btn-sm btn-success mt-2" href="/device_info?public_key=demorelay">
                                         <i class="ti ti-router"></i>
-                                        UI Demo Device
+                                        {% trans %}UI Demo Device{% endtrans %}
                                   </a>
                               </p>
                             </li>
                               <li class="list-group-item list-group-item-action">
                                   <div class="alert alert-warning" role="alert">
-                                    <a href="#collapsePartOne"><b>Manual/Smart Switch</b></a> must be set to the <b>ON</b> position to activate the smart pump controller.
-                                    This ensures the LEDs and screen turn on, allowing the smart features to function properly.
+                                    {% trans %}<a href="#collapsePartOne"><b>Manual/Smart Switch</b></a> must be set to the <b>ON</b> position to activate the smart pump controller. This ensures the LEDs and screen turn on, allowing the smart features to function properly.{% endtrans %}
                                   </div>
                               </li>
                           </ul>

@@ -1,7 +1,7 @@
 {% extends "base2.html" %}
 
 {% block head %}
-<title>Phone Verify</title>
+<title>{% trans %}Phone Verify{% endtrans %}</title>
 
 {% endblock %}
 
@@ -16,7 +16,7 @@
       <div class="col-md-8 col-lg-6 col-xxl-3">
         <div class="card mb-0">
           <div class="card-body">
-            <h3 class="text-center">User Phone Verification</h3>
+            <h3 class="text-center">{% trans %}User Phone Verification{% endtrans %}</h3>
             <form action="{{ url_for('user_settings') }}" method="post">
 
               <div class="mb-3">
@@ -37,13 +37,13 @@
 
 
               <div class="mb-3">
-                <label for="InputCode" class="form-label">Verification Code:</label>
+                <label for="InputCode" class="form-label">{% trans %}Verification Code:{% endtrans %}</label>
                 <input type="number" step="1" class="form-control" id="InputCode" aria-describedby="InputCodeHelp" name="code">
-                <span id="InputCodeHelp">Use the code sent to your phone.</span>
+                <span id="InputCodeHelp">{% trans %}Use the code sent to your phone.{% endtrans %}</span>
               </div>
 
 
-              <input type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" value="Verify"/>
+              <input type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" value="{{ _('Verify') }}"/>
 
             </form>
           </div>

@@ -110,11 +110,11 @@
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
+          <span class="visually-hidden">{% trans %}Previous{% endtrans %}</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
+          <span class="visually-hidden">{% trans %}Next{% endtrans %}</span>
         </button>
       </div>
 
@@ -151,7 +151,7 @@
                 <div class="ratio ratio-16x9 video-wrapper my-2">
                   <video autoplay muted loop>
                     <source src="https://github.com/rrguardo/WiFi-Water-Level-S1/raw/refs/heads/main/images/S1Show.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
+                    {% trans %}Your browser does not support the video tag.{% endtrans %}
                   </video>
                 </div>
 
@@ -229,11 +229,11 @@
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
                       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="visually-hidden">Previous</span>
+                      <span class="visually-hidden">{% trans %}Previous{% endtrans %}</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
                       <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="visually-hidden">Next</span>
+                      <span class="visually-hidden">{% trans %}Next{% endtrans %}</span>
                     </button>
                   </div>
 
@@ -578,7 +578,7 @@
                                <div class="ratio ratio-16x9 video-wrapper my-2">
                                   <video autoplay muted loop>
                                     <source src="https://github.com/rrguardo/WiFi-Water-Level-S1/raw/refs/heads/main/images/S1_Lid_Mount.mp4" type="video/mp4">
-                                    Your browser does not support the video tag.
+                                    {% trans %}Your browser does not support the video tag.{% endtrans %}
                                   </video>
                                </div>
 
@@ -635,66 +635,61 @@
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="heading6">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
-                          #5 Adjust Device Settings
+                          #5 {% trans %}Adjust Device Settings{% endtrans %}
                         </button>
                       </h2>
                       <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6">
                         <div class="accordion-body">
                           <p class="my-2">
-                            To accurately measure the water level in the tank, you need to set the device to
-                            recognize the point where the tank is considered empty. In summary, this ensures the
-                            device calculates the tank's total capacity correctly.
+                            {% trans %}To accurately measure the water level in the tank, you need to set the device to recognize the point where the tank is considered empty. In summary, this ensures the device calculates the tank's total capacity correctly.{% endtrans %}
                           </p>
                           <ul class="list-group ms-1">
                             <li class="list-group-item list-group-item-action">
-                              <b>1) Log in</b>
+                              <b>{% trans %}1) Log in{% endtrans %}</b>
                               <p class="my-2">
-                              Log in to your <a href="{{ DOMAIN }}{{ url_with_lang('login') }}" target="_blank">account</a>
-                                account using the same email address provided during the device's Wi-Fi setup.
-                                Ensure both emails match for proper account synchronization.
+                              {% trans %}Log in to your{% endtrans %} <a href="{{ DOMAIN }}{{ url_with_lang('login') }}" target="_blank">{% trans %}account{% endtrans %}</a>
+                                {% trans %}account using the same email address provided during the device's Wi-Fi setup. Ensure both emails match for proper account synchronization.{% endtrans %}
                               </p>
                             </li>
                             <li class="list-group-item list-group-item-action">
-                              <b>2) Update the "Empty Level" in Settings</b>
+                              <b>{% trans %}2) Update the "Empty Level" in Settings{% endtrans %}</b>
                               <p class="my-2">
-                                After logging in, find your new device in the <a href="{{ DOMAIN }}{{ url_with_lang('devices') }}" target="_blank">"My Devices"</a> list.
-                                Open the device's details page and click the <b>"Device Settings"</b> button at the bottom.
+                                {% trans %}After logging in, find your new device in the{% endtrans %} <a href="{{ DOMAIN }}{{ url_with_lang('devices') }}" target="_blank">{% trans %}"My Devices"{% endtrans %}</a> {% trans %}list.
+                                Open the device's details page and click the <b>"Device Settings"</b> button at the bottom.{% endtrans %}
                               </p>
                               <p class="my-2">
-                                In the settings, adjust the <b>"Empty Level"</b> by entering the
-                                distance (in centimeters) from the internal sensor to the bottom of the tank,
-                                representing the point at which you consider the tank to be empty.
+                                {% trans %}In the settings, adjust the <b>"Empty Level"</b> by entering the distance (in centimeters) from the internal sensor to the bottom of the tank, representing the point at which you consider the tank to be empty.{% endtrans %}
                               </p>
                             </li>
                             <li class="list-group-item list-group-item-action">
-                              <b>3) Update the "Top Margin" in Settings</b>
+                              <b>{% trans %}3) Update the "Top Margin" in Settings{% endtrans %}</b>
                               <p class="my-2 alert alert-info">
-                                The <b>Top Margin</b> property specifies the unused space at the top of the water tank. Typically,
-                                tanks have at least 20 cm of empty space at the top to prevent overflows, controlled by a float valve or
-                                similar mechanism. Setting this value ensures more accurate readings, indicating when the tank
-                                is truly at 100&#37; capacity.
+                                {% trans %}The <b>Top Margin</b> property specifies the unused space at the top of the water tank. Typically, tanks have at least 20 cm of empty space at the top to prevent overflows, controlled by a float valve or similar mechanism. Setting this value ensures more accurate readings, indicating when the tank is truly at 100&#37; capacity.{% endtrans %}
                               </p>
                               <p class="my-2">
-                                In the settings, adjust the <b>Top Margin</b> to define the distance (in centimeters) from the sensor to
-                                the maximum water level. This ensures the system accounts for the unused space at the top of
-                                the tank, providing more accurate measurements of full capacity.
+                                {% trans %}In the settings, adjust the <b>Top Margin</b> to define the distance (in centimeters) from the sensor to the maximum water level. This ensures the system accounts for the unused space at the top of the tank, providing more accurate measurements of full capacity.{% endtrans %}
                               </p>
                               <hr>
                               <ul class="list-group ms-1">
-                                <h6>Depending on the sensor model, it may have a blind spot where it cannot detect accurately.
-                                  If the water level enters this blind area, the sensor might report random or unreliable measurements.</h6>
+                                <h6>{% trans %}Depending on the sensor model, it may have a blind spot where it cannot detect accurately. If the water level enters this blind area, the sensor might report random or unreliable measurements.{% endtrans %}</h6>
                                 <li class="list-group-item list-group-item-action">
                                   <b>AJ-SR04M: </b>
-                                    The <b>AJ-SR04M</b> sensor has a blind area of <b>20 cm</b>, meaning it cannot measure
-                                    distances within this range. To ensure accurate readings, a Top Margin of at
-                                    least 20 cm is required.
+                                    {% trans %}The <b>AJ-SR04M</b> sensor has a blind area of <b>20 cm</b>, meaning it cannot measure distances within this range. To ensure accurate readings, a Top Margin of at least 20 cm is required.{% endtrans %}
                                 </li>
                                 <li class="list-group-item list-group-item-action">
                                   <b>RCWL-1670: </b>
-                                  The <b>RCWL-1670</b> sensor has a blind area of <b>2 cm</b>, meaning it cannot measure
-                                  accurately within this range. To ensure proper functionality, set a Top Margin of at least 2 cm.
+                                  {% trans %}The <b>RCWL-1670</b> sensor has a blind area of <b>2 cm</b>, meaning it cannot measure accurately within this range. To ensure proper functionality, set a Top Margin of at least 2 cm.{% endtrans %}
                                 </li>
                               </ul>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                              <b>{% trans %}4) Update "Liters per cm" in Settings{% endtrans %}</b>
+                              <p class="my-2">
+                                {% trans %}Set <b>Liters per cm</b> to convert each centimeter of water height into liters. This helps the app show volume changes more accurately.{% endtrans %}
+                              </p>
+                              <p class="my-2 alert alert-secondary">
+                                {% trans %}Quick estimate: <b>Liters per cm = usable tank liters / usable tank height in cm</b>. Start with this value and fine-tune after a few real fill/drain cycles.{% endtrans %}
+                              </p>
                             </li>
 
                           </ul>
@@ -731,7 +726,7 @@
             <div class="ratio ratio-16x9 video-wrapper my-2">
                   <video autoplay muted loop>
                     <source src="https://github.com/rrguardo/WiFi-Water-Level-S1/raw/refs/heads/main/images/S1Show2.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
+                    {% trans %}Your browser does not support the video tag.{% endtrans %}
                   </video>
             </div>
       </div>
@@ -809,13 +804,11 @@
                                         {% trans %}Fast Updates{% endtrans %} <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} {% trans %}USD/Month{% endtrans %}</span>
                                     </button>
 
-                                    {% trans %}
-                                    <p class="mx-2 mt-2">Buy this monthly subscription to enable faster frequency updates up to 30 seconds.
-                                        <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
+                                    <p class="mx-2 mt-2">{% trans %}Buy this monthly subscription to enable faster frequency updates up to 30 seconds.{% endtrans %}
+                                      <span class="badge bg-info rounded-pill fs-1 ms-1">{% trans %}1-Week Free Trial{% endtrans %}</span>
                                         <br>
-                                        <span class="fs-1">Minimum frequency updates 30 seconds.</span>
+                                      <span class="fs-1">{% trans %}Minimum frequency updates 30 seconds.{% endtrans %}</span>
                                     </p>
-                                    {% endtrans %}
                                 </div>
                             </div>
                         {% elif type == 2 %}
@@ -824,20 +817,18 @@
                             <input type="hidden" name="a3" value="{{ SUBS_PRICES[type] }}"> <!-- Recurring amount -->
 
                             <div class="row">
-                                {% trans %}
                                 <div class="col-auto">
                                     <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit">
                                         <i class="ti ti-shopping-cart fs-7 mx-1"></i>
-                                        Free Plan <span class="badge bg-warning rounded-pill mx-2 fs-3">0 USD/Month</span>
+                                      {% trans %}Free Plan{% endtrans %} <span class="badge bg-warning rounded-pill mx-2 fs-3">0 {% trans %}USD/Month{% endtrans %}</span>
                                     </button>
 
                                     <p class="mx-2 mt-2">
-                                        Basic free plan to use the device without costs.
+                                        {% trans %}Basic free plan to use the device without costs.{% endtrans %}
                                         <br>
-                                        <span class="fs-1">Minimum frequency updates 120 seconds.</span>
+                                        <span class="fs-1">{% trans %}Minimum frequency updates 120 seconds.{% endtrans %}</span>
                                     </p>
                                 </div>
-                                {% endtrans %}
                             </div>
 
 
@@ -850,14 +841,14 @@
                                 <div class="col-auto">
                                     <button class="btn3d btn btn-primary mx-2 btn-sm fs-5" type="submit">
                                         <i class="ti ti-shopping-cart fs-7 mx-1"></i>
-                                        Fast Premium <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} USD/Month</span>
+                                        {% trans %}Fast Premium{% endtrans %} <span class="badge bg-warning rounded-pill mx-2 fs-3">{{ SUBS_PRICES[type] }} {% trans %}USD/Month{% endtrans %}</span>
                                     </button>
 
                                     <p class="mx-2 mt-2">
-                                        Premium monthly subscription required to use the device that include faster frequency updates up to 30 seconds.
-                                        <span class="badge bg-info rounded-pill fs-1 ms-1">1-Week Free Trial</span>
+                                        {% trans %}Premium monthly subscription required to use the device that include faster frequency updates up to 30 seconds.{% endtrans %}
+                                        <span class="badge bg-info rounded-pill fs-1 ms-1">{% trans %}1-Week Free Trial{% endtrans %}</span>
                                         <br>
-                                        <span class="fs-1">Minimum frequency updates 30 seconds.</span>
+                                        <span class="fs-1">{% trans %}Minimum frequency updates 30 seconds.{% endtrans %}</span>
                                     </p>
                                 </div>
                             </div>

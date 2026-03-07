@@ -56,7 +56,55 @@ app.config['SECRET_KEY'] = settings.APP_SEC_KEY
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=30)  # Example: 30 days
 app.config['SESSION_COOKIE_DURATION '] = timedelta(days=5)  # Example: 30 days
 app.config['BABEL_DEFAULT_LOCALE'] = 'en'
-app.config['LANGUAGES'] = ['en', 'es', 'hi']  # Supported languages
+app.config['LANGUAGES'] = ['en', 'es', 'hi', 'zh']  # Supported languages
+
+
+def normalize_language_code(lang_code):
+    """Normalize locale tags (e.g. zh-CN, es-419) to a supported app language.
+
+    Args:
+        lang_code: Raw locale string from route/cookie/browser headers.
+
+    Returns:
+        str: Normalized locale in app.config['LANGUAGES'] or default locale.
+    """
+    default_lang = app.config['BABEL_DEFAULT_LOCALE']
+    supported_langs = app.config['LANGUAGES']
+
+    if not lang_code:
+        return default_lang
+
+    normalized = str(lang_code).strip().lower().replace('_', '-')
+    if normalized in supported_langs:
+        return normalized
+
+    # Map regional/script variants to base language (e.g. zh-CN -> zh).
+    base_lang = normalized.split('-', 1)[0]
+    if base_lang in supported_langs:
+        return base_lang
+
+    return default_lang
+
+
+def resolve_preferred_language():
+    """Resolve language preference using cookie first, then Accept-Language headers.
+
+    Returns:
+        str: One of app.config['LANGUAGES'].
+    """
+    lang_cookie = request.cookies.get('lang', False)
+    if lang_cookie:
+        return normalize_language_code(lang_cookie)
+
+    # Iterate explicit header preferences to support variants like zh-CN, es-419, hi-IN.
+    for browser_lang, _quality in request.accept_languages:
+        mapped_lang = normalize_language_code(browser_lang)
+        if mapped_lang in app.config['LANGUAGES']:
+            return mapped_lang
+
+    # Keep best_match as a final fallback.
+    best_match = request.accept_languages.best_match(app.config['LANGUAGES'])
+    return normalize_language_code(best_match)
 
 
 def get_locale():
@@ -66,12 +114,9 @@ def get_locale():
     Returns:
         str: Active locale code.
     """
-    lang = request.view_args.get('lang', app.config['BABEL_DEFAULT_LOCALE'])
+    lang = normalize_language_code(request.view_args.get('lang', app.config['BABEL_DEFAULT_LOCALE']))
 
     logging.warning(f"lang: {lang}")
-    if lang not in app.config['LANGUAGES']:
-        lang = app.config['BABEL_DEFAULT_LOCALE']
-
     return lang
 
 
@@ -88,21 +133,17 @@ def ensure_language(func):
         # Skip language redirect logic for POST requests
         if request.method == "POST":
             return func(*args, **kwargs)
-        lang = kwargs.get('lang', app.config['BABEL_DEFAULT_LOCALE'])
-        if lang not in app.config['LANGUAGES']:
-            lang = app.config['BABEL_DEFAULT_LOCALE']
-        lang_cookie = request.cookies.get('lang', False)
-        if not lang_cookie:
-            lang_cookie = request.accept_languages.best_match(app.config['LANGUAGES'])
-        if lang_cookie and lang_cookie != lang:
+        lang = normalize_language_code(kwargs.get('lang', app.config['BABEL_DEFAULT_LOCALE']))
+        preferred_lang = resolve_preferred_language()
+        if preferred_lang and preferred_lang != lang:
             query_st = request.query_string.decode()
             if query_st:
                 query_st = "?"+query_st
             new_path = request.path + query_st
             if lang != app.config['BABEL_DEFAULT_LOCALE']:
                 new_path = new_path.replace(f"/{lang}", "")
-            if lang_cookie != app.config['BABEL_DEFAULT_LOCALE']:
-                new_path = f"/{lang_cookie}{new_path}"
+            if preferred_lang != app.config['BABEL_DEFAULT_LOCALE']:
+                new_path = f"/{preferred_lang}{new_path}"
             logging.warning(f"redirect: {new_path}")
             return redirect(new_path or "/")
         return func(*args, **kwargs)
@@ -120,9 +161,7 @@ def before_request():
     """
     g.img_lang = ''
     if request.view_args:
-        g.lang = request.view_args.get('lang', app.config['BABEL_DEFAULT_LOCALE'])
-        if g.lang not in app.config['LANGUAGES']:
-            g.lang = app.config['BABEL_DEFAULT_LOCALE']
+        g.lang = normalize_language_code(request.view_args.get('lang', app.config['BABEL_DEFAULT_LOCALE']))
         if g.lang != 'en':
             g.img_lang = "_" + g.lang
 
@@ -165,7 +204,7 @@ redis_client = redis.StrictRedis(
 
 DOMAIN = settings.APP_DOMAIN
 API_URL = settings.API_DOMAIN
-RELEASE_VERSION = "1.0.6"
+RELEASE_VERSION = "1.0.7"
 
 
 @app.context_processor
@@ -1450,8 +1489,9 @@ def set_language(language):
     Returns:
         flask.Response: Redirect response with updated cookie.
     """
+    normalized_language = normalize_language_code(language)
     resp = make_response(redirect(request.referrer or '/'))  # Redirect to previous URL or '/' if missing
-    resp.set_cookie('lang', language)  # Store selected language in cookie
+    resp.set_cookie('lang', normalized_language)  # Store selected language in cookie
     return resp
 
 

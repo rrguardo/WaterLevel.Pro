@@ -2,6 +2,45 @@
 
 All notable changes to this project are documented in this file.
 
+## v1.0.7 - 2026-03-07
+
+### Added
+- New Chinese locale (`zh`) support across web routing and UI language selection.
+- New locale normalization and preference resolution in `app.py` to map regional/browser variants (for example `zh-CN`, `es-419`, `hi-IN`) to supported app locales.
+- New Chinese translation catalog scaffold at `translations/zh/LC_MESSAGES/messages.po`.
+- New localized Chinese manual assets under `static/manuals/*_zh.png`.
+- New S1 manual guidance for `Liters per cm` setting with quick estimate formula and translated strings.
+- New preview image in README (`static/prod_img/s1_stats.png`).
+
+### Changed
+- Expanded supported languages in `app.py` from `en/es/hi` to `en/es/hi/zh`.
+- Updated `templates/base2.html` language dropdown to include Chinese.
+- Internationalized additional previously hardcoded UI text in:
+	- `templates/manuals/s1.html`
+	- `templates/manuals/r1.html`
+	- `templates/products/r1.html`
+	- `templates/relay_device_info.html`
+	- `templates/add_sensor.html`
+	- `templates/add_relay.html`
+	- `templates/admin_dashboard.html`
+	- `templates/invalid_device.html`
+	- `templates/phone_verify.html`
+- Updated `static/sitemap.xml` with Chinese localized URLs for key web, product, manual, and demo pages.
+- Refreshed Spanish and Hindi catalogs (`translations/es/LC_MESSAGES/messages.po`, `translations/hi/LC_MESSAGES/messages.po`) to include new strings and template references from expanded i18n coverage.
+
+### Fixed
+- Resolved Jinja template runtime error in S1 manual by removing nested `trans` block usage.
+- Removed malformed obsolete PO blocks that could trigger Babel compile warnings/errors in runtime and cron logs.
+- Ensured Babel catalog compilation succeeds cleanly for `es`, `hi`, and `zh`.
+
+### Internationalization
+- Expanded multilingual coverage for manuals and device/admin flows, reducing English fallbacks in localized pages.
+- Added translations for new S1 settings guidance (including `Liters per cm` estimate) in `es`, `hi`, and `zh`.
+- Improved locale behavior so language cookie and browser language variants resolve to supported locales more reliably.
+
+### Documentation
+- README visual section updated with an additional S1 stats dashboard preview image.
+
 ## v1.0.6 - 2026-03-07
 
 ### Added

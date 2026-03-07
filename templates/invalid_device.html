@@ -1,7 +1,7 @@
 {% extends "base2.html" %}
 
 {% block head %}
-<title>Device Info</title>
+<title>{% trans %}Device Info{% endtrans %}</title>
 {% endblock %}
 
 {% block content %}
@@ -12,10 +12,10 @@
     <div class="row ">
         <div class="alert alert-danger">
             <div class="col-sm-4 ">
-                <h1>Invalid Device Info</h1>
+                <h1>{% trans %}Invalid Device Info{% endtrans %}</h1>
             </div>
             <div class="col-sm-6">
-                <h3 class="mt-2">Key used: [{{ key_used }}]</h3>
+                <h3 class="mt-2">{% trans %}Key used:{% endtrans %} [{{ key_used }}]</h3>
             </div>
         </div>
 

@@ -15,6 +15,10 @@ Free online demo: [https://waterlevel.pro/](https://waterlevel.pro/)
    <img src="https://waterlevel.pro/static/prod_img/cel.png" alt="WaterLevel.Pro mobile dashboard preview" width="180" />
 </p>
 
+<p align="center">
+   <img src="https://waterlevel.pro/static/prod_img/s1_stats.png" alt="WaterLevel.Pro S1 stats dashboard preview" />
+</p>
+
 SEO keywords: IoT water level monitoring, smart water pump controller, Flask backend API, ESP8266/ESP32 telemetry ingestion, self-hosted water tank dashboard, SMS/email water alerts.
 
 ## Table of contents

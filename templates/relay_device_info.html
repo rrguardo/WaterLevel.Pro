@@ -262,16 +262,18 @@
                     <li class="list-group-item list-group-item-info">
                         {% trans %}Pump <b>start</b> when water level reach{% endtrans %} <b>{{ device_setting.START_LEVEL }}% {% trans %}or lower{% endtrans %}</b>.
                     </li>
-                    <li class="list-group-item list-group-item-info">{% trans %}Pump <b>stop</b> when water level reach{% endtrans %} <b>{{ device_setting.END_LEVEL }}% {% trans %}or bigger{% endtrans %}</b>.</li>                    <li class="list-group-item list-group-item-info">Pump <b>stop</b> if water level get closer to the sensor <b>blind area</b> defined at sensor linked settings.</li>                    <li class="list-group-item list-group-item-info">Pump <b>stop</b> if the sensor is <b>offline</b> or controller lose internet connection.</li>                    <li class="list-group-item list-group-item-warning">
-                        <b>This is an experimental feature; do not use it without supervision.</b> <br>
-                        Ensure all necessary precautions are taken, as it may not work under your specific conditions.<br>
-                        <div class="btn3d btn btn-sm btn-primary" id="AdvancedSettingsButton">Use Advanced Settings</div> to customize
-                        the smart mode for factors like water tank size, pump flow, and other variables.
+                    <li class="list-group-item list-group-item-info">{% trans %}Pump <b>stop</b> when water level reach{% endtrans %} <b>{{ device_setting.END_LEVEL }}% {% trans %}or bigger{% endtrans %}</b>.</li>
+                    <li class="list-group-item list-group-item-info">{% trans %}Pump <b>stop</b> if water level get closer to the sensor <b>blind area</b> defined at sensor linked settings.{% endtrans %}</li>
+                    <li class="list-group-item list-group-item-info">{% trans %}Pump <b>stop</b> if the sensor is <b>offline</b> or controller lose internet connection.{% endtrans %}</li>
+                    <li class="list-group-item list-group-item-warning">
+                        <b>{% trans %}This is an experimental feature; do not use it without supervision.{% endtrans %}</b> <br>
+                        {% trans %}Ensure all necessary precautions are taken, as it may not work under your specific conditions.{% endtrans %}<br>
+                        <div class="btn3d btn btn-sm btn-primary" id="AdvancedSettingsButton">{% trans %}Use Advanced Settings{% endtrans %}</div> {% trans %}to customize the smart mode for factors like water tank size, pump flow, and other variables.{% endtrans %}
                     </li>
                     <li class="list-group-item list-group-item-danger">
-                        Carefully read the <b><a href="{{ DOMAIN }}{{ url_with_lang('manuals', product_name='WiFi-Water-Level-S1') }}" target="_blank">WiFi Water Level S1</a></b> sensor
-                        installation guide before using this feature. Ensure the sensor inside the water tank is not too close to the water
-                        inlet or floating valve and consistently provides accurate water level readings.
+                        {% trans %}Carefully read the <b>WiFi Water Level S1</b> sensor installation guide before using this feature. Ensure the sensor inside the water tank is not too close to the water inlet or floating valve and consistently provides accurate water level readings.{% endtrans %}
+                        <br>
+                        <a href="{{ DOMAIN }}{{ url_with_lang('manuals', product_name='WiFi-Water-Level-S1') }}" target="_blank">{% trans %}Open WiFi Water Level S1 Manual{% endtrans %}</a>
                     </li>
 
                 </ul>

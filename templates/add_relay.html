@@ -4,7 +4,7 @@
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="{{ url_for('static', filename='assets/js/templates/recaptcha-form.js') }}" defer></script>
 
-<title>Add Relay</title>
+<title>{% trans %}Add Relay{% endtrans %}</title>
 {% endblock %}
 
 
@@ -16,13 +16,12 @@
     <div class="col-md-12">
               <div class="card">
                 <div class="px-4 py-3 border-bottom">
-                  <h4 class="card-title mb-0">Add New Relay</h4>
+                  <h4 class="card-title mb-0">{% trans %}Add New Relay{% endtrans %}</h4>
                 </div>
                 <div class="card-body p-4">
 
                     <p>
-                        Use this feature to register a new S1 Pump Controller hardware. It will allow to generate a new public and private
-                        keys, that could be uploaded inside the Smart Pump microcontroller memory.
+                      {% trans %}Use this feature to register a new S1 Pump Controller hardware. It will allow to generate a new public and private keys, that could be uploaded inside the Smart Pump microcontroller memory.{% endtrans %}
                     </p>
 
                     <div class="mb-3">
@@ -38,24 +37,24 @@
                     </div>
 
                       <form method="post" action="{{ url_for('admin_dashboard') }}" data-recaptcha-form="true"
-                        data-recaptcha-msg="Please verify that you are not a robot.">
+                        data-recaptcha-msg="{% trans %}Please verify that you are not a robot.{% endtrans %}">
                         <input type="hidden" name="action" value="add-relay">
                       <div class="mb-4">
-                        <label for="PrivateKeyInput" class="form-label">Private Key:</label>
-                        <input type="text" class="form-control" id="PrivateKeyInput" placeholder="Leave empty to use secure random" name="private_key">
+                        <label for="PrivateKeyInput" class="form-label">{% trans %}Private Key:{% endtrans %}</label>
+                        <input type="text" class="form-control" id="PrivateKeyInput" placeholder="{{ _('Leave empty to use secure random') }}" name="private_key">
                       </div>
                       <div class="mb-4">
-                        <label for="PublicKeyInput" class="form-label">Public Key:</label>
-                        <input type="text" class="form-control" id="PublicKeyInput" placeholder="Leave empty to use secure random" name="public_key">
+                        <label for="PublicKeyInput" class="form-label">{% trans %}Public Key:{% endtrans %}</label>
+                        <input type="text" class="form-control" id="PublicKeyInput" placeholder="{{ _('Leave empty to use secure random') }}" name="public_key">
                       </div>
                       <div class="mb-4">
-                        <label class="form-label">Device Note:</label>
-                        <textarea class="form-control p-7" name="note" id="" cols="30" rows="3" placeholder="Extra info about device. (dev., ebay, amazon, ..)"></textarea>
+                        <label class="form-label">{% trans %}Device Note:{% endtrans %}</label>
+                        <textarea class="form-control p-7" name="note" id="" cols="30" rows="3" placeholder="{{ _('Extra info about device. (dev., ebay, amazon, ..)') }}"></textarea>
                       </div>
 
                       <div class="mb-4">
                         <label for="stype" class="form-label d-flex">
-                        <span class="col-auto  pt-1">Relay Type: </span>
+                        <span class="col-auto  pt-1">{% trans %}Relay Type:{% endtrans %} </span>
                             <span class="col-auto mx-2">
                         <select id="stype" name="stype" class="form-select">
                             <option value="3">S1 Pump Controller</option>
@@ -67,7 +66,7 @@
                       <div class="mb-4">
                         <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_PUBLIC_KEY }}"></div>
                       </div>
-                      <button class="btn btn-primary">Send</button>
+                        <button class="btn btn-primary">{% trans %}Send{% endtrans %}</button>
                   </form>
 
                 </div>
