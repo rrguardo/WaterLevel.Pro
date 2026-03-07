@@ -1502,7 +1502,7 @@ function renderHourlyCharts(publicKey) {
                       }
                   }
               },
-              plotOptions: { bar: { borderRadius: 4, columnWidth: '55%' } },
+              plotOptions: { bar: { borderRadius: 4, columnWidth: '100%' } },
               xaxis: { categories: labels },
               yaxis: { max: 100 },
               noData: { text: 'No data' },
@@ -1553,7 +1553,7 @@ function renderHourlyCharts(publicKey) {
                   }
               },
               stroke: { width: [2, 0, 0], curve: 'smooth' },
-              plotOptions: { bar: { columnWidth: '50%', borderRadius: 4 } },
+              plotOptions: { bar: { columnWidth: '100%', borderRadius: 4 } },
               xaxis: { categories: labels },
               yaxis: [{ title: { text: 'Voltage (V)' } }, { opposite: true, max: 100, title: { text: 'Charge %' } }],
               colors: ['#ff9900', '#00b050', '#ff0000'],
@@ -1674,7 +1674,7 @@ function renderHourlyDrill(publicKey, hour_start) {
                   { name: 'Offline', type: 'bar', data: offlineMarkerData }
               ],
               chart: { type: 'bar', height: 300 },
-              plotOptions: { bar: { borderRadius: 4, columnWidth: '55%' } },
+              plotOptions: { bar: { borderRadius: 4, columnWidth: '100%' } },
               colors: ['#00bfff', '#ff0000'],
               xaxis: { categories: labels },
               yaxis: { min: 1, max: 100, forceNiceScale: false },
@@ -1699,7 +1699,7 @@ function renderHourlyDrill(publicKey, hour_start) {
               ],
               chart: { type: 'line', height: 300 },
               stroke: { width: [2, 0], curve: 'smooth' },
-              plotOptions: { bar: { columnWidth: '50%', borderRadius: 4 } },
+              plotOptions: { bar: { columnWidth: '100%', borderRadius: 4 } },
               colors: ['#00b050', '#ff0000'],
               xaxis: { categories: labels },
               yaxis: [
