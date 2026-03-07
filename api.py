@@ -335,8 +335,10 @@ def update():
 
             history_key = f'tin-history/{key}'
             score = int(time.time())
-            # Store as "percent|voltage" string
-            redis_client.zadd(history_key, {f"{percent}|{voltage_val}": score})
+            # Store unique member to avoid zset member overwrite when
+            # percent/voltage values repeat across consecutive updates.
+            unique_suffix = time.time_ns()
+            redis_client.zadd(history_key, {f"{percent}|{voltage_val}|{unique_suffix}": score})
             # Keep recent history only (trim older than 3 days)
             redis_client.zremrangebyscore(history_key, 0, score - 60 * 60 * 24 * 3)
             # Optional TTL for the zset key (3 days)

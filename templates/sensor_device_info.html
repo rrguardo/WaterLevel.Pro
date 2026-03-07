@@ -8,15 +8,6 @@
     .hourly-clickable-chart * {
         cursor: pointer;
     }
-
-    #hourly-percent-chart .apexcharts-data-label,
-    #hourly-voltage-chart .apexcharts-data-label,
-    #drill-percent-chart .apexcharts-data-label,
-    #drill-voltage-chart .apexcharts-data-label {
-        writing-mode: vertical-rl;
-        text-orientation: upright;
-        letter-spacing: 0;
-    }
 </style>
 
 <script src="{{ url_for('static', filename='assets/js/qrcode.min.js') }}"></script>
@@ -1516,16 +1507,6 @@ function renderHourlyCharts(publicKey) {
               yaxis: { max: 100 },
               noData: { text: 'No data' },
               colors: ['#00bfff', '#ff0000'],
-              dataLabels: {
-                  enabled: true,
-                  enabledOnSeries: [1],
-                  formatter: function(val){
-                      if(val === null || val === undefined) return '';
-                      return 'OFFLINE';
-                  },
-                  style: { colors: ['#ffffff'], fontSize: '8px', fontWeight: '700' },
-                  offsetY: 0
-              },
               tooltip: {
                   y: {
                       formatter: function(val, opts){
@@ -1576,16 +1557,6 @@ function renderHourlyCharts(publicKey) {
               xaxis: { categories: labels },
               yaxis: [{ title: { text: 'Voltage (V)' } }, { opposite: true, max: 100, title: { text: 'Charge %' } }],
               colors: ['#ff9900', '#00b050', '#ff0000'],
-              dataLabels: {
-                  enabled: true,
-                  enabledOnSeries: [2],
-                  formatter: function(val){
-                      if(val === null || val === undefined) return '';
-                      return 'OFFLINE';
-                  },
-                  style: { colors: ['#ffffff'], fontSize: '8px', fontWeight: '700' },
-                  offsetY: 0
-              },
               tooltip: {
                   shared: true,
                   y: {
@@ -1619,7 +1590,17 @@ function renderHourlyDrill(publicKey, hour_start) {
           }
 
           var samples = (resp && Array.isArray(resp.samples)) ? resp.samples : [];
-          var slotsCount = Math.max(1, Math.ceil(3600 / samplingSeconds));
+          var nowTs = Math.floor(Date.now() / 1000);
+          var hourEnd = hour_start + 3600;
+          var effectiveWindowSeconds = 3600;
+
+          if(nowTs >= hour_start && nowTs < hourEnd){
+              effectiveWindowSeconds = Math.max(1, nowTs - hour_start + 1);
+          }
+
+          var samplingToleranceSeconds = 40;
+          var estimatedSamplingWindowSeconds = samplingSeconds + samplingToleranceSeconds;
+          var slotsCount = Math.max(1, Math.ceil(effectiveWindowSeconds / estimatedSamplingWindowSeconds));
           var slotData = {};
 
           samples.forEach(function(s){
@@ -1627,7 +1608,7 @@ function renderHourlyDrill(publicKey, hour_start) {
               if(!Number.isFinite(sampleTs)) return;
               var offset = sampleTs - hour_start;
               if(offset < 0 || offset >= 3600) return;
-              var slotIndex = Math.floor(offset / samplingSeconds);
+              var slotIndex = Math.floor(offset / estimatedSamplingWindowSeconds);
               if(!slotData[slotIndex]){
                   slotData[slotIndex] = { percent: [], voltage: [] };
               }
@@ -1649,7 +1630,7 @@ function renderHourlyDrill(publicKey, hour_start) {
           var offlineMarkerData = [];
 
           for(var i = 0; i < slotsCount; i++){
-              var expectedTs = hour_start + (i * samplingSeconds);
+              var expectedTs = hour_start + (i * estimatedSamplingWindowSeconds);
               var d = new Date(expectedTs * 1000);
               labels.push(d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0'));
 
@@ -1697,16 +1678,6 @@ function renderHourlyDrill(publicKey, hour_start) {
               colors: ['#00bfff', '#ff0000'],
               xaxis: { categories: labels },
               yaxis: { min: 1, max: 100, forceNiceScale: false },
-              dataLabels: {
-                  enabled: true,
-                  enabledOnSeries: [1],
-                  formatter: function(val){
-                      if(val === null || val === undefined) return '';
-                      return 'OFFLINE';
-                  },
-                  style: { colors: ['#ffffff'], fontSize: '8px', fontWeight: '700' },
-                  offsetY: 0
-              },
               tooltip: {
                   y: {
                       formatter: function(v, opts){
@@ -1735,16 +1706,6 @@ function renderHourlyDrill(publicKey, hour_start) {
                   { title: { text: 'Voltage (V)' } },
                   { opposite: true, min: 0, max: 100, show: false }
               ],
-              dataLabels: {
-                  enabled: true,
-                  enabledOnSeries: [1],
-                  formatter: function(val){
-                      if(val === null || val === undefined) return '';
-                      return 'OFFLINE';
-                  },
-                  style: { colors: ['#ffffff'], fontSize: '8px', fontWeight: '700' },
-                  offsetY: 0
-              },
               tooltip: {
                   shared: true,
                   y: {

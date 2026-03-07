@@ -14,13 +14,14 @@ Overview
 
 Ingestion (what happens on update)
 - The device API normalizes incoming numeric fields (voltage normalization, distance → percent using `EMPTY_LEVEL`/`TOP_MARGIN`). See `api.py` for exact calculation points.
-- Stored item: member string containing percent and voltage; score is the current epoch time (seconds).
+- Stored item: member string containing percent, voltage, and a unique suffix; score is the current epoch time (seconds).
 - The ingestion process also trims old history and sets TTLs to keep storage bounded (retention configured in the app).
 
 Storage format
 - Redis sorted-set per device: `tin-history/{public_key}`
 - Score: integer epoch seconds of the sample
-- Member: string containing sample data: `percent|voltage` (example: `72|3.79`)
+- Member: string containing sample data: `percent|voltage|unique_suffix` (example: `72|3.79|1731159935123456789`)
+- Parser compatibility: server-side stats readers accept both legacy `percent|voltage` and current `percent|voltage|unique_suffix` formats.
 
 Aggregation into hourly buckets (server-side, `/sensor_stats`)
 - The web route builds 24 buckets for the last 24 hours. Each bucket has an `hour_start` (epoch seconds representing the start of the hour window) and covers a one-hour interval.

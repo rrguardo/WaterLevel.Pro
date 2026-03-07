@@ -303,12 +303,16 @@ def sensor_stats():
             })
             continue
 
-        # parse items "percent|voltage"
+        # parse items "percent|voltage" (legacy) or
+        # "percent|voltage|unique_suffix" (current)
         percents = []
         volts = []
         for it in items:
             try:
-                p, v = it.split('|')
+                parts = it.split('|')
+                if len(parts) < 2:
+                    continue
+                p, v = parts[0], parts[1]
                 percents.append(float(p))
                 volts.append(float(v))
             except Exception:
@@ -363,7 +367,10 @@ def sensor_stats_hour():
     samples = []
     for member, score in items:
         try:
-            p, v = member.split('|')
+            parts = member.split('|')
+            if len(parts) < 2:
+                continue
+            p, v = parts[0], parts[1]
             samples.append({
                 'ts': int(score),
                 'percent': float(p),
