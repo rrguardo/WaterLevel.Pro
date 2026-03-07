@@ -21,9 +21,13 @@ echo "[wlp] Applying remote state from origin/main"
 git reset --hard origin/main
 
 echo "[wlp] Stash info"
+
+# Apply the stash if it was created
 if [[ -n "$LATEST_STASH" ]]; then
   echo "[wlp] Created stash: $LATEST_STASH"
   git stash show --stat "$LATEST_STASH"
+  echo "[wlp] Applying $LATEST_STASH to restore local changes..."
+  git stash apply "$LATEST_STASH"
 else
   echo "[wlp] No new stash entry was created (no local changes to stash)."
 fi
