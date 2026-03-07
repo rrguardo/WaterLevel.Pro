@@ -31,13 +31,13 @@ Aggregation into hourly buckets (server-side, `/sensor_stats`)
 
 Frontend rendering and chart behavior
 - The device page (`templates/sensor_device_info.html`) requests `/sensor_stats` and receives an array of 24 `buckets` with fields like `hour_start`, `percent`, `voltage`, `offline`.
-- Hour labeling: the template displays hourly labels using the bucket end time (i.e. `new Date((hour_start + 3600) * 1000)`) so the human-readable hour matches the end of that hour window and avoids a perceived -1 hour offset.
+- Hour labeling: the template displays hourly labels using the bucket start time (i.e. `new Date(hour_start * 1000)`) so each hour shown matches the bucket where samples are aggregated.
 - Fill percent chart: the percent series uses the server-provided `percent` (rounded on the server) and the template further ensures integers with `Math.round(b.percent)` before pushing series values.
 - Battery chart: the hourly voltage average is converted to a battery charge percentage using the client-side helper `mapVoltageToPercentage(voltage)`. This function maps voltage ranges to coarse percentage buckets (0,10,20,...,100). The computed charge % is also rounded on the client for display.
 - Tooltips and display: both charts format percent and battery charge as integers (no decimals) to keep the UI consistent.
 
-Why the hourly label uses bucket end time
-- When aggregating samples into hour-long windows, showing the end-of-window hour (hour_start + 3600) makes the label represent the hour that just finished rather than the starting hour. This matches human expectation for "last 24 hours" charts and avoids an off-by-one-hour perception.
+Why the hourly label uses bucket start time
+- When aggregating samples into hour-long windows, showing the start-of-window hour (`hour_start`) keeps each bucket label aligned with the hour where samples were recorded, avoiding a perceived +1h shift.
 
 How the final value for an hour is determined (summary)
 1. Collect all samples whose epoch score falls within the bucket's [hour_start, hour_start+3600] interval.

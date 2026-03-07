@@ -64,6 +64,20 @@ msgstr ""
 #: app.py:484
 msgid "No event reported"
 msgstr "No se ha reportado ningún evento"
+msgid "Click a bar or point to view hourly details."
+msgstr "Haz clic en una barra o punto para ver los detalles por hora."
+
+msgid "Fill percent last 24 hours"
+msgstr "Porcentaje de llenado en las últimas 24 horas"
+
+msgid "Battery charge last 24 hours"
+msgstr "Carga de batería en las últimas 24 horas"
+
+msgid "Hour details"
+msgstr "Detalles por hora"
+
+msgid "Warning: Multiple offline hours detected. Maintenance: replace batteries, clean solar panel, check internet, and inspect waterproof sealing/wiring."
+msgstr "Advertencia: Se detectaron múltiples horas sin conexión. Mantenimiento recomendado: reemplazar baterías, limpiar el panel solar, verificar internet e inspeccionar el sellado impermeable y el cableado."
 
 #: app.py:485
 msgid "Sensor reach near the blind area!"

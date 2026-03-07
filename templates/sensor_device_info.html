@@ -3,6 +3,13 @@
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/sensor-device-info.css') }}" />
 
+<style>
+    .hourly-clickable-chart,
+    .hourly-clickable-chart * {
+        cursor: pointer;
+    }
+</style>
+
 <script src="{{ url_for('static', filename='assets/js/qrcode.min.js') }}"></script>
 
 <script>
@@ -421,19 +428,22 @@
 <!-- New: Hourly stats charts (last 24h) inserted before Add Alert -->
 <div class="row d-flex justify-content-center mb-3 small_none">
     <div class="col-12">
+        <p class="text-muted small mb-2">{% trans %}Click a bar or point to view hourly details.{% endtrans %}</p>
         <div class="card bg-light mb-3">
             <div class="card-body">
-                <h5 class="card-title fw-semibold mb-4">Fill percent last 24 hours</h5>
-                <div id="hourly-percent-chart" style="height:260px"></div>
+                <h5 class="card-title fw-semibold mb-4">{% trans %}Fill percent last 24 hours{% endtrans %}</h5>
+                <div id="hourly-percent-chart" class="hourly-clickable-chart" style="height:260px"></div>
             </div>
         </div>
 
         <div class="card bg-light">
             <div class="card-body">
-                <h5 class="card-title fw-semibold mb-4">Battery charge last 24 hours</h5>
-                <div id="hourly-voltage-chart" style="height:260px"></div>
+                <h5 class="card-title fw-semibold mb-4">{% trans %}Battery charge last 24 hours{% endtrans %}</h5>
+                <div id="hourly-voltage-chart" class="hourly-clickable-chart" style="height:260px"></div>
             </div>
         </div>
+
+        <div id="hourly-offline-warning" class="text-warning fw-semibold mt-3 d-none"></div>
     </div>
 </div>
 
@@ -1430,37 +1440,56 @@ $(document).ready(function() {
 // Section: Hourly stats fetching and charting
 // -----------------------------------------------------------------------------
 // Modal for hourly drilldown (inserted near charts)
-var hourlyDrillModalHtml = '\n<div class="modal fade" id="HourlyDrillModal" tabindex="-1" aria-hidden="true">\n  <div class="modal-dialog modal-xl">\n    <div class="modal-content">\n      <div class="modal-header">\n        <h5 class="modal-title">Hour details</h5>\n        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n      </div>\n      <div class="modal-body">\n        <div id="drill-percent-chart" style="height:300px"></div>\n        <hr/>\n        <div id="drill-voltage-chart" style="height:300px"></div>\n      </div>\n    </div>\n  </div>\n</div>\n';
+var hourlyDrillModalHtml = '\n<div class="modal fade" id="HourlyDrillModal" tabindex="-1" aria-hidden="true">\n  <div class="modal-dialog modal-xl">\n    <div class="modal-content">\n      <div class="modal-header">\n        <h5 class="modal-title">{% trans %}Hour details{% endtrans %}</h5>\n        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n      </div>\n      <div class="modal-body">\n        <div id="drill-percent-chart" style="height:300px"></div>\n        <hr/>\n        <div id="drill-voltage-chart" style="height:300px"></div>\n      </div>\n    </div>\n  </div>\n</div>\n';
 // Append modal to body once
 if(!document.getElementById('HourlyDrillModal')){
     document.body.insertAdjacentHTML('beforeend', hourlyDrillModalHtml);
 }
 
 function renderHourlyCharts(publicKey) {
+    var offlineMaintenanceWarningText = "{% trans %}Warning: Multiple offline hours detected. Maintenance: replace batteries, clean solar panel, check internet, and inspect waterproof sealing/wiring.{% endtrans %}";
     $.getJSON('/sensor_stats', { public_key: publicKey })
       .done(function(resp) {
           if(!resp || !resp.buckets) return;
           var labels = [];
           var percentData = [];
           var voltageData = [];
+          var offlineMarkerData = [];
+          var offlineCount = 0;
 
           resp.buckets.forEach(function(b) {
-              var d = new Date((b.hour_start + 3600) * 1000);
+              var d = new Date(b.hour_start * 1000);
               var hh = d.getHours().toString().padStart(2,'0');
               labels.push(hh);
               if(b.offline) {
                   percentData.push(null);
                   voltageData.push(null);
+                  offlineMarkerData.push(100);
+                  offlineCount += 1;
               } else {
                   percentData.push(Math.round(b.percent));
                   voltageData.push(b.voltage);
+                  offlineMarkerData.push(null);
               }
           });
 
+          var warningEl = document.getElementById('hourly-offline-warning');
+          if(warningEl){
+              if(offlineCount > 3){
+                  warningEl.textContent = offlineMaintenanceWarningText;
+                  warningEl.classList.remove('d-none');
+              } else {
+                  warningEl.classList.add('d-none');
+                  warningEl.textContent = '';
+              }
+          }
+
           // Percent chart (bar) with dataPointSelection handler for drilldown
-          var percentColors = percentData.map(function(v){ return (v === null ? '#e0e0e0' : '#00bfff'); });
           var optionsPercent = {
-              series: [{ name: 'Fill %', data: percentData }],
+              series: [
+                  { name: 'Fill %', type: 'bar', data: percentData },
+                  { name: 'Offline', type: 'bar', data: offlineMarkerData }
+              ],
               chart: {
                   type: 'bar', height: 260,
                   events: {
@@ -1473,23 +1502,53 @@ function renderHourlyCharts(publicKey) {
                       }
                   }
               },
-              plotOptions: { bar: { borderRadius: 4, distributed: true } },
+              plotOptions: { bar: { borderRadius: 4, columnWidth: '55%' } },
               xaxis: { categories: labels },
               yaxis: { max: 100 },
               noData: { text: 'No data' },
-              colors: percentColors,
-              tooltip: { y: { formatter: function(val){ return val === null ? 'offline' : Math.round(val) + '%'; } } }
+              colors: ['#00bfff', '#ff0000'],
+              dataLabels: {
+                  enabled: true,
+                  enabledOnSeries: [1],
+                  formatter: function(val){
+                      if(val === null || val === undefined) return '';
+                      return 'O\nF\nF\nL\nI\nN\nE';
+                  },
+                  style: { colors: ['#ffffff'], fontSize: '10px', fontWeight: '700' },
+                  offsetY: 0
+              },
+              tooltip: {
+                  y: {
+                      formatter: function(val, opts){
+                          if(opts && opts.seriesIndex === 1) return 'offline';
+                          return val === null ? 'offline' : Math.round(val) + '%';
+                      }
+                  }
+              }
           };
           if(window.hourlyPercentChart){ try{ window.hourlyPercentChart.destroy(); }catch(e){} }
           window.hourlyPercentChart = new ApexCharts(document.querySelector('#hourly-percent-chart'), optionsPercent);
           window.hourlyPercentChart.render();
 
           // Voltage chart (line) — allow click on column (Charge %) to drilldown too
-          var batteryPercentData = voltageData.map(function(v){ if(v === null || v === undefined) return null; try { return Math.round(mapVoltageToPercentage(parseFloat(v))); } catch(e) { return null; } });
+          var validVoltages = voltageData
+              .map(function(v){ return parseFloat(v); })
+              .filter(function(v){ return Number.isFinite(v); });
+          var minVoltage24h = validVoltages.length ? Math.min.apply(null, validVoltages) : null;
+          var maxVoltage24h = validVoltages.length ? Math.max.apply(null, validVoltages) : null;
+          var batteryPercentData = voltageData.map(function(v){
+              if(v === null || v === undefined) return null;
+              var numericVoltage = parseFloat(v);
+              if(!Number.isFinite(numericVoltage) || minVoltage24h === null || maxVoltage24h === null) return null;
+              if(maxVoltage24h === minVoltage24h) return 100;
+              var relative = ((numericVoltage - minVoltage24h) * 100) / (maxVoltage24h - minVoltage24h);
+              return Math.round(Math.max(0, Math.min(100, relative)));
+          });
           var optionsVolt = {
               series: [
                   { name: 'Voltage (V)', type: 'line', data: voltageData },
-                  { name: 'Charge %', type: 'column', data: batteryPercentData }
+                  { name: 'Charge %', type: 'column', data: batteryPercentData },
+                  { name: 'Offline', type: 'column', data: offlineMarkerData }
               ],
               chart: {
                   type: 'line', height: 260,
@@ -1503,12 +1562,32 @@ function renderHourlyCharts(publicKey) {
                       }
                   }
               },
-              stroke: { width: [2, 0], curve: 'smooth' },
+              stroke: { width: [2, 0, 0], curve: 'smooth' },
               plotOptions: { bar: { columnWidth: '50%', borderRadius: 4 } },
               xaxis: { categories: labels },
               yaxis: [{ title: { text: 'Voltage (V)' } }, { opposite: true, max: 100, title: { text: 'Charge %' } }],
-              colors: ['#ff9900', '#00b050'],
-              tooltip: { shared: true, y: { formatter: function(val, opts){ return val === null ? 'offline' : (opts.seriesIndex===0 ? val + ' V' : Math.round(val) + ' %'); } } }
+              colors: ['#ff9900', '#00b050', '#ff0000'],
+              dataLabels: {
+                  enabled: true,
+                  enabledOnSeries: [2],
+                  formatter: function(val){
+                      if(val === null || val === undefined) return '';
+                      return 'O\nF\nF\nL\nI\nN\nE';
+                  },
+                  style: { colors: ['#ffffff'], fontSize: '10px', fontWeight: '700' },
+                  offsetY: 0
+              },
+              tooltip: {
+                  shared: true,
+                  y: {
+                      formatter: function(val, opts){
+                          if(val === null) return 'offline';
+                          if(opts.seriesIndex === 0) return val + ' V';
+                          if(opts.seriesIndex === 2) return 'offline';
+                          return Math.round(val) + ' %';
+                      }
+                  }
+              }
           };
           if(window.hourlyVoltChart){ try{ window.hourlyVoltChart.destroy(); }catch(e){} }
           window.hourlyVoltChart = new ApexCharts(document.querySelector('#hourly-voltage-chart'), optionsVolt);
@@ -1533,10 +1612,11 @@ function renderHourlyDrill(publicKey, hour_start) {
           // Percent time-series chart
           var optionsDrillP = {
               series: [{ name: 'Fill %', data: percentData }],
-              chart: { type: 'line', height: 300 },
-              stroke: { curve: 'smooth' },
+              chart: { type: 'bar', height: 300 },
+              plotOptions: { bar: { borderRadius: 4, columnWidth: '55%' } },
+              colors: ['#00bfff'],
               xaxis: { categories: labels },
-              yaxis: { max: 100 },
+              yaxis: { min: 1, max: 100, forceNiceScale: false },
               tooltip: { y: { formatter: function(v){ return v + ' %'; } } }
           };
           if(window.drillPercentChart){ try{ window.drillPercentChart.destroy(); }catch(e){} }
@@ -1548,6 +1628,7 @@ function renderHourlyDrill(publicKey, hour_start) {
               series: [{ name: 'Voltage', data: voltageData }],
               chart: { type: 'line', height: 300 },
               stroke: { curve: 'smooth' },
+              colors: ['#00b050'],
               xaxis: { categories: labels },
               yaxis: { title: { text: 'Voltage (V)' } },
               tooltip: { y: { formatter: function(v){ return v + ' V'; } } }
