@@ -8,6 +8,15 @@
     .hourly-clickable-chart * {
         cursor: pointer;
     }
+
+    #hourly-percent-chart .apexcharts-data-label,
+    #hourly-voltage-chart .apexcharts-data-label,
+    #drill-percent-chart .apexcharts-data-label,
+    #drill-voltage-chart .apexcharts-data-label {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        letter-spacing: 0;
+    }
 </style>
 
 <script src="{{ url_for('static', filename='assets/js/qrcode.min.js') }}"></script>
@@ -1440,7 +1449,7 @@ $(document).ready(function() {
 // Section: Hourly stats fetching and charting
 // -----------------------------------------------------------------------------
 // Modal for hourly drilldown (inserted near charts)
-var hourlyDrillModalHtml = '\n<div class="modal fade" id="HourlyDrillModal" tabindex="-1" aria-hidden="true">\n  <div class="modal-dialog modal-xl">\n    <div class="modal-content">\n      <div class="modal-header">\n        <h5 class="modal-title">{% trans %}Hour details{% endtrans %}</h5>\n        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n      </div>\n      <div class="modal-body">\n        <div id="drill-percent-chart" style="height:300px"></div>\n        <hr/>\n        <div id="drill-voltage-chart" style="height:300px"></div>\n      </div>\n    </div>\n  </div>\n</div>\n';
+var hourlyDrillModalHtml = '\n<div class="modal fade" id="HourlyDrillModal" tabindex="-1" aria-hidden="true">\n  <div class="modal-dialog modal-xl">\n    <div class="modal-content">\n      <div class="modal-header">\n        <h5 class="modal-title">{% trans %}Hour details{% endtrans %}</h5>\n        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n      </div>\n      <div class="modal-body">\n        <div id="drill-percent-chart" style="height:300px"></div>\n        <hr/>\n        <div id="drill-voltage-chart" style="height:300px"></div>\n        <div id="drill-offline-summary" class="mt-3"></div>\n      </div>\n    </div>\n  </div>\n</div>\n';
 // Append modal to body once
 if(!document.getElementById('HourlyDrillModal')){
     document.body.insertAdjacentHTML('beforeend', hourlyDrillModalHtml);
@@ -1475,7 +1484,7 @@ function renderHourlyCharts(publicKey) {
 
           var warningEl = document.getElementById('hourly-offline-warning');
           if(warningEl){
-              if(offlineCount > 3){
+              if(offlineCount > 1){
                   warningEl.textContent = offlineMaintenanceWarningText;
                   warningEl.classList.remove('d-none');
               } else {
@@ -1512,9 +1521,9 @@ function renderHourlyCharts(publicKey) {
                   enabledOnSeries: [1],
                   formatter: function(val){
                       if(val === null || val === undefined) return '';
-                      return 'O\nF\nF\nL\nI\nN\nE';
+                      return 'OFFLINE';
                   },
-                  style: { colors: ['#ffffff'], fontSize: '10px', fontWeight: '700' },
+                  style: { colors: ['#ffffff'], fontSize: '8px', fontWeight: '700' },
                   offsetY: 0
               },
               tooltip: {
@@ -1572,9 +1581,9 @@ function renderHourlyCharts(publicKey) {
                   enabledOnSeries: [2],
                   formatter: function(val){
                       if(val === null || val === undefined) return '';
-                      return 'O\nF\nF\nL\nI\nN\nE';
+                      return 'OFFLINE';
                   },
-                  style: { colors: ['#ffffff'], fontSize: '10px', fontWeight: '700' },
+                  style: { colors: ['#ffffff'], fontSize: '8px', fontWeight: '700' },
                   offsetY: 0
               },
               tooltip: {
@@ -1598,26 +1607,114 @@ function renderHourlyCharts(publicKey) {
 
 // Drilldown: fetch raw samples for the selected hour and show modal charts
 function renderHourlyDrill(publicKey, hour_start) {
+    var missedSamplesLabelText = "{% trans %}Estimated missed samples:{% endtrans %}";
+    var missedSamplesWarningText = "{% trans %}Warning: More than 3 estimated missed samples detected in this hour. Maintenance is recommended: replace batteries, clean solar panel, check internet, and inspect waterproof sealing/wiring.{% endtrans %}";
+    var missedSamplesNoteText = "{% trans %}Note: This estimate assumes constant S1 sampling speed. Discard this estimate if sampling speed changed in the last 24 hours.{% endtrans %}";
+
     $.getJSON('/sensor_stats_hour', { public_key: publicKey, hour_start: hour_start })
       .done(function(resp){
-          if(!resp || !resp.samples) return;
+          var samplingSeconds = parseInt({{ device_setting.WIFI_POOL_TIME }});
+          if(!Number.isFinite(samplingSeconds) || samplingSeconds <= 0){
+              samplingSeconds = 120;
+          }
 
-          var labels = resp.samples.map(function(s){
-              var d = new Date(s.ts * 1000);
-              return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+          var samples = (resp && Array.isArray(resp.samples)) ? resp.samples : [];
+          var slotsCount = Math.max(1, Math.ceil(3600 / samplingSeconds));
+          var slotData = {};
+
+          samples.forEach(function(s){
+              var sampleTs = parseInt(s.ts);
+              if(!Number.isFinite(sampleTs)) return;
+              var offset = sampleTs - hour_start;
+              if(offset < 0 || offset >= 3600) return;
+              var slotIndex = Math.floor(offset / samplingSeconds);
+              if(!slotData[slotIndex]){
+                  slotData[slotIndex] = { percent: [], voltage: [] };
+              }
+
+              var samplePercent = parseFloat(s.percent);
+              if(Number.isFinite(samplePercent)){
+                  slotData[slotIndex].percent.push(samplePercent);
+              }
+
+              var sampleVoltage = parseFloat(s.voltage);
+              if(Number.isFinite(sampleVoltage)){
+                  slotData[slotIndex].voltage.push(sampleVoltage);
+              }
           });
-          var percentData = resp.samples.map(function(s){ return Math.round(s.percent); });
-          var voltageData = resp.samples.map(function(s){ return s.voltage; });
+
+          var labels = [];
+          var percentData = [];
+          var voltageData = [];
+          var offlineMarkerData = [];
+
+          for(var i = 0; i < slotsCount; i++){
+              var expectedTs = hour_start + (i * samplingSeconds);
+              var d = new Date(expectedTs * 1000);
+              labels.push(d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0'));
+
+              var bucket = slotData[i];
+              var hasPercent = bucket && bucket.percent && bucket.percent.length > 0;
+              var hasVoltage = bucket && bucket.voltage && bucket.voltage.length > 0;
+              var hasAnySample = hasPercent || hasVoltage;
+
+              if(hasPercent){
+                  var avgPercent = bucket.percent.reduce(function(a, b){ return a + b; }, 0) / bucket.percent.length;
+                  percentData.push(Math.round(avgPercent));
+              } else {
+                  percentData.push(null);
+              }
+
+              if(hasVoltage){
+                  var avgVoltage = bucket.voltage.reduce(function(a, b){ return a + b; }, 0) / bucket.voltage.length;
+                  voltageData.push(Math.round(avgVoltage * 100) / 100);
+              } else {
+                  voltageData.push(null);
+              }
+
+              offlineMarkerData.push(hasAnySample ? null : 100);
+          }
+
+          var missedSamplesCount = offlineMarkerData.filter(function(v){ return v !== null; }).length;
+          var drillSummaryEl = document.getElementById('drill-offline-summary');
+          if(drillSummaryEl){
+              var summaryHtml = '<div class="small text-muted mb-1">' + missedSamplesLabelText + ' <strong>' + missedSamplesCount + '</strong></div>';
+              if(missedSamplesCount > 3){
+                  summaryHtml += '<div class="text-warning fw-semibold mb-1">' + missedSamplesWarningText + '</div>';
+              }
+              summaryHtml += '<div class="small text-muted">' + missedSamplesNoteText + '</div>';
+              drillSummaryEl.innerHTML = summaryHtml;
+          }
 
           // Percent time-series chart
           var optionsDrillP = {
-              series: [{ name: 'Fill %', data: percentData }],
+              series: [
+                  { name: 'Fill %', type: 'bar', data: percentData },
+                  { name: 'Offline', type: 'bar', data: offlineMarkerData }
+              ],
               chart: { type: 'bar', height: 300 },
               plotOptions: { bar: { borderRadius: 4, columnWidth: '55%' } },
-              colors: ['#00bfff'],
+              colors: ['#00bfff', '#ff0000'],
               xaxis: { categories: labels },
               yaxis: { min: 1, max: 100, forceNiceScale: false },
-              tooltip: { y: { formatter: function(v){ return v + ' %'; } } }
+              dataLabels: {
+                  enabled: true,
+                  enabledOnSeries: [1],
+                  formatter: function(val){
+                      if(val === null || val === undefined) return '';
+                      return 'OFFLINE';
+                  },
+                  style: { colors: ['#ffffff'], fontSize: '8px', fontWeight: '700' },
+                  offsetY: 0
+              },
+              tooltip: {
+                  y: {
+                      formatter: function(v, opts){
+                          if(opts && opts.seriesIndex === 1) return 'offline';
+                          return v === null ? 'offline' : v + ' %';
+                      }
+                  }
+              }
           };
           if(window.drillPercentChart){ try{ window.drillPercentChart.destroy(); }catch(e){} }
           window.drillPercentChart = new ApexCharts(document.querySelector('#drill-percent-chart'), optionsDrillP);
@@ -1625,13 +1722,38 @@ function renderHourlyDrill(publicKey, hour_start) {
 
           // Voltage time-series chart
           var optionsDrillV = {
-              series: [{ name: 'Voltage', data: voltageData }],
+              series: [
+                  { name: 'Voltage', type: 'line', data: voltageData },
+                  { name: 'Offline', type: 'column', data: offlineMarkerData, yAxisIndex: 1 }
+              ],
               chart: { type: 'line', height: 300 },
-              stroke: { curve: 'smooth' },
-              colors: ['#00b050'],
+              stroke: { width: [2, 0], curve: 'smooth' },
+              plotOptions: { bar: { columnWidth: '50%', borderRadius: 4 } },
+              colors: ['#00b050', '#ff0000'],
               xaxis: { categories: labels },
-              yaxis: { title: { text: 'Voltage (V)' } },
-              tooltip: { y: { formatter: function(v){ return v + ' V'; } } }
+              yaxis: [
+                  { title: { text: 'Voltage (V)' } },
+                  { opposite: true, min: 0, max: 100, show: false }
+              ],
+              dataLabels: {
+                  enabled: true,
+                  enabledOnSeries: [1],
+                  formatter: function(val){
+                      if(val === null || val === undefined) return '';
+                      return 'OFFLINE';
+                  },
+                  style: { colors: ['#ffffff'], fontSize: '8px', fontWeight: '700' },
+                  offsetY: 0
+              },
+              tooltip: {
+                  shared: true,
+                  y: {
+                      formatter: function(v, opts){
+                          if(opts && opts.seriesIndex === 1) return 'offline';
+                          return v === null ? 'offline' : v + ' V';
+                      }
+                  }
+              }
           };
           if(window.drillVoltChart){ try{ window.drillVoltChart.destroy(); }catch(e){} }
           window.drillVoltChart = new ApexCharts(document.querySelector('#drill-voltage-chart'), optionsDrillV);

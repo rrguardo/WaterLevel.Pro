@@ -26,6 +26,7 @@ SEO keywords: IoT water level monitoring, smart water pump controller, Flask bac
 - [Project structure](#project-structure)
 - [Quick start (local Python)](#quick-start-local-python)
 - [Quick start (Docker)](#quick-start-docker)
+- [Update helper (main branch + Docker restart)](#update-helper-main-branch--docker-restart)
 - [Minimal server requirements (low-cost VPS)](#minimal-server-requirements-low-cost-vps)
 - [What unit tests represent (and what CI runs here)](#what-unit-tests-represent-and-what-ci-runs-here)
 - [S1 demo device simulator (Python service)](#s1-demo-device-simulator-python-service)
@@ -122,6 +123,21 @@ Basic run:
 2. Pull public image (optional but recommended for fast deploy): `docker pull rguardo/waterlevel-pro:latest`
 3. Start stack: `docker compose -f docker/docker-compose.yml up -d`
 3. Open web: `https://localhost`
+
+## Update helper (main branch + Docker restart)
+
+For environments where local uncommitted changes may exist, this repository includes:
+
+- `./docker/update_main.sh`
+
+Utility and behavior:
+
+- Stashes all local changes including untracked files (`git stash push -u`).
+- Fetches latest remote `main` and applies remote state locally (`git reset --hard origin/main`).
+- Prints stash info (`git stash show --stat`) for traceability.
+- Restarts services using `./docker/down.sh` and `./docker/up.sh`.
+
+Use when you need a quick "align with remote main + restart stack" operation during deploy/update workflows.
 
 ## Minimal server requirements (low-cost VPS)
 

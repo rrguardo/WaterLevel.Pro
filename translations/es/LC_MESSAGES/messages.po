@@ -76,6 +76,15 @@ msgstr "Carga de batería en las últimas 24 horas"
 msgid "Hour details"
 msgstr "Detalles por hora"
 
+msgid "Estimated missed samples:"
+msgstr "Muestreos faltantes estimados:"
+
+msgid "Warning: More than 3 estimated missed samples detected in this hour. Maintenance is recommended: replace batteries, clean solar panel, check internet, and inspect waterproof sealing/wiring."
+msgstr "Advertencia: Se detectaron más de 3 muestreos faltantes estimados en esta hora. Mantenimiento recomendado: reemplazar baterías, limpiar el panel solar, verificar internet e inspeccionar el sellado impermeable y el cableado."
+
+msgid "Note: This estimate assumes constant S1 sampling speed. Discard this estimate if sampling speed changed in the last 24 hours."
+msgstr "Nota: Esta estimación asume una velocidad de muestreo S1 constante. Descarta esta estimación si la velocidad de muestreo cambió en las últimas 24 horas."
+
 msgid "Warning: Multiple offline hours detected. Maintenance: replace batteries, clean solar panel, check internet, and inspect waterproof sealing/wiring."
 msgstr "Advertencia: Se detectaron múltiples horas sin conexión. Mantenimiento recomendado: reemplazar baterías, limpiar el panel solar, verificar internet e inspeccionar el sellado impermeable y el cableado."
 
