@@ -1448,13 +1448,14 @@ if(!document.getElementById('HourlyDrillModal')){
 
 function renderHourlyCharts(publicKey) {
     var offlineMaintenanceWarningText = "{% trans %}Warning: Multiple offline hours detected. Maintenance: replace batteries, clean solar panel, check internet, and inspect waterproof sealing/wiring.{% endtrans %}";
+
     $.getJSON('/sensor_stats', { public_key: publicKey })
       .done(function(resp) {
           if(!resp || !resp.buckets) return;
           var labels = [];
           var percentData = [];
           var voltageData = [];
-          var offlineMarkerData = [];
+          var offlineFlags24h = [];
           var offlineCount = 0;
 
           resp.buckets.forEach(function(b) {
@@ -1462,14 +1463,14 @@ function renderHourlyCharts(publicKey) {
               var hh = d.getHours().toString().padStart(2,'0');
               labels.push(hh);
               if(b.offline) {
-                  percentData.push(null);
+                  percentData.push(50);
                   voltageData.push(null);
-                  offlineMarkerData.push(100);
+                  offlineFlags24h.push(true);
                   offlineCount += 1;
               } else {
                   percentData.push(Math.round(b.percent));
                   voltageData.push(b.voltage);
-                  offlineMarkerData.push(null);
+                  offlineFlags24h.push(false);
               }
           });
 
@@ -1484,11 +1485,10 @@ function renderHourlyCharts(publicKey) {
               }
           }
 
-          // Percent chart (bar) with dataPointSelection handler for drilldown
+          // Percent chart (bar) con una sola serie (offline sin barra)
           var optionsPercent = {
               series: [
-                  { name: 'Fill %', type: 'bar', data: percentData },
-                  { name: 'Offline', type: 'bar', data: offlineMarkerData }
+                  { name: 'Fill %', type: 'bar', data: percentData }
               ],
               chart: {
                   type: 'bar', height: 260,
@@ -1502,15 +1502,18 @@ function renderHourlyCharts(publicKey) {
                       }
                   }
               },
-              plotOptions: { bar: { borderRadius: 4, columnWidth: '100%' } },
+              dataLabels: { enabled: false },
+              plotOptions: { bar: { borderRadius: 6, columnWidth: '90%' } },
               xaxis: { categories: labels },
               yaxis: { max: 100 },
               noData: { text: 'No data' },
-              colors: ['#00bfff', '#ff0000'],
+              colors: [function(ctx){
+                  return offlineFlags24h[ctx.dataPointIndex] ? '#ff0000' : '#00bfff';
+              }],
               tooltip: {
                   y: {
                       formatter: function(val, opts){
-                          if(opts && opts.seriesIndex === 1) return 'offline';
+                          if(opts && offlineFlags24h[opts.dataPointIndex]) return 'offline';
                           return val === null ? 'offline' : Math.round(val) + '%';
                       }
                   }
@@ -1526,7 +1529,8 @@ function renderHourlyCharts(publicKey) {
               .filter(function(v){ return Number.isFinite(v); });
           var minVoltage24h = validVoltages.length ? Math.min.apply(null, validVoltages) : null;
           var maxVoltage24h = validVoltages.length ? Math.max.apply(null, validVoltages) : null;
-          var batteryPercentData = voltageData.map(function(v){
+          var batteryPercentData = voltageData.map(function(v, idx){
+              if(offlineFlags24h[idx]) return 50;
               if(v === null || v === undefined) return null;
               var numericVoltage = parseFloat(v);
               if(!Number.isFinite(numericVoltage) || minVoltage24h === null || maxVoltage24h === null) return null;
@@ -1537,8 +1541,7 @@ function renderHourlyCharts(publicKey) {
           var optionsVolt = {
               series: [
                   { name: 'Voltage (V)', type: 'line', data: voltageData },
-                  { name: 'Charge %', type: 'column', data: batteryPercentData },
-                  { name: 'Offline', type: 'column', data: offlineMarkerData }
+                  { name: 'Charge %', type: 'column', data: batteryPercentData }
               ],
               chart: {
                   type: 'line', height: 260,
@@ -1552,18 +1555,21 @@ function renderHourlyCharts(publicKey) {
                       }
                   }
               },
-              stroke: { width: [2, 0, 0], curve: 'smooth' },
-              plotOptions: { bar: { columnWidth: '100%', borderRadius: 4 } },
+              stroke: { width: [2, 0], curve: 'smooth' },
+              plotOptions: { bar: { columnWidth: '90%', borderRadius: 6 } },
               xaxis: { categories: labels },
               yaxis: [{ title: { text: 'Voltage (V)' } }, { opposite: true, max: 100, title: { text: 'Charge %' } }],
-              colors: ['#ff9900', '#00b050', '#ff0000'],
+              colors: [
+                  function(){ return '#ff9900'; },
+                  function(ctx){ return offlineFlags24h[ctx.dataPointIndex] ? '#ff0000' : '#00b050'; }
+              ],
               tooltip: {
                   shared: true,
                   y: {
                       formatter: function(val, opts){
+                          if(opts && opts.seriesIndex === 1 && offlineFlags24h[opts.dataPointIndex]) return 'offline';
                           if(val === null) return 'offline';
                           if(opts.seriesIndex === 0) return val + ' V';
-                          if(opts.seriesIndex === 2) return 'offline';
                           return Math.round(val) + ' %';
                       }
                   }
@@ -1627,7 +1633,7 @@ function renderHourlyDrill(publicKey, hour_start) {
           var labels = [];
           var percentData = [];
           var voltageData = [];
-          var offlineMarkerData = [];
+          var offlineFlags = [];
 
           for(var i = 0; i < slotsCount; i++){
               var expectedTs = hour_start + (i * estimatedSamplingWindowSeconds);
@@ -1643,7 +1649,7 @@ function renderHourlyDrill(publicKey, hour_start) {
                   var avgPercent = bucket.percent.reduce(function(a, b){ return a + b; }, 0) / bucket.percent.length;
                   percentData.push(Math.round(avgPercent));
               } else {
-                  percentData.push(null);
+                  percentData.push(50);
               }
 
               if(hasVoltage){
@@ -1653,10 +1659,10 @@ function renderHourlyDrill(publicKey, hour_start) {
                   voltageData.push(null);
               }
 
-              offlineMarkerData.push(hasAnySample ? null : 100);
+              offlineFlags.push(!hasAnySample);
           }
 
-          var missedSamplesCount = offlineMarkerData.filter(function(v){ return v !== null; }).length;
+          var missedSamplesCount = offlineFlags.filter(function(v){ return v; }).length;
           var drillSummaryEl = document.getElementById('drill-offline-summary');
           if(drillSummaryEl){
               var summaryHtml = '<div class="small text-muted mb-1">' + missedSamplesLabelText + ' <strong>' + missedSamplesCount + '</strong></div>';
@@ -1667,21 +1673,23 @@ function renderHourlyDrill(publicKey, hour_start) {
               drillSummaryEl.innerHTML = summaryHtml;
           }
 
-          // Percent time-series chart
+          // Percent time-series chart (offline sin barra)
           var optionsDrillP = {
               series: [
-                  { name: 'Fill %', type: 'bar', data: percentData },
-                  { name: 'Offline', type: 'bar', data: offlineMarkerData }
+                  { name: 'Fill %', type: 'bar', data: percentData }
               ],
               chart: { type: 'bar', height: 300 },
-              plotOptions: { bar: { borderRadius: 4, columnWidth: '100%' } },
-              colors: ['#00bfff', '#ff0000'],
+              dataLabels: { enabled: false },
+              plotOptions: { bar: { borderRadius: 6, columnWidth: '90%' } },
+              colors: [function(ctx){
+                  return offlineFlags[ctx.dataPointIndex] ? '#ff0000' : '#00bfff';
+              }],
               xaxis: { categories: labels },
               yaxis: { min: 1, max: 100, forceNiceScale: false },
               tooltip: {
                   y: {
                       formatter: function(v, opts){
-                          if(opts && opts.seriesIndex === 1) return 'offline';
+                          if(opts && offlineFlags[opts.dataPointIndex]) return 'offline';
                           return v === null ? 'offline' : v + ' %';
                       }
                   }
@@ -1691,27 +1699,47 @@ function renderHourlyDrill(publicKey, hour_start) {
           window.drillPercentChart = new ApexCharts(document.querySelector('#drill-percent-chart'), optionsDrillP);
           window.drillPercentChart.render();
 
-          // Voltage time-series chart
+          var validVoltagesDrill = voltageData
+              .map(function(v){ return parseFloat(v); })
+              .filter(function(v){ return Number.isFinite(v); });
+          var minVoltageDrill = validVoltagesDrill.length ? Math.min.apply(null, validVoltagesDrill) : null;
+          var maxVoltageDrill = validVoltagesDrill.length ? Math.max.apply(null, validVoltagesDrill) : null;
+          var batteryPercentDataDrill = voltageData.map(function(v, idx){
+              if(offlineFlags[idx]) return 50;
+              if(v === null || v === undefined) return null;
+              var numericVoltage = parseFloat(v);
+              if(!Number.isFinite(numericVoltage) || minVoltageDrill === null || maxVoltageDrill === null) return null;
+              if(maxVoltageDrill === minVoltageDrill) return 100;
+              var relative = ((numericVoltage - minVoltageDrill) * 100) / (maxVoltageDrill - minVoltageDrill);
+              return Math.round(Math.max(0, Math.min(100, relative)));
+          });
+
+          // Voltage time-series chart (offline sin barra/punto)
           var optionsDrillV = {
               series: [
                   { name: 'Voltage', type: 'line', data: voltageData },
-                  { name: 'Offline', type: 'column', data: offlineMarkerData, yAxisIndex: 1 }
+                  { name: 'Charge %', type: 'column', data: batteryPercentDataDrill }
               ],
               chart: { type: 'line', height: 300 },
               stroke: { width: [2, 0], curve: 'smooth' },
-              plotOptions: { bar: { columnWidth: '100%', borderRadius: 4 } },
-              colors: ['#00b050', '#ff0000'],
+              plotOptions: { bar: { columnWidth: '90%', borderRadius: 6 } },
+              colors: [
+                  function(){ return '#ff9900'; },
+                  function(ctx){ return offlineFlags[ctx.dataPointIndex] ? '#ff0000' : '#00b050'; }
+              ],
               xaxis: { categories: labels },
               yaxis: [
                   { title: { text: 'Voltage (V)' } },
-                  { opposite: true, min: 0, max: 100, show: false }
+                  { opposite: true, min: 0, max: 100, title: { text: 'Charge %' } }
               ],
               tooltip: {
                   shared: true,
                   y: {
                       formatter: function(v, opts){
-                          if(opts && opts.seriesIndex === 1) return 'offline';
-                          return v === null ? 'offline' : v + ' V';
+                          if(opts && opts.seriesIndex === 1 && offlineFlags[opts.dataPointIndex]) return 'offline';
+                          if(v === null) return 'offline';
+                          if(opts && opts.seriesIndex === 0) return v + ' V';
+                          return Math.round(v) + ' %';
                       }
                   }
               }
