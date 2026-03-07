@@ -29,12 +29,23 @@
 - Important request headers: `FW-Version`, `RSSI`, `EVENTS`
 - Cache write: `relay-keys/<public_key> = "status|epoch|rssi"`
 - Optional event write (developer mode): `relay-events/<public_key>` and DB `relay_events`
+- Runtime stats write: compares current/previous relay state and persists ON runtime
+  plus estimated liters added into DB `relay_daily_stats`
+- Estimation source: linked S1 (`relay_settings.SENSOR_KEY`) + sensor settings
+  (`EMPTY_LEVEL`, `TOP_MARGIN`, `liters_per_cm`) + latest `tin-keys/<sensor_public_key>`
 - Response body/header contract: body `OK`, headers include control values (`ACTION`, `ALGO`, `SAFE_MODE`, levels, pool times, etc.) plus linked sensor-derived values (`percent`, `distance`, times)
+
+### Relay consumption web stats flow
+- Web endpoint: `GET /relay_consumption_stats?public_key=<relay_public_key>`
+- Returns last 15 days (zero-filled) with `{ day, on_minutes, liters }`
+- UI consumer: `templates/relay_device_info.html` daily liters bar chart
+- Liters rule (brief): for ON intervals, accumulate only positive tank-liter deltas from linked S1 (`max(0, current_liters - previous_liters)`).
 
 ## Data layer
 
 - SQLite database file stored in volume at `/app/data/database.db`
 - Database bootstrapped from `database.opensource.db` via `docker/entrypoint.sh`
+- Relay daily stats table: `relay_daily_stats` (`relay_id`, `day_date`, `on_seconds`, `liters_added`, `updated_at`)
 - Redis used for runtime cache/frequency checks and transient state
 - Redis runs inside the `app` container for low-resource single-node deployments
 

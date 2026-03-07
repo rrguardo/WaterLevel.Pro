@@ -384,6 +384,30 @@ def sensor_stats_hour():
     return jsonify({'samples': samples})
 
 
+@app.route('/relay_consumption_stats', methods=['GET'])
+def relay_consumption_stats():
+    """Return last 15 days of relay daily stats for liters and ON minutes.
+
+    Query params:
+    - public_key: relay public key or 'demorelay'
+    """
+    key = request.args.get('public_key')
+    if not key:
+        return jsonify({'error': 'missing public_key'}), 400
+
+    if key == 'demorelay':
+        key = settings.DEMO_RELAY_PUB_KEY
+
+    relay_info = db.DevicesDB.load_device_by_public_key(key)
+    if not relay_info:
+        return jsonify({'error': 'invalid public_key'}), 404
+    if int(relay_info.type) != 3:
+        return jsonify({'error': 'public_key is not a relay device'}), 400
+
+    days = db.DevicesDB.get_relay_daily_stats(relay_info.id, days=15)
+    return jsonify({'days': days})
+
+
 def validate_recaptcha(response):
     """Verify a reCAPTCHA token against Google verification endpoint.
 

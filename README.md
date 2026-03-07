@@ -22,6 +22,7 @@ SEO keywords: IoT water level monitoring, smart water pump controller, Flask bac
 - [What this server-side includes today](#what-this-server-side-includes-today)
    - [Web UI features (`app.py`)](#web-ui-features-apppy)
    - [Device/API service features (`api.py`)](#deviceapi-service-features-apipy)
+   - [Relay consumption stats (R1 + linked S1)](#relay-consumption-stats-r1--linked-s1)
    - [Platform/runtime features](#platformruntime-features)
 - [Project structure](#project-structure)
 - [Quick start (local Python)](#quick-start-local-python)
@@ -45,6 +46,7 @@ SEO keywords: IoT water level monitoring, smart water pump controller, Flask bac
 - User account flows (register/login/verification/recovery patterns)
 - Device management pages for sensor + relay devices
 - Dashboard views for level, relay state, and account settings
+- Relay page chart for estimated daily water consumption (last 15 days)
 - Admin/dashboard templates and localized routes (`/<lang>/...`)
 - Flask-Babel translation support (`translations/`)
 - Optional tracking integrations controlled by environment variables
@@ -56,6 +58,33 @@ SEO keywords: IoT water level monitoring, smart water pump controller, Flask bac
 - Firmware response headers for runtime control (`wpl`, `pool-time`, `ACTION`, safety/config fields)
 - Device/link and validation flows used by hardware onboarding
 - Redis-backed transient runtime state + SQLite persistence
+
+### Relay consumption stats (R1 + linked S1)
+
+This feature persists relay runtime/consumption telemetry in SQLite and renders
+it in the relay device page.
+
+How it works:
+
+1. Relay firmware calls `GET /relay-update?key=<private_key>&status=<0|1>`.
+2. API compares current relay state with previous state and computes elapsed ON time.
+3. ON runtime is accumulated into daily DB buckets (`relay_daily_stats.on_seconds`).
+4. If relay has a linked S1 (`relay_settings.SENSOR_KEY`), API reads current sensor
+   distance from Redis (`tin-keys/<sensor_public_key>`), converts to liters using
+   S1 settings (`EMPTY_LEVEL`, `TOP_MARGIN`, `liters_per_cm`), and stores positive
+   liters delta into the same daily bucket (`relay_daily_stats.liters_added`).
+5. Web endpoint `GET /relay_consumption_stats?public_key=<relay_public_key>` returns
+   the last 15 days as contiguous zero-filled data (`day`, `on_minutes`, `liters`).
+6. `templates/relay_device_info.html` renders an ApexCharts bar chart with liters/day,
+   tooltip ON minutes, and a 15-day total summary.
+
+Notes:
+
+- The liters chart is an estimate based on linked sensor geometry and `liters_per_cm`.
+- Brief formula: `pumped_liters += max(0, current_liters - previous_liters)` for intervals where the previous relay status was ON.
+- Runtime is still stored even when liters cannot be estimated (for example missing
+  linked sensor or no recent sensor sample).
+- Daily aggregation currently uses UTC day boundaries in DB.
 
 ### Platform/runtime features
 

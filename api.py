@@ -389,10 +389,18 @@ def relay_update():
     rssi = int(request.headers.get('RSSI', 0))
 
     status = request.args.get('status')
+    try:
+        status = int(status)
+    except Exception:
+        status = 0
+    if status not in (0, 1):
+        status = 0
     logging.warning(f"relay params: >>> {key}|{status}|{rssi}")
 
+    now_ts = int(time.time())
     cache_key = f'relay-keys/{key}'
-    redis_client.set(cache_key, f"{status}|{int(time.time())}|{rssi}")
+    prev_live_state = redis_client.get(cache_key)
+    redis_client.set(cache_key, f"{status}|{now_ts}|{rssi}")
 
     logging.warning(f"Relay-FW Version: {request.headers.get('FW-Version', 'unknow')}")
     logging.warning(f"Relay-RSSI: {request.headers.get('RSSI', 'unknow')} dBm")
@@ -402,22 +410,90 @@ def relay_update():
         RELAY_EVENTS = ''
 
     sensor_key = 'none'
-    device_id = db.DevicesDB.load_device_id_by_public_key(public_key)
-    db_device_settings = db.DevicesDB.load_device_settings(device_id=device_id, device_type=3)
-    if not db_device_settings:
+    relay_device_id = db.DevicesDB.load_device_id_by_public_key(public_key)
+    relay_settings = db.DevicesDB.load_device_settings(device_id=relay_device_id, device_type=3)
+    if not relay_settings:
         logging.error(f"relay don't have settings, public_key: {public_key}")
+        return jsonify({'error': 'relay settings missing'}), 500
 
     if DEVELOPER_MODE and RELAY_EVENTS:
-        db.DevicesDB.add_relay_events(device_id, RELAY_EVENTS)
+        db.DevicesDB.add_relay_events(relay_device_id, RELAY_EVENTS)
         cache_key_event = f'relay-events/{key}'
         redis_client.set(cache_key_event, RELAY_EVENTS)
         RELAY_EVENTS = RELAY_EVENTS.split(",")
 
     if RELAY_EVENTS and ('2' in RELAY_EVENTS or '14' in RELAY_EVENTS):
-        logging.warning(f"Detected sensor fail or danger blind distance, for device: {device_id}")
-        db.DevicesDB.turn_off_relay_smart_mode(device_id)
+        logging.warning(f"Detected sensor fail or danger blind distance, for device: {relay_device_id}")
+        db.DevicesDB.turn_off_relay_smart_mode(relay_device_id)
 
-    sensor_key = db_device_settings.SENSOR_KEY
+    sensor_key = relay_settings.SENSOR_KEY
+
+    # Persist relay usage stats in DB (daily ON minutes + estimated liters added).
+    try:
+        current_sensor_liters = None
+        if sensor_key and sensor_key != 'none':
+            sensor_cache_key = f'tin-keys/{sensor_key}'
+            sensor_data_for_stats = redis_client.get(sensor_cache_key)
+            if sensor_data_for_stats:
+                distance_now, _, _, _ = sensor_data_for_stats.split("|")
+                sensor_device_id = db.DevicesDB.load_device_id_by_public_key(sensor_key)
+                sensor_settings = db.DevicesDB.load_device_settings(device_id=sensor_device_id, device_type=1)
+                if sensor_settings:
+                    empty_level = float(sensor_settings.EMPTY_LEVEL)
+                    top_margin = float(sensor_settings.TOP_MARGIN)
+                    liters_per_cm = float(sensor_settings.get('liters_per_cm', 10.0))
+                    dist_val = float(distance_now)
+                    if dist_val > empty_level:
+                        dist_val = empty_level
+                    if dist_val < top_margin:
+                        dist_val = top_margin
+                    water_height_cm = max(0.0, empty_level - dist_val)
+                    current_sensor_liters = round(water_height_cm * liters_per_cm, 4)
+
+        runtime_key = f'relay-runtime-stats/{key}'
+        runtime_state = redis_client.get(runtime_key)
+
+        prev_status = None
+        prev_ts = None
+        prev_liters = None
+
+        if runtime_state:
+            parts = runtime_state.split('|')
+            if len(parts) >= 3:
+                try:
+                    prev_ts = int(parts[0])
+                    prev_status = int(parts[1])
+                    prev_liters = None if parts[2] == 'none' else float(parts[2])
+                except Exception:
+                    prev_ts = None
+                    prev_status = None
+                    prev_liters = None
+
+        # Fallback to the previous live relay cache state when runtime state is unavailable.
+        if prev_ts is None and prev_live_state:
+            try:
+                prev_status_str, prev_ts_str, _ = prev_live_state.split('|')
+                prev_status = int(prev_status_str)
+                prev_ts = int(prev_ts_str)
+            except Exception:
+                prev_status = None
+                prev_ts = None
+
+        # Accumulate ON runtime for the elapsed interval.
+        if prev_status == 1 and prev_ts is not None and now_ts > prev_ts:
+            db.DevicesDB.add_relay_on_runtime(relay_device_id, prev_ts, now_ts)
+
+            # Estimate added liters while relay was ON (negative deltas are ignored).
+            if prev_liters is not None and current_sensor_liters is not None:
+                liters_added = round(max(0.0, current_sensor_liters - prev_liters), 4)
+                if liters_added > 0:
+                    db.DevicesDB.add_relay_liters_for_day(relay_device_id, now_ts, liters_added)
+
+        next_liters_value = 'none' if current_sensor_liters is None else str(current_sensor_liters)
+        redis_client.set(runtime_key, f"{now_ts}|{status}|{next_liters_value}", ex=60 * 60 * 24 * 30)
+    except Exception:
+        logging.exception("failed to persist relay daily usage stats")
+
     raction = get_relay_action(public_key)
     # relay action read by device, pass to neutral
     set_relay_action(public_key, action=0)
@@ -433,16 +509,16 @@ def relay_update():
     response.headers['fw-version'] = LAST_RELAY_FW_VERSION
     response.headers['pool-time'] = 0
 
-    response.headers['ALGO'] = db_device_settings.ALGO
-    response.headers['SAFE_MODE'] = db_device_settings.SAFE_MODE
-    response.headers['START_LEVEL'] = db_device_settings.START_LEVEL
-    response.headers['END_LEVEL'] = db_device_settings.END_LEVEL
-    response.headers['AUTO_OFF'] = db_device_settings.AUTO_OFF
-    response.headers['AUTO_ON'] = db_device_settings.AUTO_ON
-    response.headers['MIN_FLOW_MM_X_MIN'] = db_device_settings.MIN_FLOW_MM_X_MIN
+    response.headers['ALGO'] = relay_settings.ALGO
+    response.headers['SAFE_MODE'] = relay_settings.SAFE_MODE
+    response.headers['START_LEVEL'] = relay_settings.START_LEVEL
+    response.headers['END_LEVEL'] = relay_settings.END_LEVEL
+    response.headers['AUTO_OFF'] = relay_settings.AUTO_OFF
+    response.headers['AUTO_ON'] = relay_settings.AUTO_ON
+    response.headers['MIN_FLOW_MM_X_MIN'] = relay_settings.MIN_FLOW_MM_X_MIN
     response.headers['ACTION'] = raction
-    response.headers['BLIND_DISTANCE'] = db_device_settings.BLIND_DISTANCE
-    response.headers['HOURS_OFF'] = db_device_settings.HOURS_OFF or '-'
+    response.headers['BLIND_DISTANCE'] = relay_settings.BLIND_DISTANCE
+    response.headers['HOURS_OFF'] = relay_settings.HOURS_OFF or '-'
 
     if sensor_key != 'none' and sensor_key:
         cache_key = f'tin-keys/{sensor_key}'
@@ -453,14 +529,13 @@ def relay_update():
         if sensor_data:
             distance, rtime, voltage, rssi = sensor_data.split("|")
 
-        device_id = db.DevicesDB.load_device_id_by_public_key(sensor_key)
-        db_device_settings = db.DevicesDB.load_device_settings(device_id=device_id, device_type=1)
-
-        EMPTY_LEVEL = db_device_settings.EMPTY_LEVEL
-        TOP_MARGIN = db_device_settings.TOP_MARGIN
-        WIFI_POOL_TIME = db_device_settings.WIFI_POOL_TIME
+        sensor_device_id = db.DevicesDB.load_device_id_by_public_key(sensor_key)
+        sensor_settings = db.DevicesDB.load_device_settings(device_id=sensor_device_id, device_type=1)
         percent = 0
-        if db_device_settings:
+        if sensor_settings:
+            EMPTY_LEVEL = sensor_settings.EMPTY_LEVEL
+            TOP_MARGIN = sensor_settings.TOP_MARGIN
+            WIFI_POOL_TIME = sensor_settings.WIFI_POOL_TIME
             distance = int(distance)
 
             if EMPTY_LEVEL == 0:

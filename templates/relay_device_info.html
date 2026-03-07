@@ -200,6 +200,22 @@
 
 </div>
 
+<div class="row d-flex justify-content-center mb-3">
+    <div class="col-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-2">{% trans %}Estimated Daily Consumption (last 15 days){% endtrans %}</h5>
+                <p class="text-muted small mb-3">{% trans %}Based on relay ON runtime and linked S1 liters-per-cm conversion. Assumes added liters are consumed by network demand.{% endtrans %}</p>
+                <div id="relay-consumption-chart" style="height:280px"></div>
+                <div class="small text-muted mt-3" id="relay-consumption-summary">-</div>
+                <div class="small text-muted mt-1">
+                    {% trans %}Estimation: while relay is ON, pumped liters are accumulated as positive deltas of linked S1 tank liters (computed with liters-per-cm). Negative deltas are ignored.{% endtrans %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <hr>
 
 <div class="row mb-5">
@@ -686,6 +702,77 @@ function fetchData() {
 $(document).ready(function() {
     fetchData();
     setInterval(fetchData, 10000); // Refresh every 10 seconds.
+});
+</script>
+
+<script>
+// -----------------------------------------------------------------------------
+// Section: Relay daily consumption chart (DB-backed)
+// - Reads persisted 15-day relay stats from backend
+// - Renders liters/day bars and exposes ON-minutes in tooltip/summary
+// -----------------------------------------------------------------------------
+
+function renderRelayConsumptionChart() {
+    $.getJSON('/relay_consumption_stats', { public_key: '{{ key_used }}' })
+      .done(function(resp) {
+          var days = (resp && Array.isArray(resp.days)) ? resp.days : [];
+          var labels = [];
+          var litersData = [];
+          var minutesData = [];
+          var totalLiters = 0;
+          var todayMinutes = 0;
+
+          days.forEach(function(item, idx) {
+              var day = String(item.day || '');
+              labels.push(day.length >= 10 ? day.substring(5) : day);
+              var liters = Number(item.liters || 0);
+              var onMinutes = Number(item.on_minutes || 0);
+              litersData.push(Math.round(liters * 100) / 100);
+              minutesData.push(onMinutes);
+              totalLiters += liters;
+              if(idx === days.length - 1) {
+                  todayMinutes = onMinutes;
+              }
+          });
+
+          var options = {
+              series: [{ name: '{% trans %}Consumed (L/day){% endtrans %}', data: litersData }],
+              chart: { type: 'bar', height: 280, toolbar: { show: false } },
+              plotOptions: { bar: { borderRadius: 6, columnWidth: '65%' } },
+              dataLabels: { enabled: false },
+              colors: ['#0ea5e9'],
+              xaxis: { categories: labels, title: { text: '{% trans %}Date (MM-DD){% endtrans %}' } },
+              yaxis: { title: { text: '{% trans %}Liters{% endtrans %}' }, min: 0 },
+              noData: { text: '{% trans %}No data{% endtrans %}' },
+              tooltip: {
+                  y: {
+                      formatter: function(val, opts) {
+                          var idx = (opts && typeof opts.dataPointIndex === 'number') ? opts.dataPointIndex : -1;
+                          var mins = (idx >= 0 && idx < minutesData.length) ? minutesData[idx] : 0;
+                          return (Math.round(val * 100) / 100) + ' L | ' + mins + ' {% trans %}min ON{% endtrans %}';
+                      }
+                  }
+              }
+          };
+
+          if(window.relayConsumptionChart){
+              try { window.relayConsumptionChart.destroy(); } catch(e) {}
+          }
+          window.relayConsumptionChart = new ApexCharts(document.querySelector('#relay-consumption-chart'), options);
+          window.relayConsumptionChart.render();
+
+          $('#relay-consumption-summary').text(
+              '{% trans %}15-day total:{% endtrans %} ' + (Math.round(totalLiters * 100) / 100) + ' L | ' +
+              '{% trans %}Today relay ON:{% endtrans %} ' + todayMinutes + ' {% trans %}minutes{% endtrans %}'
+          );
+      })
+      .fail(function() {
+          $('#relay-consumption-summary').text('{% trans %}Unable to load consumption stats{% endtrans %}');
+      });
+}
+
+$(document).ready(function() {
+    renderRelayConsumptionChart();
 });
 </script>
 

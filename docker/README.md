@@ -37,6 +37,8 @@ Publish image to Docker Hub:
 - A dedicated `cron` container runs scheduled jobs from `ext_conf/crontab.ini`.
 - SQLite persists in a Docker volume (`wlp_data`).
 - On first run, `/app/data/database.db` is auto-created from `database.opensource.db`.
+- Relay daily consumption stats are persisted in SQLite table `relay_daily_stats`
+	(auto-created at runtime on first relay update handling, no manual migration required).
 - Nginx writes access logs to a shared volume used by GoAccess.
 - GoAccess generates live reports in `/app/reports` (mounted in `web` service).
 

@@ -687,6 +687,160 @@ class DevicesDB:
             "id": r.id, "events": r.events, "created_at": r.created_at
         } for r in rows]
 
+    @staticmethod
+    def ensure_relay_daily_stats_table():
+        """Ensure the relay daily stats table exists.
+
+        Table stores per-relay daily aggregates for ON runtime and estimated
+        liters added while pump is ON.
+        """
+        sql_create = """
+            CREATE TABLE IF NOT EXISTS relay_daily_stats (
+                relay_id INTEGER NOT NULL,
+                day_date TEXT NOT NULL,
+                on_seconds INTEGER NOT NULL DEFAULT 0,
+                liters_added REAL NOT NULL DEFAULT 0,
+                updated_at TEXT,
+                PRIMARY KEY (relay_id, day_date)
+            )
+        """
+        sql_index = """
+            CREATE INDEX IF NOT EXISTS idx_relay_daily_stats_day
+            ON relay_daily_stats(day_date)
+        """
+        with engine.connect() as connection:
+            connection.execute(text(sql_create))
+            connection.execute(text(sql_index))
+            connection.commit()
+
+    @staticmethod
+    def _upsert_relay_daily_stats(relay_id, day_date, on_seconds_inc=0, liters_added_inc=0.0):
+        """Increment per-day aggregate counters for a relay.
+
+        Args:
+            relay_id: Relay device id.
+            day_date: UTC day key in YYYY-MM-DD format.
+            on_seconds_inc: Seconds to add to ON runtime.
+            liters_added_inc: Liters to add to estimated daily added water.
+        """
+        DevicesDB.ensure_relay_daily_stats_table()
+        sql_query = """
+            INSERT INTO relay_daily_stats (relay_id, day_date, on_seconds, liters_added, updated_at)
+            VALUES (:relay_id, :day_date, :on_seconds_inc, :liters_added_inc, :updated_at)
+            ON CONFLICT(relay_id, day_date)
+            DO UPDATE SET
+                on_seconds = on_seconds + excluded.on_seconds,
+                liters_added = liters_added + excluded.liters_added,
+                updated_at = excluded.updated_at
+        """
+        with engine.connect() as connection:
+            connection.execute(text(sql_query), {
+                "relay_id": relay_id,
+                "day_date": day_date,
+                "on_seconds_inc": int(max(0, on_seconds_inc)),
+                "liters_added_inc": float(max(0.0, liters_added_inc)),
+                "updated_at": datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            })
+            connection.commit()
+
+    @staticmethod
+    def add_relay_on_runtime(relay_id, start_ts, end_ts):
+        """Add relay ON runtime splitting seconds across UTC day boundaries.
+
+        Args:
+            relay_id: Relay device id.
+            start_ts: Interval start epoch seconds (inclusive).
+            end_ts: Interval end epoch seconds (exclusive).
+        """
+        try:
+            start_ts = int(start_ts)
+            end_ts = int(end_ts)
+        except Exception:
+            return
+
+        if end_ts <= start_ts:
+            return
+
+        cursor = start_ts
+        while cursor < end_ts:
+            day_start_dt = datetime.datetime.utcfromtimestamp(cursor).replace(hour=0, minute=0, second=0, microsecond=0)
+            next_day_dt = day_start_dt + datetime.timedelta(days=1)
+            next_day_ts = int(next_day_dt.timestamp())
+            chunk_end = min(end_ts, next_day_ts)
+            chunk_seconds = max(0, chunk_end - cursor)
+            day_key = day_start_dt.strftime("%Y-%m-%d")
+            DevicesDB._upsert_relay_daily_stats(relay_id, day_key, on_seconds_inc=chunk_seconds, liters_added_inc=0.0)
+            cursor = chunk_end
+
+    @staticmethod
+    def add_relay_liters_for_day(relay_id, at_ts, liters_added):
+        """Add estimated liters to the UTC day bucket containing `at_ts`."""
+        try:
+            at_ts = int(at_ts)
+            liters_added = float(liters_added)
+        except Exception:
+            return
+
+        if liters_added <= 0:
+            return
+
+        day_key = datetime.datetime.utcfromtimestamp(at_ts).strftime("%Y-%m-%d")
+        DevicesDB._upsert_relay_daily_stats(relay_id, day_key, on_seconds_inc=0, liters_added_inc=liters_added)
+
+    @staticmethod
+    def get_relay_daily_stats(relay_id, days=15):
+        """Return contiguous daily stats for the last `days` UTC days.
+
+        Missing days are zero-filled to simplify chart rendering.
+        """
+        DevicesDB.ensure_relay_daily_stats_table()
+
+        try:
+            days = int(days)
+        except Exception:
+            days = 15
+        if days < 1:
+            days = 1
+
+        today = datetime.datetime.utcnow().date()
+        start_date = today - datetime.timedelta(days=days - 1)
+
+        query = """
+            SELECT day_date, on_seconds, liters_added
+            FROM relay_daily_stats
+            WHERE relay_id = :relay_id
+              AND day_date >= :start_date
+            ORDER BY day_date ASC
+        """
+
+        rows_by_day = {}
+        with engine.connect() as connection:
+            result = connection.execute(text(query), {
+                "relay_id": relay_id,
+                "start_date": start_date.strftime("%Y-%m-%d")
+            })
+            rows = result.fetchall()
+            result.close()
+
+        for row in rows:
+            rows_by_day[row.day_date] = {
+                "on_seconds": int(row.on_seconds or 0),
+                "liters_added": float(row.liters_added or 0.0)
+            }
+
+        output = []
+        for offset in range(days):
+            current = start_date + datetime.timedelta(days=offset)
+            day_key = current.strftime("%Y-%m-%d")
+            item = rows_by_day.get(day_key, {"on_seconds": 0, "liters_added": 0.0})
+            output.append({
+                "day": day_key,
+                "on_minutes": int(round(item["on_seconds"] / 60.0)),
+                "liters": round(item["liters_added"], 2)
+            })
+
+        return output
+
 
 class User(UserMixin):
     """Flask-Login compatible user model backed by SQL helper methods."""
