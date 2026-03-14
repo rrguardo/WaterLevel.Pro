@@ -204,7 +204,7 @@ redis_client = redis.StrictRedis(
 
 DOMAIN = settings.APP_DOMAIN
 API_URL = settings.API_DOMAIN
-RELEASE_VERSION = "1.0.7"
+RELEASE_VERSION = "1.0.8"
 
 
 @app.context_processor

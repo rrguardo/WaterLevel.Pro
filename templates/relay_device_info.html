@@ -1019,6 +1019,23 @@ function buildRelayStatsQuery() {
     return params;
 }
 
+function format2Decimals(value) {
+    var num = Number(value || 0);
+    return (Math.round(num * 100) / 100);
+}
+
+function formatCurrencyWithCentsText(value, currencyCode) {
+    var rounded = format2Decimals(value);
+    var absoluteCents = Math.abs(Math.round(rounded * 100));
+    var major = Math.floor(absoluteCents / 100);
+    var cents = absoluteCents % 100;
+    var sign = rounded < 0 ? '-' : '';
+    var centsLabel = (cents === 1)
+        ? '{% trans %}cent{% endtrans %}'
+        : '{% trans %}cents{% endtrans %}';
+    return sign + major + ' ' + currencyCode + ' {% trans %}and{% endtrans %} ' + String(cents).padStart(2, '0') + ' ' + centsLabel;
+}
+
 function renderRelayConsumptionChart() {
     $.getJSON('/relay_consumption_stats', buildRelayStatsQuery())
       .done(function(resp) {
@@ -1045,10 +1062,10 @@ function renderRelayConsumptionChart() {
               var energyCost = Number(item.energy_cost || 0);
               var energyWh = Number(item.energy_wh || 0);
               var onMinutes = Number(item.on_minutes || 0);
-              litersData.push(Math.round(liters * 100) / 100);
-              waterCostData.push(Math.round(waterCost * 10000) / 10000);
-              energyCostData.push(Math.round(energyCost * 10000) / 10000);
-              energyWhData.push(Math.round(energyWh * 100) / 100);
+              litersData.push(format2Decimals(liters));
+              waterCostData.push(format2Decimals(waterCost));
+              energyCostData.push(format2Decimals(energyCost));
+              energyWhData.push(format2Decimals(energyWh));
               minutesData.push(onMinutes);
               totalLiters += liters;
               totalWaterCost += waterCost;
@@ -1093,15 +1110,15 @@ function renderRelayConsumptionChart() {
                           var idx = (opts && typeof opts.dataPointIndex === 'number') ? opts.dataPointIndex : -1;
                           var mins = (idx >= 0 && idx < minutesData.length) ? minutesData[idx] : 0;
                           if(opts && opts.seriesIndex === 0) {
-                              return (Math.round(val * 100) / 100) + ' L | ' + mins + ' {% trans %}min ON{% endtrans %}';
+                              return format2Decimals(val) + ' L | ' + mins + ' {% trans %}min ON{% endtrans %}';
                           }
                           if(opts && (opts.seriesIndex === 1 || opts.seriesIndex === 2)) {
-                              return currencyCode + ' ' + (Math.round(val * 10000) / 10000) + ' | ' + mins + ' {% trans %}min ON{% endtrans %}';
+                              return currencyCode + ' ' + format2Decimals(val).toFixed(2) + ' | ' + mins + ' {% trans %}min ON{% endtrans %}';
                           }
                           if(opts && opts.seriesIndex === 3) {
-                              return (Math.round(val * 100) / 100) + ' Wh | ' + mins + ' {% trans %}min ON{% endtrans %}';
+                              return format2Decimals(val) + ' Wh | ' + mins + ' {% trans %}min ON{% endtrans %}';
                           }
-                          return (Math.round(val * 10000) / 10000) + ' | ' + mins + ' {% trans %}min ON{% endtrans %}';
+                          return format2Decimals(val).toFixed(2) + ' | ' + mins + ' {% trans %}min ON{% endtrans %}';
                       }
                   }
               }
@@ -1119,10 +1136,10 @@ function renderRelayConsumptionChart() {
               ? (period.start_date + ' - ' + period.end_date)
               : '-';
 
-          $('#relay-sum-water').text((Math.round(totalLiters * 100) / 100) + ' L');
-          $('#relay-sum-energy-wh').text((Math.round(totalEnergyWh * 100) / 100) + ' Wh');
-          $('#relay-sum-water-cost').text(currencyCode + ' ' + (Math.round(totalWaterCost * 10000) / 10000));
-          $('#relay-sum-energy-cost').text(currencyCode + ' ' + (Math.round(totalEnergyCost * 10000) / 10000));
+          $('#relay-sum-water').text(format2Decimals(totalLiters) + ' L');
+          $('#relay-sum-energy-wh').text(format2Decimals(totalEnergyWh) + ' Wh');
+          $('#relay-sum-water-cost').text(formatCurrencyWithCentsText(totalWaterCost, currencyCode));
+          $('#relay-sum-energy-cost').text(formatCurrencyWithCentsText(totalEnergyCost, currencyCode));
           $('#relay-sum-today-minutes').text(todayMinutes + ' {% trans %}minutes{% endtrans %}');
           $('#relay-sum-period').text(periodText);
       })

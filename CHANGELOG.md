@@ -2,6 +2,60 @@
 
 All notable changes to this project are documented in this file.
 
+## v1.0.8 - 2026-03-14
+
+### Added
+- Relay R1 extended settings persisted in `relay_settings`: `WATER_COST_PER_M3`, `RELAY_POWER_WATTS`, `ENERGY_COST_PER_KWH`, and `CURRENCY_CODE`.
+- Automatic relay settings schema guard/migration in `db.py` for backward-compatible column provisioning.
+- Manual SQL helper script for relay cost/energy schema updates: `scripts/migrate_add_relay_cost_energy_fields.sql`.
+- Relay consumption API period controls in `/relay_consumption_stats`:
+	- month mode (`month=YYYY-MM`),
+	- custom date range (`start_date`/`end_date`),
+	- period metadata in JSON response.
+- Relay chart UX controls on `templates/relay_device_info.html`:
+	- previous/current/next month navigation,
+	- quick ranges (`Last 7 days`, `Last 30 days`, `This month`, `Previous month`),
+	- custom date range apply,
+	- series visibility presets and per-series toggles.
+- Currency support for relay costs with supported codes:
+	`USD`, `DOP`, `EUR`, `MXN`, `COP`, `ARS`, `CLP`, `PEN`, `INR`, `CNY`.
+
+### Changed
+- Relay consumption chart converted to mixed-series visualization:
+	- consumed liters as light-blue bars,
+	- water/energy costs as lines,
+	- energy usage (`Wh`) as line.
+- Relay summary panel upgraded from plain totals text to compact visual cards + table.
+- Cost presentation now uses two-decimal formatting in chart tooltips and series values.
+- Cost summary strings now render major + cents text for readability
+	(for example: `22 USD and 15 cents`) with translation-ready tokens.
+- Relay settings UI now unlocks all form controls in admin/private-key edit mode (`input`, `select`, `textarea`), enabling currency selection changes.
+- Demo/reset data initialization updated with realistic relay defaults (costs/power/currency) and schema alignment.
+
+### Fixed
+- Fixed relay settings read-path mismatch where SQLAlchemy rows could fall back to defaults in stats calculations.
+	`load_relay_settings` now normalizes rows to dict-like access (`AttrDict`) so `.get(...)` works consistently.
+- Fixed CI/unit failure path when `relay_settings` table is absent:
+	schema helper now checks table existence before `ALTER TABLE`, preventing `no such table: relay_settings` errors.
+- Improved integration test resilience by skipping Docker-dependent suites when Docker is unavailable in environment.
+- Removed hard Redis dependency from sensor stats unit test by using local fake sorted-set behavior in test scope.
+
+### Internationalization
+- Added/updated translations for new relay settings/chart controls and updated R1 docs content across:
+	- `translations/es/LC_MESSAGES/messages.po`
+	- `translations/hi/LC_MESSAGES/messages.po`
+	- `translations/zh/LC_MESSAGES/messages.po`
+- Updated product/manual pages for R1 with cost and consumption analytics descriptions.
+
+### Testing
+- Updated unit tests for relay stats response/enrichment and period modes.
+- Updated DB unit tests for relay schema checks and UTC day-splitting behavior.
+- Test suite and coverage revalidated after fixes (coverage target above 70% maintained).
+
+### Release Metadata
+- Web `app.py` release version: `1.0.8`
+- API `api.py` release version: `1.0.8`
+
 ## v1.0.7 - 2026-03-07
 
 ### Added
