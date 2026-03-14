@@ -1,26 +1,46 @@
-import time
 import json
+import time
 import unittest
-from app import app, redis_client
-import settings
+from unittest.mock import patch
+
+import app as app_module
+from app import app
+
+
+class FakeRedisSortedSet:
+    def __init__(self):
+        self._data = {}
+
+    def delete(self, key):
+        self._data.pop(key, None)
+
+    def zadd(self, key, mapping):
+        bucket = self._data.setdefault(key, [])
+        for member, score in mapping.items():
+            bucket.append((str(member), float(score)))
+        bucket.sort(key=lambda item: item[1])
+
+    def zrangebyscore(self, key, minimum, maximum, withscores=False):
+        matches = []
+        for member, score in self._data.get(key, []):
+            if minimum <= score <= maximum:
+                matches.append((member, score) if withscores else member)
+        return matches
 
 
 class SensorStatsUnitTest(unittest.TestCase):
     def setUp(self):
+        self.fake_redis = FakeRedisSortedSet()
+        self.redis_patcher = patch.object(app_module, 'redis_client', self.fake_redis)
+        self.redis_patcher.start()
         self.app = app.test_client()
         self.pub = 'unittest_pubkey'
         self.history_key = f'tin-history/{self.pub}'
-        # flush any existing test key
-        try:
-            redis_client.delete(self.history_key)
-        except Exception:
-            pass
+        self.fake_redis.delete(self.history_key)
 
     def tearDown(self):
-        try:
-            redis_client.delete(self.history_key)
-        except Exception:
-            pass
+        self.fake_redis.delete(self.history_key)
+        self.redis_patcher.stop()
 
     def test_sensor_stats_empty(self):
         # No data -> all buckets offline
@@ -46,7 +66,7 @@ class SensorStatsUnitTest(unittest.TestCase):
         # push into redis sorted set as "percent|voltage" with score = ts
         for ts, p, v in samples:
             member = f"{p}|{v}"
-            redis_client.zadd(self.history_key, {member: ts})
+            self.fake_redis.zadd(self.history_key, {member: ts})
 
         # query /sensor_stats and find the bucket with hour_start
         rv = self.app.get('/sensor_stats', query_string={'public_key': self.pub})
