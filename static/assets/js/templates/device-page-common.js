@@ -171,7 +171,9 @@
     if (!config.enableAdminEditing) {
       return;
     }
-    $("input").prop("disabled", false);
+    // Unlock all form controls, not only inputs. Some settings (e.g. currency)
+    // are select fields and must be editable in admin/private-key mode.
+    $("input, select, textarea").prop("disabled", false);
     if (config.canEditButtonSelector) {
       $(config.canEditButtonSelector).removeClass("d-none");
     }

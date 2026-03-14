@@ -140,10 +140,14 @@ class DbUnitTestCase(unittest.TestCase):
             (3, 'ENERGY_COST_PER_KWH', 'REAL', 1, '0.17', 0),
             (4, 'CURRENCY_CODE', 'TEXT', 1, 'USD', 0),
         ]
+        fake_exists_result = MagicMock()
+        fake_exists_result.fetchone.return_value = ('relay_settings',)
         fake_conn = MagicMock()
 
         def execute_side_effect(statement, *args, **kwargs):
             sql = str(statement)
+            if "SELECT name FROM sqlite_master WHERE type='table' AND name='relay_settings'" in sql:
+                return fake_exists_result
             if 'PRAGMA table_info(relay_settings)' in sql:
                 return fake_prag_result
             return object()

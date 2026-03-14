@@ -448,7 +448,9 @@ class DevicesDB:
     @staticmethod
     @cache.memoize(300)
     def load_relay_settings(device_id):
-        DevicesDB.ensure_relay_settings_extra_fields()
+        table_exists = DevicesDB.ensure_relay_settings_extra_fields()
+        if not table_exists:
+            return None
         connection = engine.connect()
 
         query = "SELECT * FROM relay_settings WHERE device = :device_id"
@@ -475,6 +477,12 @@ class DevicesDB:
         }
 
         with engine.connect() as connection:
+            table_row = connection.execute(
+                text("SELECT name FROM sqlite_master WHERE type='table' AND name='relay_settings'")
+            ).fetchone()
+            if not table_row:
+                return False
+
             result = connection.execute(text(sql_columns))
             existing = {row[1] for row in result.fetchall()}
             result.close()
@@ -487,6 +495,8 @@ class DevicesDB:
 
             if changed:
                 connection.commit()
+
+        return True
 
     @staticmethod
     def update_sensor_settings(device_id, EMPTY_LEVEL=None, TOP_MARGIN=None, WIFI_POOL_TIME=None, LITERS_PER_CM=None):
@@ -541,7 +551,9 @@ class DevicesDB:
                               RELAY_POWER_WATTS=settings.DEFAULT_RELAY_POWER_WATTS,
                               ENERGY_COST_PER_KWH=settings.DEFAULT_ENERGY_COST_PER_KWH,
                               CURRENCY_CODE=settings.DEFAULT_RELAY_CURRENCY):
-        DevicesDB.ensure_relay_settings_extra_fields()
+        table_exists = DevicesDB.ensure_relay_settings_extra_fields()
+        if not table_exists:
+            return False
         sql_query = """
                 INSERT OR REPLACE INTO relay_settings 
                     (device, ALGO, START_LEVEL, END_LEVEL, AUTO_OFF, AUTO_ON, MIN_FLOW_MM_X_MIN, 
