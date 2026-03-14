@@ -132,7 +132,24 @@ class DbUnitTestCase(unittest.TestCase):
             self.assertEqual(1, db.DevicesDB.load_device_settings(3, 3).ALGO)
 
     def test_devicesdb_update_methods(self):
-        fake_conn, _ = self._fake_connection(execute_result=object())
+        fake_prag_result = MagicMock()
+        fake_prag_result.fetchall.return_value = [
+            (0, 'device', 'INTEGER', 1, None, 1),
+            (1, 'WATER_COST_PER_M3', 'REAL', 1, '1.5', 0),
+            (2, 'RELAY_POWER_WATTS', 'REAL', 1, '750', 0),
+            (3, 'ENERGY_COST_PER_KWH', 'REAL', 1, '0.17', 0),
+            (4, 'CURRENCY_CODE', 'TEXT', 1, 'USD', 0),
+        ]
+        fake_conn = MagicMock()
+
+        def execute_side_effect(statement, *args, **kwargs):
+            sql = str(statement)
+            if 'PRAGMA table_info(relay_settings)' in sql:
+                return fake_prag_result
+            return object()
+
+        fake_conn.execute.side_effect = execute_side_effect
+
         with patch.object(db.engine, "connect", return_value=_CtxConn(fake_conn)), patch.object(db.cache, "delete_memoized"):
             self.assertTrue(db.DevicesDB.update_sensor_settings(10, EMPTY_LEVEL=200, TOP_MARGIN=20, WIFI_POOL_TIME=60))
             self.assertTrue(db.DevicesDB.update_sensor_pool_time(10, 90))
@@ -244,8 +261,8 @@ class DbUnitTestCase(unittest.TestCase):
 
     def test_add_relay_on_runtime_splits_across_days(self):
         # 2026-03-07 23:59:30 UTC -> 2026-03-08 00:00:30 UTC
-        start_ts = int(datetime.datetime(2026, 3, 7, 23, 59, 30).timestamp())
-        end_ts = int(datetime.datetime(2026, 3, 8, 0, 0, 30).timestamp())
+        start_ts = int(datetime.datetime(2026, 3, 7, 23, 59, 30, tzinfo=datetime.timezone.utc).timestamp())
+        end_ts = int(datetime.datetime(2026, 3, 8, 0, 0, 30, tzinfo=datetime.timezone.utc).timestamp())
 
         with patch('db.DevicesDB._upsert_relay_daily_stats') as upsert:
             db.DevicesDB.add_relay_on_runtime(12, start_ts, end_ts)

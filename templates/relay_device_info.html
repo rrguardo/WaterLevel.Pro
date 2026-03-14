@@ -231,8 +231,61 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                    <span class="small text-muted me-1">{% trans %}Chart view{% endtrans %}</span>
+                    <button type="button" class="btn btn-sm btn-outline-dark relay-visibility-preset active" data-visibility-preset="all">{% trans %}All series{% endtrans %}</button>
+                    <button type="button" class="btn btn-sm btn-outline-dark relay-visibility-preset" data-visibility-preset="costs">{% trans %}Costs only{% endtrans %}</button>
+                    <button type="button" class="btn btn-sm btn-outline-dark relay-visibility-preset" data-visibility-preset="usage">{% trans %}Usage only{% endtrans %}</button>
+                </div>
+                <div class="d-flex flex-wrap gap-2 align-items-center mb-3" id="relay-series-toggle-group">
+                    <button type="button" class="btn btn-sm btn-info relay-series-toggle active" data-series-key="water">{% trans %}Water volume{% endtrans %}</button>
+                    <button type="button" class="btn btn-sm btn-success relay-series-toggle active" data-series-key="waterCost">{% trans %}Water cost{% endtrans %}</button>
+                    <button type="button" class="btn btn-sm btn-warning relay-series-toggle active" data-series-key="energyCost">{% trans %}Electricity cost{% endtrans %}</button>
+                    <button type="button" class="btn btn-sm btn-secondary relay-series-toggle active" data-series-key="energyWh">{% trans %}Energy used{% endtrans %}</button>
+                </div>
                 <div id="relay-consumption-chart" style="height:280px"></div>
-                <div class="small text-muted mt-3" id="relay-consumption-summary">-</div>
+                <div class="mt-3" id="relay-consumption-summary">
+                    <div class="row g-2">
+                        <div class="col-6 col-md-3">
+                            <div class="border rounded p-2 h-100 bg-white">
+                                <div class="small text-muted"><i class="ti ti-droplet"></i> {% trans %}Water{% endtrans %}</div>
+                                <div class="fw-semibold" id="relay-sum-water">0 L</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="border rounded p-2 h-100 bg-white">
+                                <div class="small text-muted"><i class="ti ti-bolt"></i> {% trans %}Energy{% endtrans %}</div>
+                                <div class="fw-semibold" id="relay-sum-energy-wh">0 Wh</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="border rounded p-2 h-100 bg-white">
+                                <div class="small text-muted"><i class="ti ti-currency-dollar"></i> {% trans %}Water Cost{% endtrans %}</div>
+                                <div class="fw-semibold" id="relay-sum-water-cost">0</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="border rounded p-2 h-100 bg-white">
+                                <div class="small text-muted"><i class="ti ti-plug-connected"></i> {% trans %}Energy Cost{% endtrans %}</div>
+                                <div class="fw-semibold" id="relay-sum-energy-cost">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive mt-2">
+                        <table class="table table-sm table-bordered align-middle mb-0 bg-white">
+                            <tbody>
+                                <tr>
+                                    <th class="small text-muted" style="width:40%">{% trans %}Relay ON today{% endtrans %}</th>
+                                    <td class="fw-semibold" id="relay-sum-today-minutes">0 {% trans %}minutes{% endtrans %}</td>
+                                </tr>
+                                <tr>
+                                    <th class="small text-muted">{% trans %}Period{% endtrans %}</th>
+                                    <td class="small" id="relay-sum-period">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <div class="small text-muted mt-1">{% trans %}Estimated from relay ON time and linked S1 liters-per-cm; only positive tank-liter increases are counted.{% endtrans %}</div>
             </div>
         </div>
@@ -508,6 +561,28 @@
                 {% endtrans %}
             </li>
 
+            <li class="advanced_settings list-group-item list-group-item-action bg-secondary-subtle">
+                <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Currency:{% endtrans %}</button>
+                <select name="CURRENCY_CODE" class="form-select d-inline-block" style="max-width: 220px;" disabled>
+                    {% set selected_currency = (device_setting.CURRENCY_CODE if device_setting and device_setting.CURRENCY_CODE else 'USD') %}
+                    <option value="USD" {% if selected_currency == 'USD' %}selected{% endif %}>USD - US Dollar</option>
+                    <option value="DOP" {% if selected_currency == 'DOP' %}selected{% endif %}>DOP - Dominican Peso</option>
+                    <option value="EUR" {% if selected_currency == 'EUR' %}selected{% endif %}>EUR - Euro</option>
+                    <option value="MXN" {% if selected_currency == 'MXN' %}selected{% endif %}>MXN - Mexican Peso</option>
+                    <option value="COP" {% if selected_currency == 'COP' %}selected{% endif %}>COP - Colombian Peso</option>
+                    <option value="ARS" {% if selected_currency == 'ARS' %}selected{% endif %}>ARS - Argentine Peso</option>
+                    <option value="CLP" {% if selected_currency == 'CLP' %}selected{% endif %}>CLP - Chilean Peso</option>
+                    <option value="PEN" {% if selected_currency == 'PEN' %}selected{% endif %}>PEN - Peruvian Sol</option>
+                    <option value="INR" {% if selected_currency == 'INR' %}selected{% endif %}>INR - Indian Rupee</option>
+                    <option value="CNY" {% if selected_currency == 'CNY' %}selected{% endif %}>CNY - Chinese Yuan</option>
+                </select>
+                {% trans %}
+                <p class="ms-4 my-3">
+                    Select the currency used for water and energy cost estimates.
+                </p>
+                {% endtrans %}
+            </li>
+
             <li class="advanced_settings list-group-item list-group-item-action">
                <div class="form-check form-switch mid-switch">
                   <input class="form-check-input" name="SAFE_MODE" type="checkbox" id="SafeModeCheckBox" disabled {% if device_setting.SAFE_MODE %} checked {% endif %}>
@@ -773,8 +848,74 @@ var relayChartState = {
     month: null,
     startDate: null,
     endDate: null,
-    quickPreset: 'thisMonth'
+    quickPreset: 'thisMonth',
+    visibilityPreset: 'all',
+    visibleSeries: {
+        water: true,
+        waterCost: true,
+        energyCost: true,
+        energyWh: true
+    }
 };
+
+var relaySeriesNames = {
+    water: '{% trans %}Consumed Water (L/day){% endtrans %}',
+    waterCost: '{% trans %}Water Cost / day{% endtrans %}',
+    energyCost: '{% trans %}Energy Cost / day{% endtrans %}',
+    energyWh: '{% trans %}Energy Used (Wh/day){% endtrans %}'
+};
+
+function syncRelaySeriesButtons() {
+    $('.relay-series-toggle').each(function() {
+        var key = $(this).data('series-key');
+        var isActive = !!relayChartState.visibleSeries[key];
+        $(this).toggleClass('active', isActive);
+        $(this).toggleClass('opacity-50', !isActive);
+        $(this).attr('aria-pressed', isActive ? 'true' : 'false');
+    });
+
+    $('.relay-visibility-preset').removeClass('active');
+    $('.relay-visibility-preset[data-visibility-preset="' + relayChartState.visibilityPreset + '"]').addClass('active');
+}
+
+function applyRelaySeriesVisibility() {
+    if(!window.relayConsumptionChart) return;
+
+    Object.keys(relaySeriesNames).forEach(function(key) {
+        var seriesName = relaySeriesNames[key];
+        if(relayChartState.visibleSeries[key]) {
+            try { window.relayConsumptionChart.showSeries(seriesName); } catch(e) {}
+        } else {
+            try { window.relayConsumptionChart.hideSeries(seriesName); } catch(e) {}
+        }
+    });
+    syncRelaySeriesButtons();
+}
+
+function setRelayVisibilityPreset(preset) {
+    relayChartState.visibilityPreset = preset;
+    if(preset === 'costs') {
+        relayChartState.visibleSeries = { water: false, waterCost: true, energyCost: true, energyWh: false };
+    } else if(preset === 'usage') {
+        relayChartState.visibleSeries = { water: true, waterCost: false, energyCost: false, energyWh: true };
+    } else {
+        relayChartState.visibleSeries = { water: true, waterCost: true, energyCost: true, energyWh: true };
+    }
+    applyRelaySeriesVisibility();
+}
+
+function toggleRelaySeries(seriesKey) {
+    relayChartState.visibilityPreset = 'custom';
+    relayChartState.visibleSeries[seriesKey] = !relayChartState.visibleSeries[seriesKey];
+
+    var anyVisible = Object.keys(relayChartState.visibleSeries).some(function(key) {
+        return relayChartState.visibleSeries[key];
+    });
+    if(!anyVisible) {
+        relayChartState.visibleSeries[seriesKey] = true;
+    }
+    applyRelaySeriesVisibility();
+}
 
 function setActiveQuickPreset(preset) {
     relayChartState.quickPreset = preset || null;
@@ -883,6 +1024,7 @@ function renderRelayConsumptionChart() {
       .done(function(resp) {
           var days = (resp && Array.isArray(resp.days)) ? resp.days : [];
           var period = resp && resp.period ? resp.period : null;
+          var currencyCode = (resp && resp.settings && resp.settings.currency_code) ? String(resp.settings.currency_code) : 'USD';
           var labels = [];
           var litersData = [];
           var waterCostData = [];
@@ -926,15 +1068,16 @@ function renderRelayConsumptionChart() {
 
           var options = {
               series: [
-                  { name: '{% trans %}Consumed Water (L/day){% endtrans %}', type: 'line', data: litersData },
+                  { name: '{% trans %}Consumed Water (L/day){% endtrans %}', type: 'bar', data: litersData },
                   { name: '{% trans %}Water Cost / day{% endtrans %}', type: 'line', data: waterCostData },
                   { name: '{% trans %}Energy Cost / day{% endtrans %}', type: 'line', data: energyCostData },
                   { name: '{% trans %}Energy Used (Wh/day){% endtrans %}', type: 'line', data: energyWhData }
               ],
-              chart: { type: 'line', height: 280, toolbar: { show: false } },
-              stroke: { width: [3, 2, 2, 2], curve: 'smooth' },
+              chart: { type: 'line', height: 280, stacked: false, toolbar: { show: false } },
+              stroke: { width: [0, 2, 2, 2], curve: 'smooth' },
+              plotOptions: { bar: { columnWidth: '65%', borderRadius: 4 } },
               dataLabels: { enabled: false },
-              colors: ['#0ea5e9', '#16a34a', '#f59e0b', '#7c3aed'],
+              colors: ['#67d4ff', '#16a34a', '#f59e0b', '#7c3aed'],
               xaxis: { categories: labels, title: { text: '{% trans %}Date (MM-DD){% endtrans %}' } },
               yaxis: [
                   { seriesName: '{% trans %}Consumed Water (L/day){% endtrans %}', title: { text: '{% trans %}Liters / Wh{% endtrans %}' }, min: 0 },
@@ -952,6 +1095,9 @@ function renderRelayConsumptionChart() {
                           if(opts && opts.seriesIndex === 0) {
                               return (Math.round(val * 100) / 100) + ' L | ' + mins + ' {% trans %}min ON{% endtrans %}';
                           }
+                          if(opts && (opts.seriesIndex === 1 || opts.seriesIndex === 2)) {
+                              return currencyCode + ' ' + (Math.round(val * 10000) / 10000) + ' | ' + mins + ' {% trans %}min ON{% endtrans %}';
+                          }
                           if(opts && opts.seriesIndex === 3) {
                               return (Math.round(val * 100) / 100) + ' Wh | ' + mins + ' {% trans %}min ON{% endtrans %}';
                           }
@@ -965,20 +1111,24 @@ function renderRelayConsumptionChart() {
               try { window.relayConsumptionChart.destroy(); } catch(e) {}
           }
           window.relayConsumptionChart = new ApexCharts(document.querySelector('#relay-consumption-chart'), options);
-          window.relayConsumptionChart.render();
+          window.relayConsumptionChart.render().then(function() {
+              applyRelaySeriesVisibility();
+          });
 
-          $('#relay-consumption-summary').text(
-              '{% trans %}Period totals:{% endtrans %} ' +
-              (Math.round(totalLiters * 100) / 100) + ' L, ' +
-              (Math.round(totalWaterCost * 10000) / 10000) + ' {% trans %}water cost{% endtrans %}, ' +
-              (Math.round(totalEnergyCost * 10000) / 10000) + ' {% trans %}energy cost{% endtrans %}, ' +
-              (Math.round(totalEnergyWh * 100) / 100) + ' Wh | ' +
-              '{% trans %}Today relay ON:{% endtrans %} ' + todayMinutes + ' {% trans %}minutes{% endtrans %}'
-          );
+          var periodText = (period && period.start_date && period.end_date)
+              ? (period.start_date + ' - ' + period.end_date)
+              : '-';
+
+          $('#relay-sum-water').text((Math.round(totalLiters * 100) / 100) + ' L');
+          $('#relay-sum-energy-wh').text((Math.round(totalEnergyWh * 100) / 100) + ' Wh');
+          $('#relay-sum-water-cost').text(currencyCode + ' ' + (Math.round(totalWaterCost * 10000) / 10000));
+          $('#relay-sum-energy-cost').text(currencyCode + ' ' + (Math.round(totalEnergyCost * 10000) / 10000));
+          $('#relay-sum-today-minutes').text(todayMinutes + ' {% trans %}minutes{% endtrans %}');
+          $('#relay-sum-period').text(periodText);
       })
       .fail(function() {
           syncNavButtons();
-          $('#relay-consumption-summary').text('{% trans %}Unable to load consumption stats{% endtrans %}');
+          $('#relay-sum-period').text('{% trans %}Unable to load consumption stats{% endtrans %}');
       });
 }
 
@@ -1026,7 +1176,18 @@ $(document).ready(function() {
         applyQuickRange(preset);
     });
 
+    $('.relay-visibility-preset').on('click', function() {
+        var preset = $(this).data('visibility-preset');
+        setRelayVisibilityPreset(preset);
+    });
+
+    $('.relay-series-toggle').on('click', function() {
+        var seriesKey = $(this).data('series-key');
+        toggleRelaySeries(seriesKey);
+    });
+
     setActiveQuickPreset('thisMonth');
+    syncRelaySeriesButtons();
 
     renderRelayConsumptionChart();
 });

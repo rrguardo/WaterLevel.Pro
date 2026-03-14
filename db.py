@@ -470,7 +470,8 @@ class DevicesDB:
         expected_columns = {
             "WATER_COST_PER_M3": f"REAL NOT NULL DEFAULT {float(settings.DEFAULT_WATER_COST_PER_M3)}",
             "RELAY_POWER_WATTS": f"REAL NOT NULL DEFAULT {float(settings.DEFAULT_RELAY_POWER_WATTS)}",
-            "ENERGY_COST_PER_KWH": f"REAL NOT NULL DEFAULT {float(settings.DEFAULT_ENERGY_COST_PER_KWH)}"
+            "ENERGY_COST_PER_KWH": f"REAL NOT NULL DEFAULT {float(settings.DEFAULT_ENERGY_COST_PER_KWH)}",
+            "CURRENCY_CODE": f"TEXT NOT NULL DEFAULT '{settings.DEFAULT_RELAY_CURRENCY}'"
         }
 
         with engine.connect() as connection:
@@ -538,17 +539,18 @@ class DevicesDB:
                               MIN_FLOW_MM_X_MIN=10, SENSOR_KEY='', BLIND_DISTANCE=22, HOURS_OFF='', SAFE_MODE=1,
                               WATER_COST_PER_M3=settings.DEFAULT_WATER_COST_PER_M3,
                               RELAY_POWER_WATTS=settings.DEFAULT_RELAY_POWER_WATTS,
-                              ENERGY_COST_PER_KWH=settings.DEFAULT_ENERGY_COST_PER_KWH):
+                              ENERGY_COST_PER_KWH=settings.DEFAULT_ENERGY_COST_PER_KWH,
+                              CURRENCY_CODE=settings.DEFAULT_RELAY_CURRENCY):
         DevicesDB.ensure_relay_settings_extra_fields()
         sql_query = """
                 INSERT OR REPLACE INTO relay_settings 
                     (device, ALGO, START_LEVEL, END_LEVEL, AUTO_OFF, AUTO_ON, MIN_FLOW_MM_X_MIN, 
                     SENSOR_KEY, BLIND_DISTANCE, HOURS_OFF, SAFE_MODE,
-                    WATER_COST_PER_M3, RELAY_POWER_WATTS, ENERGY_COST_PER_KWH) 
+                    WATER_COST_PER_M3, RELAY_POWER_WATTS, ENERGY_COST_PER_KWH, CURRENCY_CODE) 
                     
                     VALUES (:device, :ALGO, :START_LEVEL, :END_LEVEL, :AUTO_OFF, :AUTO_ON, :MIN_FLOW_MM_X_MIN, 
                     :SENSOR_KEY, :BLIND_DISTANCE, :HOURS_OFF, :SAFE_MODE,
-                    :WATER_COST_PER_M3, :RELAY_POWER_WATTS, :ENERGY_COST_PER_KWH)
+                    :WATER_COST_PER_M3, :RELAY_POWER_WATTS, :ENERGY_COST_PER_KWH, :CURRENCY_CODE)
             """
         with engine.connect() as connection:
             result = connection.execute(text(sql_query), {
@@ -558,7 +560,8 @@ class DevicesDB:
                 "BLIND_DISTANCE": BLIND_DISTANCE, "HOURS_OFF": HOURS_OFF, "SAFE_MODE": SAFE_MODE,
                 "WATER_COST_PER_M3": float(max(0.0, WATER_COST_PER_M3)),
                 "RELAY_POWER_WATTS": float(max(0.0, RELAY_POWER_WATTS)),
-                "ENERGY_COST_PER_KWH": float(max(0.0, ENERGY_COST_PER_KWH))
+                "ENERGY_COST_PER_KWH": float(max(0.0, ENERGY_COST_PER_KWH)),
+                "CURRENCY_CODE": str(CURRENCY_CODE or settings.DEFAULT_RELAY_CURRENCY).strip().upper()
             })
             connection.commit()
             if result:

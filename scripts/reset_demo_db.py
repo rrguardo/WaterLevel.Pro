@@ -36,6 +36,8 @@ def rebuild_demo_dataset(db_path: Path) -> None:
         cur.execute("ALTER TABLE relay_settings ADD COLUMN RELAY_POWER_WATTS REAL NOT NULL DEFAULT 750")
     if "ENERGY_COST_PER_KWH" not in relay_columns:
         cur.execute("ALTER TABLE relay_settings ADD COLUMN ENERGY_COST_PER_KWH REAL NOT NULL DEFAULT 0.17")
+    if "CURRENCY_CODE" not in relay_columns:
+        cur.execute("ALTER TABLE relay_settings ADD COLUMN CURRENCY_CODE TEXT NOT NULL DEFAULT 'USD'")
 
     admin_hash = hashlib.sha256(ADMIN_PASSWORD.encode()).hexdigest()
 
@@ -93,10 +95,10 @@ def rebuild_demo_dataset(db_path: Path) -> None:
         """
         INSERT INTO relay_settings (device, ALGO, START_LEVEL, END_LEVEL, AUTO_OFF, AUTO_ON, MIN_FLOW_MM_X_MIN,
                                     SENSOR_KEY, BLIND_DISTANCE, HOURS_OFF, SAFE_MODE,
-                                    WATER_COST_PER_M3, RELAY_POWER_WATTS, ENERGY_COST_PER_KWH)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                    WATER_COST_PER_M3, RELAY_POWER_WATTS, ENERGY_COST_PER_KWH, CURRENCY_CODE)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
-        (3, 0, 30, 95, 1, 1, 10, "1pubDEMO_SENSOR_S1", 22, "", 1, 1.5, 750.0, 0.17),
+        (3, 0, 30, 95, 1, 1, 10, "1pubDEMO_SENSOR_S1", 22, "", 1, 1.5, 750.0, 0.17, "USD"),
     )
 
     cur.executemany(

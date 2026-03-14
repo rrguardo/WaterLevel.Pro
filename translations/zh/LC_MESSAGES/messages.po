@@ -3089,6 +3089,198 @@ msgstr "该项目是完全开源和开放硬件的。您可以通过以下链接
 msgid "S1 Device Subscriptions"
 msgstr "S1 设备订阅"
 
+#: templates/relay_device_info.html:207
+msgid "Estimated Daily Consumption"
+msgstr "预估每日消耗"
+
+#: templates/relay_device_info.html:210 templates/relay_device_info.html:213
+msgid "Current month"
+msgstr "本月"
+
+#: templates/relay_device_info.html:212
+msgid "Prev month"
+msgstr "上个月"
+
+#: templates/relay_device_info.html:214
+msgid "Next month"
+msgstr "下个月"
+
+#: templates/relay_device_info.html:218
+msgid "Quick ranges"
+msgstr "快捷区间"
+
+#: templates/relay_device_info.html:220
+msgid "Last 7 days"
+msgstr "最近 7 天"
+
+#: templates/relay_device_info.html:221
+msgid "Last 30 days"
+msgstr "最近 30 天"
+
+#: templates/relay_device_info.html:222
+msgid "This month"
+msgstr "这个月"
+
+#: templates/relay_device_info.html:223
+msgid "Previous month"
+msgstr "上个月"
+
+#: templates/relay_device_info.html:225
+msgid "Custom date range"
+msgstr "自定义日期范围"
+
+#: templates/relay_device_info.html:230
+msgid "Apply range"
+msgstr "应用范围"
+
+#: templates/relay_device_info.html:239
+msgid "Water"
+msgstr "用水"
+
+#: templates/relay_device_info.html:245
+msgid "Energy"
+msgstr "能耗"
+
+#: templates/relay_device_info.html:251
+msgid "Water Cost"
+msgstr "水费"
+
+#: templates/relay_device_info.html:257
+msgid "Energy Cost"
+msgstr "电费"
+
+#: templates/relay_device_info.html:266
+msgid "Relay ON today"
+msgstr "今日继电器 ON"
+
+#: templates/relay_device_info.html:270
+msgid "Period"
+msgstr "周期"
+
+#: templates/relay_device_info.html:523 templates/manuals/r1.html:421
+msgid "Water Cost (per m3):"
+msgstr "水费（每 m3）："
+
+#: templates/relay_device_info.html:527
+msgid "Estimated local currency cost per cubic meter of water."
+msgstr "每立方米用水的本地货币预估成本。"
+
+#: templates/relay_device_info.html:534 templates/manuals/r1.html:421
+msgid "Relay Power (W):"
+msgstr "继电器功率 (W)："
+
+#: templates/relay_device_info.html:538
+msgid "Average relay/pump power usage in watts while ON."
+msgstr "继电器/水泵在 ON 状态下的平均功率（瓦）。"
+
+#: templates/relay_device_info.html:543 templates/manuals/r1.html:421
+msgid "Energy Cost (per kWh):"
+msgstr "电价（每 kWh）："
+
+#: templates/relay_device_info.html:547
+msgid "Estimated local currency cost per 1 kWh."
+msgstr "每 1 kWh 的本地货币预估成本。"
+
+#: templates/relay_device_info.html:553 templates/manuals/r1.html:421
+msgid "Currency:"
+msgstr "货币："
+
+#: templates/relay_device_info.html:569
+msgid "Select the currency used for water and energy cost estimates."
+msgstr "选择用于水费和电费估算的货币。"
+
+#: templates/relay_device_info.html:897
+msgid "Consumed Water (L/day)"
+msgstr "每日用水量 (L/天)"
+
+#: templates/relay_device_info.html:898
+msgid "Water Cost / day"
+msgstr "每日水费"
+
+#: templates/relay_device_info.html:899
+msgid "Energy Cost / day"
+msgstr "每日电费"
+
+#: templates/relay_device_info.html:900
+msgid "Energy Used (Wh/day)"
+msgstr "每日用电量 (Wh/天)"
+
+#: templates/relay_device_info.html:913
+msgid "Costs"
+msgstr "费用"
+
+#: templates/relay_device_info.html:985
+msgid "Select both start and end dates"
+msgstr "请选择开始和结束日期"
+
+#: templates/relay_device_info.html:989
+msgid "End date should be greater or equal than start date"
+msgstr "结束日期应大于或等于开始日期"
+
+#: templates/relay_device_info.html:962
+msgid "Period totals:"
+msgstr "周期汇总："
+
+#: templates/manuals/r1.html:418
+msgid "3) Configure Cost & Consumption Analytics"
+msgstr "3) 配置成本与消耗分析"
+
+#: templates/manuals/r1.html:421
+msgid "In <b>Device Settings</b>, open the advanced section and configure: <b>Water Cost (per m3)</b>, <b>Relay Power (W)</b>, <b>Energy Cost (per kWh)</b>, and your <b>Currency</b>."
+msgstr "在 <b>设备设置</b> 中，打开高级设置并配置：<b>水费（每 m3）</b>、<b>继电器功率 (W)</b>、<b>电价（每 kWh）</b> 以及你的 <b>货币</b>。"
+
+#: templates/manuals/r1.html:424
+msgid "The dashboard then estimates daily values from relay ON runtime and sensor-based liters: <b>water volume used</b>, <b>energy used (Wh)</b>, <b>water cost</b>, and <b>electricity cost</b>."
+msgstr "仪表盘会基于继电器 ON 运行时长和传感器升数数据估算每日值：<b>用水量</b>、<b>用电量 (Wh)</b>、<b>水费</b> 和 <b>电费</b>。"
+
+#: templates/manuals/r1.html:427
+msgid "You can review stats by current month, navigate previous months, or apply a custom date range."
+msgstr "你可以查看当月数据、浏览历史月份，或应用自定义日期范围。"
+
+#: templates/products/r1.html:180
+msgid "Cost and Consumption Analytics"
+msgstr "成本与消耗分析"
+
+#: templates/products/r1.html:182
+msgid "The web dashboard includes mixed charts and summaries to estimate <b>daily water volume (L)</b>, <b>energy used (Wh)</b>, <b>water cost</b>, and <b>electricity cost</b> from relay ON runtime and linked sensor data."
+msgstr "Web 仪表盘提供混合图表和汇总，用于根据继电器 ON 运行时长与已连接传感器数据估算 <b>每日用水量 (L)</b>、<b>用电量 (Wh)</b>、<b>水费</b> 与 <b>电费</b>。"
+
+#: templates/products/r1.html:183
+msgid "Users can review the current month, navigate previous months, and apply custom date ranges."
+msgstr "用户可以查看当月、浏览历史月份并应用自定义日期范围。"
+
+#: templates/relay_device_info.html:233
+msgid "Chart view"
+msgstr "图表视图"
+
+#: templates/relay_device_info.html:234
+msgid "All series"
+msgstr "全部系列"
+
+#: templates/relay_device_info.html:235
+msgid "Costs only"
+msgstr "仅看费用"
+
+#: templates/relay_device_info.html:236
+msgid "Usage only"
+msgstr "仅看用量"
+
+#: templates/relay_device_info.html:239
+msgid "Water volume"
+msgstr "用水量"
+
+#: templates/relay_device_info.html:240
+msgid "Water cost"
+msgstr "水费"
+
+#: templates/relay_device_info.html:241
+msgid "Electricity cost"
+msgstr "电费"
+
+#: templates/relay_device_info.html:242
+msgid "Energy used"
+msgstr "用电量"
+
 #: templates/manuals/s1.html:812 templates/products/s1.html:376
 msgid ""
 "\n"

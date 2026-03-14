@@ -405,6 +405,18 @@
                                   </a>
                               </p>
                             </li>
+                            <li class="list-group-item list-group-item-action">
+                              <b>{% trans %}3) Configure Cost & Consumption Analytics{% endtrans %}</b>
+                              <p class="my-2">
+                                {% trans %}In <b>Device Settings</b>, open the advanced section and configure: <b>Water Cost (per m3)</b>, <b>Relay Power (W)</b>, <b>Energy Cost (per kWh)</b>, and your <b>Currency</b>.{% endtrans %}
+                              </p>
+                              <p class="my-2">
+                                {% trans %}The dashboard then estimates daily values from relay ON runtime and sensor-based liters: <b>water volume used</b>, <b>energy used (Wh)</b>, <b>water cost</b>, and <b>electricity cost</b>.{% endtrans %}
+                              </p>
+                              <p class="my-2">
+                                {% trans %}You can review stats by current month, navigate previous months, or apply a custom date range.{% endtrans %}
+                              </p>
+                            </li>
                               <li class="list-group-item list-group-item-action">
                                   <div class="alert alert-warning" role="alert">
                                     {% trans %}<a href="#collapsePartOne"><b>Manual/Smart Switch</b></a> must be set to the <b>ON</b> position to activate the smart pump controller. This ensures the LEDs and screen turn on, allowing the smart features to function properly.{% endtrans %}

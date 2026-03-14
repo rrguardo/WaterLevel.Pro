@@ -489,10 +489,15 @@ def relay_consumption_stats():
         period_start = month_start
         period_end = today if (month_start.year == today.year and month_start.month == today.month) else month_end
 
+    supported_currency_codes = {
+        'USD', 'DOP', 'EUR', 'MXN', 'COP', 'ARS', 'CLP', 'PEN', 'INR', 'CNY'
+    }
+
     relay_settings = db.DevicesDB.load_device_settings(relay_info.id, 3)
     water_cost_per_m3 = float(settings.DEFAULT_WATER_COST_PER_M3)
     relay_power_watts = float(settings.DEFAULT_RELAY_POWER_WATTS)
     energy_cost_per_kwh = float(settings.DEFAULT_ENERGY_COST_PER_KWH)
+    currency_code = str(settings.DEFAULT_RELAY_CURRENCY).upper()
     if relay_settings:
         try:
             water_cost_per_m3 = float(relay_settings.get('WATER_COST_PER_M3', water_cost_per_m3) or water_cost_per_m3)
@@ -506,6 +511,12 @@ def relay_consumption_stats():
             energy_cost_per_kwh = float(relay_settings.get('ENERGY_COST_PER_KWH', energy_cost_per_kwh) or energy_cost_per_kwh)
         except Exception:
             energy_cost_per_kwh = float(settings.DEFAULT_ENERGY_COST_PER_KWH)
+        try:
+            currency_candidate = str(relay_settings.get('CURRENCY_CODE', currency_code) or currency_code).strip().upper()
+            if currency_candidate in supported_currency_codes:
+                currency_code = currency_candidate
+        except Exception:
+            currency_code = str(settings.DEFAULT_RELAY_CURRENCY).upper()
 
     if water_cost_per_m3 <= 0:
         water_cost_per_m3 = float(settings.DEFAULT_WATER_COST_PER_M3)
@@ -557,7 +568,8 @@ def relay_consumption_stats():
         'settings': {
             'water_cost_per_m3': round(water_cost_per_m3, 4),
             'relay_power_watts': round(relay_power_watts, 2),
-            'energy_cost_per_kwh': round(energy_cost_per_kwh, 4)
+            'energy_cost_per_kwh': round(energy_cost_per_kwh, 4),
+            'currency_code': currency_code
         }
     })
 
@@ -1129,6 +1141,9 @@ def device_admin():
 
     if action == 'relay-setting' and auth:
         if public_key:
+            supported_currency_codes = {
+                'USD', 'DOP', 'EUR', 'MXN', 'COP', 'ARS', 'CLP', 'PEN', 'INR', 'CNY'
+            }
             device = db.DevicesDB.load_device_by_public_key(public_key)
             if device and device.id:
                 device_id = device.id
@@ -1145,12 +1160,14 @@ def device_admin():
                 WATER_COST_PER_M3 = request.form.get("WATER_COST_PER_M3", str(settings.DEFAULT_WATER_COST_PER_M3))
                 RELAY_POWER_WATTS = request.form.get("RELAY_POWER_WATTS", str(settings.DEFAULT_RELAY_POWER_WATTS))
                 ENERGY_COST_PER_KWH = request.form.get("ENERGY_COST_PER_KWH", str(settings.DEFAULT_ENERGY_COST_PER_KWH))
+                CURRENCY_CODE = request.form.get("CURRENCY_CODE", settings.DEFAULT_RELAY_CURRENCY)
 
                 HOURS_OFF = bleach.clean(HOURS_OFF)
                 SENSOR_KEY = bleach.clean(SENSOR_KEY)
                 WATER_COST_PER_M3 = bleach.clean(str(WATER_COST_PER_M3))
                 RELAY_POWER_WATTS = bleach.clean(str(RELAY_POWER_WATTS))
                 ENERGY_COST_PER_KWH = bleach.clean(str(ENERGY_COST_PER_KWH))
+                CURRENCY_CODE = bleach.clean(str(CURRENCY_CODE)).strip().upper()
 
                 try:
                     WATER_COST_PER_M3 = float(WATER_COST_PER_M3)
@@ -1191,6 +1208,9 @@ def device_admin():
                 if ENERGY_COST_PER_KWH < 0:
                     flash("Energy cost per kWh should be >= 0", category='danger')
                     return redirect(url_for('device_info') + '?public_key=' + public_key)
+                if CURRENCY_CODE not in supported_currency_codes:
+                    flash("Unsupported currency code", category='danger')
+                    return redirect(url_for('device_info') + '?public_key=' + public_key)
                 if HOURS_OFF:
                     HOURS_OFF = HOURS_OFF.strip().replace(" ", "")
                     if not db.valid_hours_list(HOURS_OFF):
@@ -1199,7 +1219,8 @@ def device_admin():
 
                 if db.DevicesDB.update_relay_settings(device_id, ALGO, START_LEVEL, END_LEVEL, AUTO_OFF, AUTO_ON,
                                                       MIN_FLOW_MM_X_MIN, SENSOR_KEY, BLIND_DISTANCE, HOURS_OFF, SAFE_MODE,
-                                                      WATER_COST_PER_M3, RELAY_POWER_WATTS, ENERGY_COST_PER_KWH):
+                                                      WATER_COST_PER_M3, RELAY_POWER_WATTS, ENERGY_COST_PER_KWH,
+                                                      CURRENCY_CODE):
                     flash("Setting update success", category='success')
                     return redirect(url_for('device_info')+'?public_key='+public_key)
                 else:
