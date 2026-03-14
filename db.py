@@ -460,7 +460,21 @@ class DevicesDB:
         result.close()
         connection.close()
         if row:
-            return row
+            # Normalize relay settings rows to a dict-like object that supports
+            # both attribute access and `.get(...)`.
+            if isinstance(row, dict):
+                row_dict = dict(row)
+            elif hasattr(row, '_mapping'):
+                row_dict = dict(row._mapping)
+            else:
+                try:
+                    row_dict = dict(row)
+                except Exception:
+                    try:
+                        row_dict = vars(row)
+                    except Exception:
+                        return row
+            return AttrDict(row_dict)
 
     @staticmethod
     def ensure_relay_settings_extra_fields():
