@@ -1000,6 +1000,67 @@ def format_hours(hours):
     return ' and '.join(parts)
 
 
+def _default_relay_device_setting(sensor_key=''):
+    """Build a relay settings object suitable for template rendering.
+
+    Args:
+        sensor_key: Linked sensor public key shown in the UI.
+
+    Returns:
+        db.AttrDict: Relay settings populated with safe defaults.
+    """
+    return db.AttrDict({
+        'ALGO': 0,
+        'START_LEVEL': 30,
+        'END_LEVEL': 95,
+        'AUTO_OFF': 1,
+        'AUTO_ON': 1,
+        'MIN_FLOW_MM_X_MIN': 10,
+        'SENSOR_KEY': sensor_key,
+        'BLIND_DISTANCE': 22,
+        'HOURS_OFF': '',
+        'SAFE_MODE': 1,
+        'WATER_COST_PER_M3': float(settings.DEFAULT_WATER_COST_PER_M3),
+        'RELAY_POWER_WATTS': float(settings.DEFAULT_RELAY_POWER_WATTS),
+        'ENERGY_COST_PER_KWH': float(settings.DEFAULT_ENERGY_COST_PER_KWH),
+        'CURRENCY_CODE': settings.DEFAULT_RELAY_CURRENCY,
+    })
+
+
+def _normalize_relay_device_setting(device_setting, sensor_key=''):
+    """Coerce relay settings into an AttrDict and backfill template defaults.
+
+    Args:
+        device_setting: DB row, mapping-like object, or None.
+        sensor_key: Optional linked sensor public key override.
+
+    Returns:
+        db.AttrDict: Normalized relay settings for the template.
+    """
+    normalized = _default_relay_device_setting(sensor_key=sensor_key)
+
+    if device_setting is None:
+        return normalized
+
+    if isinstance(device_setting, dict):
+        normalized.update(device_setting)
+        return normalized
+
+    mapping = getattr(device_setting, '_mapping', None)
+    if mapping is not None:
+        normalized.update(dict(mapping))
+        return normalized
+
+    try:
+        normalized.update(dict(device_setting))
+    except Exception:
+        try:
+            normalized.update(vars(device_setting))
+        except Exception:
+            return normalized
+    return normalized
+
+
 @app.route('/device_info', methods=['GET'], strict_slashes=False)
 @app.route('/<lang>/device_info', methods=['GET', 'POST'], strict_slashes=False)
 @ensure_language
@@ -1052,6 +1113,7 @@ def device_info(lang='en'):
     DISPLAY_EVENTS = []
     if device_info.type == 3:
         template_name = 'relay_device_info.html'
+        device_setting = _normalize_relay_device_setting(device_setting)
         PAST_EVENTS = db.DevicesDB.get_relay_events(device_info.id)
         if PAST_EVENTS:
             for event in PAST_EVENTS:
@@ -1066,7 +1128,7 @@ def device_info(lang='en'):
         public_key = 'demo'
         if device_info.type == 3:
             public_key = 'demorelay'
-            device_setting = dict(device_setting._mapping)
+            device_setting = _normalize_relay_device_setting(device_setting, sensor_key='demo')
             device_setting['SENSOR_KEY'] = 'demo'
 
     active_subs = []

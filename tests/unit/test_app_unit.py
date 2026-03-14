@@ -219,6 +219,30 @@ class AppUnitTestCase(unittest.TestCase):
 
             self.assertGreaterEqual(get_stats.call_count, 2)
 
+    def test_device_info_demo_relay_accepts_attrdict_settings(self):
+        demo_pub = '3pubDEMO_TEST'
+        relay_info = SimpleNamespace(id=77, type=3)
+        relay_settings = web_app.db.AttrDict({'ALGO': 1, 'AUTO_ON': 0})
+
+        with patch.object(web_app.settings, 'DEMO_RELAY_PUB_KEY', demo_pub), \
+            patch('app.db.DevicesDB.load_device_by_public_key', return_value=relay_info), \
+            patch('app.db.DevicesDB.get_device_uptime', return_value=0), \
+            patch('app.db.DevicesDB.load_model_info_by_public_key', return_value=None), \
+            patch('app.db.DevicesDB.load_device_settings', return_value=relay_settings), \
+            patch('app.db.DevicesDB.get_relay_events', return_value=[]), \
+            patch('app.render_template', return_value='OK') as render_template:
+            response = self.client.get('/device_info', query_string={'public_key': 'demorelay'})
+
+        self.assertEqual(200, response.status_code)
+        render_template.assert_called_once()
+        _, context = render_template.call_args
+        self.assertEqual('relay_device_info.html', render_template.call_args.args[0])
+        self.assertEqual('demorelay', context['key_used'])
+        self.assertEqual('demo', context['device_setting']['SENSOR_KEY'])
+        self.assertEqual(1, context['device_setting']['ALGO'])
+        self.assertEqual(30, context['device_setting']['START_LEVEL'])
+        self.assertEqual(float(web_app.settings.DEFAULT_RELAY_POWER_WATTS), context['device_setting']['RELAY_POWER_WATTS'])
+
     def test_devices_post_paths(self):
         with patch.object(web_app, "current_user", SimpleNamespace(is_authenticated=False)):
             response_fail = self.client.post("/devices", data={"action": "add", "public_key": "1pubX"})
