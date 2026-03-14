@@ -106,3 +106,8 @@ API_REDIS_DB = 0
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///database.db?journal_mode=WAL2")
 
 REPORTS_FOLDER = './reports/'
+
+# Relay consumption estimation defaults (global residential baseline values)
+DEFAULT_WATER_COST_PER_M3 = float(os.getenv("DEFAULT_WATER_COST_PER_M3", "1.5"))
+DEFAULT_ENERGY_COST_PER_KWH = float(os.getenv("DEFAULT_ENERGY_COST_PER_KWH", "0.17"))
+DEFAULT_RELAY_POWER_WATTS = float(os.getenv("DEFAULT_RELAY_POWER_WATTS", "750"))

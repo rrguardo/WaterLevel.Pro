@@ -427,10 +427,12 @@ def sensor_stats_hour():
 
 @app.route('/relay_consumption_stats', methods=['GET'])
 def relay_consumption_stats():
-    """Return last 15 days of relay daily stats for liters and ON minutes.
+    """Return relay daily stats with estimated costs/energy for a selected period.
 
     Query params:
     - public_key: relay public key or 'demorelay'
+    - month: optional YYYY-MM (defaults to current month)
+    - start_date/end_date: optional YYYY-MM-DD custom range (both required)
     """
     key = request.args.get('public_key')
     if not key:
@@ -445,8 +447,119 @@ def relay_consumption_stats():
     if int(relay_info.type) != 3:
         return jsonify({'error': 'public_key is not a relay device'}), 400
 
-    days = db.DevicesDB.get_relay_daily_stats(relay_info.id, days=15)
-    return jsonify({'days': days})
+    today = datetime.now(timezone.utc).date()
+    month_param = (request.args.get('month') or '').strip()
+    start_date_param = (request.args.get('start_date') or '').strip()
+    end_date_param = (request.args.get('end_date') or '').strip()
+
+    range_mode = 'month'
+    period_start = None
+    period_end = None
+
+    if start_date_param or end_date_param:
+        if not start_date_param or not end_date_param:
+            return jsonify({'error': 'start_date and end_date are both required'}), 400
+        try:
+            period_start = datetime.strptime(start_date_param, '%Y-%m-%d').date()
+            period_end = datetime.strptime(end_date_param, '%Y-%m-%d').date()
+        except Exception:
+            return jsonify({'error': 'invalid date format, expected YYYY-MM-DD'}), 400
+        if period_end < period_start:
+            return jsonify({'error': 'end_date should be >= start_date'}), 400
+        if (period_end - period_start).days > 366:
+            return jsonify({'error': 'date range too large (max 367 days)'}), 400
+        range_mode = 'custom'
+    else:
+        if month_param:
+            try:
+                month_dt = datetime.strptime(month_param, '%Y-%m').date()
+            except Exception:
+                return jsonify({'error': 'invalid month format, expected YYYY-MM'}), 400
+            month_start = month_dt.replace(day=1)
+        else:
+            month_start = today.replace(day=1)
+            month_param = month_start.strftime('%Y-%m')
+
+        if month_start.month == 12:
+            next_month_start = month_start.replace(year=month_start.year + 1, month=1)
+        else:
+            next_month_start = month_start.replace(month=month_start.month + 1)
+        month_end = next_month_start - timedelta(days=1)
+
+        period_start = month_start
+        period_end = today if (month_start.year == today.year and month_start.month == today.month) else month_end
+
+    relay_settings = db.DevicesDB.load_device_settings(relay_info.id, 3)
+    water_cost_per_m3 = float(settings.DEFAULT_WATER_COST_PER_M3)
+    relay_power_watts = float(settings.DEFAULT_RELAY_POWER_WATTS)
+    energy_cost_per_kwh = float(settings.DEFAULT_ENERGY_COST_PER_KWH)
+    if relay_settings:
+        try:
+            water_cost_per_m3 = float(relay_settings.get('WATER_COST_PER_M3', water_cost_per_m3) or water_cost_per_m3)
+        except Exception:
+            water_cost_per_m3 = float(settings.DEFAULT_WATER_COST_PER_M3)
+        try:
+            relay_power_watts = float(relay_settings.get('RELAY_POWER_WATTS', relay_power_watts) or relay_power_watts)
+        except Exception:
+            relay_power_watts = float(settings.DEFAULT_RELAY_POWER_WATTS)
+        try:
+            energy_cost_per_kwh = float(relay_settings.get('ENERGY_COST_PER_KWH', energy_cost_per_kwh) or energy_cost_per_kwh)
+        except Exception:
+            energy_cost_per_kwh = float(settings.DEFAULT_ENERGY_COST_PER_KWH)
+
+    if water_cost_per_m3 <= 0:
+        water_cost_per_m3 = float(settings.DEFAULT_WATER_COST_PER_M3)
+    if relay_power_watts <= 0:
+        relay_power_watts = float(settings.DEFAULT_RELAY_POWER_WATTS)
+    if energy_cost_per_kwh <= 0:
+        energy_cost_per_kwh = float(settings.DEFAULT_ENERGY_COST_PER_KWH)
+
+    days = db.DevicesDB.get_relay_daily_stats(
+        relay_info.id,
+        start_date=period_start,
+        end_date=period_end
+    )
+    enriched_days = []
+    for item in days:
+        liters = float(item.get('liters', 0.0) or 0.0)
+        on_minutes = int(item.get('on_minutes', 0) or 0)
+
+        water_m3 = liters / 1000.0
+        water_cost = water_m3 * water_cost_per_m3
+
+        on_hours = on_minutes / 60.0
+        energy_kwh = (relay_power_watts * on_hours) / 1000.0
+        energy_cost = energy_kwh * energy_cost_per_kwh
+        energy_wh = relay_power_watts * on_hours
+
+        enriched_days.append({
+            'day': item.get('day'),
+            'on_minutes': on_minutes,
+            'liters': round(liters, 2),
+            'water_cost': round(water_cost, 4),
+            'energy_cost': round(energy_cost, 4),
+            'energy_wh': round(energy_wh, 2)
+        })
+
+    return jsonify({
+        'days': enriched_days,
+        'period': {
+            'mode': range_mode,
+            'start_date': period_start.strftime('%Y-%m-%d'),
+            'end_date': period_end.strftime('%Y-%m-%d'),
+            'month': month_param if range_mode == 'month' else None,
+            'is_current_month': bool(
+                range_mode == 'month' and
+                period_start.year == today.year and
+                period_start.month == today.month
+            )
+        },
+        'settings': {
+            'water_cost_per_m3': round(water_cost_per_m3, 4),
+            'relay_power_watts': round(relay_power_watts, 2),
+            'energy_cost_per_kwh': round(energy_cost_per_kwh, 4)
+        }
+    })
 
 
 def validate_recaptcha(response):
@@ -1029,9 +1142,23 @@ def device_admin():
                 BLIND_DISTANCE = int(request.form.get("BLIND_DISTANCE"))
                 SENSOR_KEY = request.form.get("SENSOR_KEY", '')
                 HOURS_OFF = request.form.get("HOURS_OFF", '')
+                WATER_COST_PER_M3 = request.form.get("WATER_COST_PER_M3", str(settings.DEFAULT_WATER_COST_PER_M3))
+                RELAY_POWER_WATTS = request.form.get("RELAY_POWER_WATTS", str(settings.DEFAULT_RELAY_POWER_WATTS))
+                ENERGY_COST_PER_KWH = request.form.get("ENERGY_COST_PER_KWH", str(settings.DEFAULT_ENERGY_COST_PER_KWH))
 
                 HOURS_OFF = bleach.clean(HOURS_OFF)
                 SENSOR_KEY = bleach.clean(SENSOR_KEY)
+                WATER_COST_PER_M3 = bleach.clean(str(WATER_COST_PER_M3))
+                RELAY_POWER_WATTS = bleach.clean(str(RELAY_POWER_WATTS))
+                ENERGY_COST_PER_KWH = bleach.clean(str(ENERGY_COST_PER_KWH))
+
+                try:
+                    WATER_COST_PER_M3 = float(WATER_COST_PER_M3)
+                    RELAY_POWER_WATTS = float(RELAY_POWER_WATTS)
+                    ENERGY_COST_PER_KWH = float(ENERGY_COST_PER_KWH)
+                except Exception:
+                    flash("Invalid cost/energy values", category='danger')
+                    return redirect(url_for('device_info') + '?public_key=' + public_key)
 
                 if ALGO > 1 or ALGO < 0:
                     flash("Invalid ALGO value. ALGO can be 0 or 1", category='danger')
@@ -1055,6 +1182,15 @@ def device_admin():
                 if BLIND_DISTANCE < 0:
                     flash("Blind distance, should be >= 0", category='danger')
                     return redirect(url_for('device_info') + '?public_key=' + public_key)
+                if WATER_COST_PER_M3 < 0:
+                    flash("Water cost per m3 should be >= 0", category='danger')
+                    return redirect(url_for('device_info') + '?public_key=' + public_key)
+                if RELAY_POWER_WATTS < 0:
+                    flash("Relay power watts should be >= 0", category='danger')
+                    return redirect(url_for('device_info') + '?public_key=' + public_key)
+                if ENERGY_COST_PER_KWH < 0:
+                    flash("Energy cost per kWh should be >= 0", category='danger')
+                    return redirect(url_for('device_info') + '?public_key=' + public_key)
                 if HOURS_OFF:
                     HOURS_OFF = HOURS_OFF.strip().replace(" ", "")
                     if not db.valid_hours_list(HOURS_OFF):
@@ -1062,7 +1198,8 @@ def device_admin():
                         return redirect(url_for('device_info') + '?public_key=' + public_key)
 
                 if db.DevicesDB.update_relay_settings(device_id, ALGO, START_LEVEL, END_LEVEL, AUTO_OFF, AUTO_ON,
-                                                      MIN_FLOW_MM_X_MIN, SENSOR_KEY, BLIND_DISTANCE, HOURS_OFF, SAFE_MODE):
+                                                      MIN_FLOW_MM_X_MIN, SENSOR_KEY, BLIND_DISTANCE, HOURS_OFF, SAFE_MODE,
+                                                      WATER_COST_PER_M3, RELAY_POWER_WATTS, ENERGY_COST_PER_KWH):
                     flash("Setting update success", category='success')
                     return redirect(url_for('device_info')+'?public_key='+public_key)
                 else:

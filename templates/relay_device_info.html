@@ -204,7 +204,33 @@
     <div class="col-12">
         <div class="card bg-light">
             <div class="card-body">
-                <h5 class="card-title fw-semibold mb-2">{% trans %}Estimated Daily Consumption (last 15 days){% endtrans %}</h5>
+                <h5 class="card-title fw-semibold mb-2">{% trans %}Estimated Daily Consumption{% endtrans %}</h5>
+                <div class="row g-2 align-items-end mb-3">
+                    <div class="col-md-4">
+                        <div class="small text-muted" id="relay-consumption-period-label">{% trans %}Current month{% endtrans %}</div>
+                        <div class="btn-group mt-1" role="group" aria-label="Month navigation">
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="relay-month-prev">{% trans %}Prev month{% endtrans %}</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="relay-month-current">{% trans %}Current month{% endtrans %}</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="relay-month-next">{% trans %}Next month{% endtrans %}</button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label mb-1">{% trans %}Quick ranges{% endtrans %}</label>
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary relay-quick-range" data-preset="last7">{% trans %}Last 7 days{% endtrans %}</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary relay-quick-range" data-preset="last30">{% trans %}Last 30 days{% endtrans %}</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary relay-quick-range" data-preset="thisMonth">{% trans %}This month{% endtrans %}</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary relay-quick-range" data-preset="prevMonth">{% trans %}Previous month{% endtrans %}</button>
+                        </div>
+                        <label class="form-label mb-1">{% trans %}Custom date range{% endtrans %}</label>
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                            <input type="date" class="form-control form-control-sm" id="relay-range-start" style="max-width: 180px;" />
+                            <span class="small text-muted">{% trans %}to{% endtrans %}</span>
+                            <input type="date" class="form-control form-control-sm" id="relay-range-end" style="max-width: 180px;" />
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="relay-range-apply">{% trans %}Apply range{% endtrans %}</button>
+                        </div>
+                    </div>
+                </div>
                 <div id="relay-consumption-chart" style="height:280px"></div>
                 <div class="small text-muted mt-3" id="relay-consumption-summary">-</div>
                 <div class="small text-muted mt-1">{% trans %}Estimated from relay ON time and linked S1 liters-per-cm; only positive tank-liter increases are counted.{% endtrans %}</div>
@@ -449,6 +475,36 @@
                         Don't Depends On: <span class="badge text-bg-primary fw-bold">Smart Off</span>
                     </div>
                 </div>
+                {% endtrans %}
+            </li>
+
+            <li class="advanced_settings list-group-item list-group-item-action">
+                <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Water Cost (per m3):{% endtrans %}</button>
+                <input type="number" step="0.0001" min="0" name="WATER_COST_PER_M3" value="{{ device_setting.WATER_COST_PER_M3 if (device_setting.WATER_COST_PER_M3 is not none and device_setting.WATER_COST_PER_M3 > 0) else 1.5 }}" disabled>
+                {% trans %}
+                <p class="ms-4 my-3">
+                    Estimated local currency cost per cubic meter of water.
+                </p>
+                {% endtrans %}
+            </li>
+
+            <li class="advanced_settings list-group-item list-group-item-action bg-secondary-subtle">
+                <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Relay Power (W):{% endtrans %}</button>
+                <input type="number" step="0.1" min="0" name="RELAY_POWER_WATTS" value="{{ device_setting.RELAY_POWER_WATTS if (device_setting.RELAY_POWER_WATTS is not none and device_setting.RELAY_POWER_WATTS > 0) else 750 }}" disabled>
+                {% trans %}
+                <p class="ms-4 my-3">
+                    Average relay/pump power usage in watts while ON.
+                </p>
+                {% endtrans %}
+            </li>
+
+            <li class="advanced_settings list-group-item list-group-item-action">
+                <button type="button" class="btn bg-primary-subtle text-primary">{% trans %}Energy Cost (per kWh):{% endtrans %}</button>
+                <input type="number" step="0.0001" min="0" name="ENERGY_COST_PER_KWH" value="{{ device_setting.ENERGY_COST_PER_KWH if (device_setting.ENERGY_COST_PER_KWH is not none and device_setting.ENERGY_COST_PER_KWH > 0) else 0.17 }}" disabled>
+                {% trans %}
+                <p class="ms-4 my-3">
+                    Estimated local currency cost per 1 kWh.
+                </p>
                 {% endtrans %}
             </li>
 
@@ -707,48 +763,199 @@ $(document).ready(function() {
 <script>
 // -----------------------------------------------------------------------------
 // Section: Relay daily consumption chart (DB-backed)
-// - Reads persisted 15-day relay stats from backend
-// - Renders liters/day bars and exposes ON-minutes in tooltip/summary
+// - Defaults to current month
+// - Supports previous/next month navigation
+// - Supports custom date-range filtering
 // -----------------------------------------------------------------------------
 
+var relayChartState = {
+    mode: 'month',
+    month: null,
+    startDate: null,
+    endDate: null,
+    quickPreset: 'thisMonth'
+};
+
+function setActiveQuickPreset(preset) {
+    relayChartState.quickPreset = preset || null;
+    $('.relay-quick-range').removeClass('active');
+    $('.relay-quick-range').attr('aria-pressed', 'false');
+    if(!relayChartState.quickPreset) return;
+    var selector = '.relay-quick-range[data-preset="' + relayChartState.quickPreset + '"]';
+    $(selector).addClass('active');
+    $(selector).attr('aria-pressed', 'true');
+}
+
+function getCurrentMonthKey() {
+    var now = new Date();
+    return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+}
+
+function monthKeyToDate(monthKey) {
+    var parts = String(monthKey || '').split('-');
+    if(parts.length !== 2) return null;
+    var year = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10);
+    if(!Number.isFinite(year) || !Number.isFinite(month) || month < 1 || month > 12) return null;
+    return new Date(year, month - 1, 1);
+}
+
+function shiftMonth(monthKey, delta) {
+    var dt = monthKeyToDate(monthKey);
+    if(!dt) return getCurrentMonthKey();
+    dt.setMonth(dt.getMonth() + delta);
+    return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0');
+}
+
+function formatDateISO(dateObj) {
+    return dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
+}
+
+function applyCustomRange(startDate, endDate, presetName) {
+    relayChartState.mode = 'custom';
+    relayChartState.startDate = startDate;
+    relayChartState.endDate = endDate;
+    setActiveQuickPreset(presetName || null);
+    $('#relay-range-start').val(startDate);
+    $('#relay-range-end').val(endDate);
+    renderRelayConsumptionChart();
+}
+
+function applyQuickRange(preset) {
+    var today = new Date();
+    var end = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+    if(preset === 'thisMonth') {
+        relayChartState.mode = 'month';
+        relayChartState.month = getCurrentMonthKey();
+        setActiveQuickPreset('thisMonth');
+        renderRelayConsumptionChart();
+        return;
+    }
+
+    if(preset === 'prevMonth') {
+        relayChartState.mode = 'month';
+        relayChartState.month = shiftMonth(getCurrentMonthKey(), -1);
+        setActiveQuickPreset('prevMonth');
+        renderRelayConsumptionChart();
+        return;
+    }
+
+    if(preset === 'last7' || preset === 'last30') {
+        var daysBack = preset === 'last7' ? 6 : 29;
+        var start = new Date(end);
+        start.setDate(start.getDate() - daysBack);
+        applyCustomRange(formatDateISO(start), formatDateISO(end), preset);
+    }
+}
+
+function setPeriodLabel(period) {
+    var labelEl = $('#relay-consumption-period-label');
+    if(!period || !period.start_date || !period.end_date) {
+        labelEl.text('{% trans %}Current month{% endtrans %}');
+        return;
+    }
+    labelEl.text(period.start_date + ' - ' + period.end_date);
+}
+
+function syncNavButtons() {
+    if(relayChartState.mode !== 'month') {
+        $('#relay-month-next').prop('disabled', true);
+        return;
+    }
+    var currentMonth = getCurrentMonthKey();
+    $('#relay-month-next').prop('disabled', relayChartState.month >= currentMonth);
+}
+
+function buildRelayStatsQuery() {
+    var params = { public_key: '{{ key_used }}' };
+    if(relayChartState.mode === 'custom') {
+        params.start_date = relayChartState.startDate;
+        params.end_date = relayChartState.endDate;
+    } else {
+        params.month = relayChartState.month;
+    }
+    return params;
+}
+
 function renderRelayConsumptionChart() {
-    $.getJSON('/relay_consumption_stats', { public_key: '{{ key_used }}' })
+    $.getJSON('/relay_consumption_stats', buildRelayStatsQuery())
       .done(function(resp) {
           var days = (resp && Array.isArray(resp.days)) ? resp.days : [];
+          var period = resp && resp.period ? resp.period : null;
           var labels = [];
           var litersData = [];
+          var waterCostData = [];
+          var energyCostData = [];
+          var energyWhData = [];
           var minutesData = [];
           var totalLiters = 0;
+          var totalWaterCost = 0;
+          var totalEnergyCost = 0;
+          var totalEnergyWh = 0;
           var todayMinutes = 0;
 
           days.forEach(function(item, idx) {
               var day = String(item.day || '');
               labels.push(day.length >= 10 ? day.substring(5) : day);
               var liters = Number(item.liters || 0);
+              var waterCost = Number(item.water_cost || 0);
+              var energyCost = Number(item.energy_cost || 0);
+              var energyWh = Number(item.energy_wh || 0);
               var onMinutes = Number(item.on_minutes || 0);
               litersData.push(Math.round(liters * 100) / 100);
+              waterCostData.push(Math.round(waterCost * 10000) / 10000);
+              energyCostData.push(Math.round(energyCost * 10000) / 10000);
+              energyWhData.push(Math.round(energyWh * 100) / 100);
               minutesData.push(onMinutes);
               totalLiters += liters;
+              totalWaterCost += waterCost;
+              totalEnergyCost += energyCost;
+              totalEnergyWh += energyWh;
               if(idx === days.length - 1) {
                   todayMinutes = onMinutes;
               }
           });
 
+          setPeriodLabel(period);
+          if(period && period.mode === 'month' && period.month) {
+              relayChartState.mode = 'month';
+              relayChartState.month = period.month;
+          }
+          syncNavButtons();
+
           var options = {
-              series: [{ name: '{% trans %}Consumed (L/day){% endtrans %}', data: litersData }],
-              chart: { type: 'bar', height: 280, toolbar: { show: false } },
-              plotOptions: { bar: { borderRadius: 6, columnWidth: '65%' } },
+              series: [
+                  { name: '{% trans %}Consumed Water (L/day){% endtrans %}', type: 'line', data: litersData },
+                  { name: '{% trans %}Water Cost / day{% endtrans %}', type: 'line', data: waterCostData },
+                  { name: '{% trans %}Energy Cost / day{% endtrans %}', type: 'line', data: energyCostData },
+                  { name: '{% trans %}Energy Used (Wh/day){% endtrans %}', type: 'line', data: energyWhData }
+              ],
+              chart: { type: 'line', height: 280, toolbar: { show: false } },
+              stroke: { width: [3, 2, 2, 2], curve: 'smooth' },
               dataLabels: { enabled: false },
-              colors: ['#0ea5e9'],
+              colors: ['#0ea5e9', '#16a34a', '#f59e0b', '#7c3aed'],
               xaxis: { categories: labels, title: { text: '{% trans %}Date (MM-DD){% endtrans %}' } },
-              yaxis: { title: { text: '{% trans %}Liters{% endtrans %}' }, min: 0 },
+              yaxis: [
+                  { seriesName: '{% trans %}Consumed Water (L/day){% endtrans %}', title: { text: '{% trans %}Liters / Wh{% endtrans %}' }, min: 0 },
+                  { seriesName: '{% trans %}Water Cost / day{% endtrans %}', opposite: true, title: { text: '{% trans %}Costs{% endtrans %}' }, min: 0 },
+                  { seriesName: '{% trans %}Energy Cost / day{% endtrans %}', opposite: true, show: false, min: 0 },
+                  { seriesName: '{% trans %}Energy Used (Wh/day){% endtrans %}', show: false, min: 0 }
+              ],
               noData: { text: '{% trans %}No data{% endtrans %}' },
               tooltip: {
+                  shared: true,
                   y: {
                       formatter: function(val, opts) {
                           var idx = (opts && typeof opts.dataPointIndex === 'number') ? opts.dataPointIndex : -1;
                           var mins = (idx >= 0 && idx < minutesData.length) ? minutesData[idx] : 0;
-                          return (Math.round(val * 100) / 100) + ' L | ' + mins + ' {% trans %}min ON{% endtrans %}';
+                          if(opts && opts.seriesIndex === 0) {
+                              return (Math.round(val * 100) / 100) + ' L | ' + mins + ' {% trans %}min ON{% endtrans %}';
+                          }
+                          if(opts && opts.seriesIndex === 3) {
+                              return (Math.round(val * 100) / 100) + ' Wh | ' + mins + ' {% trans %}min ON{% endtrans %}';
+                          }
+                          return (Math.round(val * 10000) / 10000) + ' | ' + mins + ' {% trans %}min ON{% endtrans %}';
                       }
                   }
               }
@@ -761,16 +968,66 @@ function renderRelayConsumptionChart() {
           window.relayConsumptionChart.render();
 
           $('#relay-consumption-summary').text(
-              '{% trans %}15-day total:{% endtrans %} ' + (Math.round(totalLiters * 100) / 100) + ' L | ' +
+              '{% trans %}Period totals:{% endtrans %} ' +
+              (Math.round(totalLiters * 100) / 100) + ' L, ' +
+              (Math.round(totalWaterCost * 10000) / 10000) + ' {% trans %}water cost{% endtrans %}, ' +
+              (Math.round(totalEnergyCost * 10000) / 10000) + ' {% trans %}energy cost{% endtrans %}, ' +
+              (Math.round(totalEnergyWh * 100) / 100) + ' Wh | ' +
               '{% trans %}Today relay ON:{% endtrans %} ' + todayMinutes + ' {% trans %}minutes{% endtrans %}'
           );
       })
       .fail(function() {
+          syncNavButtons();
           $('#relay-consumption-summary').text('{% trans %}Unable to load consumption stats{% endtrans %}');
       });
 }
 
 $(document).ready(function() {
+    relayChartState.month = getCurrentMonthKey();
+
+    $('#relay-month-prev').on('click', function() {
+        relayChartState.mode = 'month';
+        relayChartState.month = shiftMonth(relayChartState.month, -1);
+        setActiveQuickPreset(null);
+        renderRelayConsumptionChart();
+    });
+
+    $('#relay-month-next').on('click', function() {
+        if($(this).prop('disabled')) return;
+        relayChartState.mode = 'month';
+        relayChartState.month = shiftMonth(relayChartState.month, 1);
+        setActiveQuickPreset(null);
+        renderRelayConsumptionChart();
+    });
+
+    $('#relay-month-current').on('click', function() {
+        relayChartState.mode = 'month';
+        relayChartState.month = getCurrentMonthKey();
+        setActiveQuickPreset('thisMonth');
+        renderRelayConsumptionChart();
+    });
+
+    $('#relay-range-apply').on('click', function() {
+        var start = ($('#relay-range-start').val() || '').trim();
+        var end = ($('#relay-range-end').val() || '').trim();
+        if(!start || !end) {
+            alert('{% trans %}Select both start and end dates{% endtrans %}');
+            return;
+        }
+        if(start > end) {
+            alert('{% trans %}End date should be greater or equal than start date{% endtrans %}');
+            return;
+        }
+        applyCustomRange(start, end);
+    });
+
+    $('.relay-quick-range').on('click', function() {
+        var preset = $(this).data('preset');
+        applyQuickRange(preset);
+    });
+
+    setActiveQuickPreset('thisMonth');
+
     renderRelayConsumptionChart();
 });
 </script>

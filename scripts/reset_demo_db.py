@@ -29,6 +29,14 @@ def rebuild_demo_dataset(db_path: Path) -> None:
     cur = conn.cursor()
     cur.execute("PRAGMA foreign_keys=OFF")
 
+    relay_columns = {row[1] for row in cur.execute("PRAGMA table_info(relay_settings)").fetchall()}
+    if "WATER_COST_PER_M3" not in relay_columns:
+        cur.execute("ALTER TABLE relay_settings ADD COLUMN WATER_COST_PER_M3 REAL NOT NULL DEFAULT 1.5")
+    if "RELAY_POWER_WATTS" not in relay_columns:
+        cur.execute("ALTER TABLE relay_settings ADD COLUMN RELAY_POWER_WATTS REAL NOT NULL DEFAULT 750")
+    if "ENERGY_COST_PER_KWH" not in relay_columns:
+        cur.execute("ALTER TABLE relay_settings ADD COLUMN ENERGY_COST_PER_KWH REAL NOT NULL DEFAULT 0.17")
+
     admin_hash = hashlib.sha256(ADMIN_PASSWORD.encode()).hexdigest()
 
     for table in [
@@ -84,10 +92,11 @@ def rebuild_demo_dataset(db_path: Path) -> None:
     cur.execute(
         """
         INSERT INTO relay_settings (device, ALGO, START_LEVEL, END_LEVEL, AUTO_OFF, AUTO_ON, MIN_FLOW_MM_X_MIN,
-                                    SENSOR_KEY, BLIND_DISTANCE, HOURS_OFF, SAFE_MODE)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                    SENSOR_KEY, BLIND_DISTANCE, HOURS_OFF, SAFE_MODE,
+                                    WATER_COST_PER_M3, RELAY_POWER_WATTS, ENERGY_COST_PER_KWH)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
-        (3, 0, 30, 95, 1, 1, 10, "1pubDEMO_SENSOR_S1", 22, "", 1),
+        (3, 0, 30, 95, 1, 1, 10, "1pubDEMO_SENSOR_S1", 22, "", 1, 1.5, 750.0, 0.17),
     )
 
     cur.executemany(

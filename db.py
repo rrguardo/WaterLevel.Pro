@@ -448,6 +448,7 @@ class DevicesDB:
     @staticmethod
     @cache.memoize(300)
     def load_relay_settings(device_id):
+        DevicesDB.ensure_relay_settings_extra_fields()
         connection = engine.connect()
 
         query = "SELECT * FROM relay_settings WHERE device = :device_id"
@@ -458,6 +459,33 @@ class DevicesDB:
         connection.close()
         if row:
             return row
+
+    @staticmethod
+    def ensure_relay_settings_extra_fields():
+        """Ensure relay_settings has optional cost/energy columns.
+
+        Adds backward-compatible columns when running on existing databases.
+        """
+        sql_columns = "PRAGMA table_info(relay_settings)"
+        expected_columns = {
+            "WATER_COST_PER_M3": f"REAL NOT NULL DEFAULT {float(settings.DEFAULT_WATER_COST_PER_M3)}",
+            "RELAY_POWER_WATTS": f"REAL NOT NULL DEFAULT {float(settings.DEFAULT_RELAY_POWER_WATTS)}",
+            "ENERGY_COST_PER_KWH": f"REAL NOT NULL DEFAULT {float(settings.DEFAULT_ENERGY_COST_PER_KWH)}"
+        }
+
+        with engine.connect() as connection:
+            result = connection.execute(text(sql_columns))
+            existing = {row[1] for row in result.fetchall()}
+            result.close()
+
+            changed = False
+            for col_name, col_sql in expected_columns.items():
+                if col_name not in existing:
+                    connection.execute(text(f"ALTER TABLE relay_settings ADD COLUMN {col_name} {col_sql}"))
+                    changed = True
+
+            if changed:
+                connection.commit()
 
     @staticmethod
     def update_sensor_settings(device_id, EMPTY_LEVEL=None, TOP_MARGIN=None, WIFI_POOL_TIME=None, LITERS_PER_CM=None):
@@ -507,21 +535,30 @@ class DevicesDB:
 
     @staticmethod
     def update_relay_settings(device_id, ALGO=0, START_LEVEL=30, END_LEVEL=95, AUTO_OFF=1, AUTO_ON=1,
-                              MIN_FLOW_MM_X_MIN=10, SENSOR_KEY='', BLIND_DISTANCE=22, HOURS_OFF='', SAFE_MODE=1):
+                              MIN_FLOW_MM_X_MIN=10, SENSOR_KEY='', BLIND_DISTANCE=22, HOURS_OFF='', SAFE_MODE=1,
+                              WATER_COST_PER_M3=settings.DEFAULT_WATER_COST_PER_M3,
+                              RELAY_POWER_WATTS=settings.DEFAULT_RELAY_POWER_WATTS,
+                              ENERGY_COST_PER_KWH=settings.DEFAULT_ENERGY_COST_PER_KWH):
+        DevicesDB.ensure_relay_settings_extra_fields()
         sql_query = """
                 INSERT OR REPLACE INTO relay_settings 
                     (device, ALGO, START_LEVEL, END_LEVEL, AUTO_OFF, AUTO_ON, MIN_FLOW_MM_X_MIN, 
-                    SENSOR_KEY, BLIND_DISTANCE, HOURS_OFF, SAFE_MODE) 
+                    SENSOR_KEY, BLIND_DISTANCE, HOURS_OFF, SAFE_MODE,
+                    WATER_COST_PER_M3, RELAY_POWER_WATTS, ENERGY_COST_PER_KWH) 
                     
                     VALUES (:device, :ALGO, :START_LEVEL, :END_LEVEL, :AUTO_OFF, :AUTO_ON, :MIN_FLOW_MM_X_MIN, 
-                    :SENSOR_KEY, :BLIND_DISTANCE, :HOURS_OFF, :SAFE_MODE)
+                    :SENSOR_KEY, :BLIND_DISTANCE, :HOURS_OFF, :SAFE_MODE,
+                    :WATER_COST_PER_M3, :RELAY_POWER_WATTS, :ENERGY_COST_PER_KWH)
             """
         with engine.connect() as connection:
             result = connection.execute(text(sql_query), {
                 "device": device_id, "ALGO": ALGO, "START_LEVEL": START_LEVEL,
                 "END_LEVEL": END_LEVEL, "AUTO_OFF": AUTO_OFF, "AUTO_ON": AUTO_ON,
                 "MIN_FLOW_MM_X_MIN": MIN_FLOW_MM_X_MIN, "SENSOR_KEY": SENSOR_KEY,
-                "BLIND_DISTANCE": BLIND_DISTANCE, "HOURS_OFF": HOURS_OFF, "SAFE_MODE": SAFE_MODE
+                "BLIND_DISTANCE": BLIND_DISTANCE, "HOURS_OFF": HOURS_OFF, "SAFE_MODE": SAFE_MODE,
+                "WATER_COST_PER_M3": float(max(0.0, WATER_COST_PER_M3)),
+                "RELAY_POWER_WATTS": float(max(0.0, RELAY_POWER_WATTS)),
+                "ENERGY_COST_PER_KWH": float(max(0.0, ENERGY_COST_PER_KWH))
             })
             connection.commit()
             if result:
@@ -788,28 +825,38 @@ class DevicesDB:
         DevicesDB._upsert_relay_daily_stats(relay_id, day_key, on_seconds_inc=0, liters_added_inc=liters_added)
 
     @staticmethod
-    def get_relay_daily_stats(relay_id, days=15):
-        """Return contiguous daily stats for the last `days` UTC days.
+    def get_relay_daily_stats(relay_id, days=15, start_date=None, end_date=None):
+        """Return contiguous daily stats for a range or trailing `days` window.
 
         Missing days are zero-filled to simplify chart rendering.
         """
         DevicesDB.ensure_relay_daily_stats_table()
 
-        try:
-            days = int(days)
-        except Exception:
-            days = 15
-        if days < 1:
-            days = 1
+        if start_date is not None and end_date is not None:
+            if isinstance(start_date, str):
+                start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d").date()
+            if isinstance(end_date, str):
+                end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d").date()
+            if end_date < start_date:
+                start_date, end_date = end_date, start_date
+            days = (end_date - start_date).days + 1
+        else:
+            try:
+                days = int(days)
+            except Exception:
+                days = 15
+            if days < 1:
+                days = 1
 
-        today = datetime.datetime.utcnow().date()
-        start_date = today - datetime.timedelta(days=days - 1)
+            end_date = datetime.datetime.utcnow().date()
+            start_date = end_date - datetime.timedelta(days=days - 1)
 
         query = """
             SELECT day_date, on_seconds, liters_added
             FROM relay_daily_stats
             WHERE relay_id = :relay_id
               AND day_date >= :start_date
+                            AND day_date <= :end_date
             ORDER BY day_date ASC
         """
 
@@ -817,7 +864,8 @@ class DevicesDB:
         with engine.connect() as connection:
             result = connection.execute(text(query), {
                 "relay_id": relay_id,
-                "start_date": start_date.strftime("%Y-%m-%d")
+                "start_date": start_date.strftime("%Y-%m-%d"),
+                "end_date": end_date.strftime("%Y-%m-%d")
             })
             rows = result.fetchall()
             result.close()

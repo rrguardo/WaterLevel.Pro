@@ -177,10 +177,20 @@ class AppUnitTestCase(unittest.TestCase):
     def test_relay_consumption_stats_success(self):
         fake_rows = [{'day': '2026-03-01', 'on_minutes': 15, 'liters': 120.5}]
         with patch('app.db.DevicesDB.load_device_by_public_key', return_value=SimpleNamespace(id=22, type=3)), \
+            patch('app.db.DevicesDB.load_device_settings', return_value={'WATER_COST_PER_M3': 2.0, 'RELAY_POWER_WATTS': 500.0, 'ENERGY_COST_PER_KWH': 0.25}), \
             patch('app.db.DevicesDB.get_relay_daily_stats', return_value=fake_rows):
             response = self.client.get('/relay_consumption_stats', query_string={'public_key': '3pubR'})
             self.assertEqual(200, response.status_code)
-            self.assertEqual(fake_rows, response.get_json()['days'])
+            payload = response.get_json()
+            self.assertIn('days', payload)
+            self.assertIn('settings', payload)
+            self.assertEqual(1, len(payload['days']))
+            self.assertEqual('2026-03-01', payload['days'][0]['day'])
+            self.assertEqual(15, payload['days'][0]['on_minutes'])
+            self.assertEqual(120.5, payload['days'][0]['liters'])
+            self.assertAlmostEqual(0.241, payload['days'][0]['water_cost'], places=3)
+            self.assertAlmostEqual(0.0312, payload['days'][0]['energy_cost'], places=4)
+            self.assertAlmostEqual(125.0, payload['days'][0]['energy_wh'], places=1)
 
     def test_relay_consumption_stats_demo_alias(self):
         demo_pub = 'pubDemoRelay'
@@ -190,6 +200,24 @@ class AppUnitTestCase(unittest.TestCase):
             response = self.client.get('/relay_consumption_stats', query_string={'public_key': 'demorelay'})
             self.assertEqual(200, response.status_code)
             load_device.assert_called_once_with(demo_pub)
+
+    def test_relay_consumption_stats_month_and_custom_range(self):
+        with patch('app.db.DevicesDB.load_device_by_public_key', return_value=SimpleNamespace(id=22, type=3)), \
+            patch('app.db.DevicesDB.load_device_settings', return_value={}), \
+            patch('app.db.DevicesDB.get_relay_daily_stats', return_value=[]) as get_stats:
+            response_month = self.client.get('/relay_consumption_stats', query_string={'public_key': '3pubR', 'month': '2026-02'})
+            self.assertEqual(200, response_month.status_code)
+            self.assertEqual('month', response_month.get_json().get('period', {}).get('mode'))
+
+            response_custom = self.client.get('/relay_consumption_stats', query_string={
+                'public_key': '3pubR',
+                'start_date': '2026-01-10',
+                'end_date': '2026-01-20'
+            })
+            self.assertEqual(200, response_custom.status_code)
+            self.assertEqual('custom', response_custom.get_json().get('period', {}).get('mode'))
+
+            self.assertGreaterEqual(get_stats.call_count, 2)
 
     def test_devices_post_paths(self):
         with patch.object(web_app, "current_user", SimpleNamespace(is_authenticated=False)):
