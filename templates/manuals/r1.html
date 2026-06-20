@@ -70,6 +70,61 @@
 }
 </script>
 
+<meta name="keywords" content="how to install smart water pump controller, WiFi pump controller setup guide, smart pump automatic water control, water pump controller installation">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ DOMAIN }}/" },
+    { "@type": "ListItem", "position": 2, "name": "WiFi Smart Water Pump Controller S1 Manual", "item": "{{ DOMAIN }}{{ url_with_lang('manuals', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "WiFi Smart Water Pump Controller S1 Installation and Usage Guide",
+  "description": "Step-by-step instructions to install and configure the WiFi Smart Water Pump Controller S1 for automatic water pump control.",
+  "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "0" },
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Connect the Pump Controller",
+      "text": "Connect the R1 pump controller to your water pump following the wiring diagram. Ensure the power supply matches the pump specifications."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Pair with S1 Sensor",
+      "text": "The R1 works with the WiFi Water Level S1 sensor. Configure the SENSOR_KEY setting to link the controller to the sensor that monitors your tank."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Configure Control Parameters",
+      "text": "Set Start Level (when pump turns on) and End Level (when pump turns off). Configure ALGO mode, Safe Mode, and hours-off schedule as needed."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Set Cost and Energy Parameters",
+      "text": "Configure water cost per m3, relay power in watts, energy cost per kWh, and currency code to enable cost analytics on the dashboard."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "name": "Monitor and Adjust",
+      "text": "Use the live dashboard to monitor pump status, water consumption, energy usage, and relay events. Adjust settings remotely as needed."
+    }
+  ]
+}
+</script>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/manuals-r1.css') }}" />
 {% endblock %}
 

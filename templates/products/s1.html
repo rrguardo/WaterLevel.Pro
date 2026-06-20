@@ -69,6 +69,68 @@
 }
 </script>
 
+<meta name="keywords" content="WiFi water level sensor for tanks, wireless tank level monitor, solar powered water level sensor, remote water tank monitoring system, IoT water level solution">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ DOMAIN }}/" },
+    { "@type": "ListItem", "position": 2, "name": "WiFi Water Level S1", "item": "{{ DOMAIN }}{{ url_with_lang('products', product_name='WiFi-Water-Level-S1') }}" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does the WiFi Water Level S1 measure water level?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The S1 uses an ultrasonic sensor to measure distance to the water surface. It calculates the water level in centimeters and reports it over WiFi to the web app with centimeter precision."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What power options are available for the S1 sensor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The S1 supports USB-C power from a solar module, standard phone charger, or power bank. It can also run on 3x AA NiMH rechargeable batteries for solar-powered setups."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I monitor water level remotely from my phone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the S1 sends water level data over WiFi to the Water Level Pro web app. You can check your tank level from anywhere using a cellphone, tablet, or computer with internet access."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the maximum measurement range of the S1?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The WiFi Water Level S1 can measure water levels from 2 cm up to 800 cm (8 meters) with a small 2 cm blind area."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the S1 suitable for outdoor use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the S1 is designed and tested for outdoor and indoor use. It operates in temperatures from -20°C to +50°C and is weather-resistant."
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/products-s1.css') }}" />
 {% endblock %}
 

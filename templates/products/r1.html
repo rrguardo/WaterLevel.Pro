@@ -71,6 +71,60 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/products-r1.css') }}" />
 
+<meta name="keywords" content="smart water pump controller WiFi, automatic pump control system, WiFi pump switch, water pump energy monitor, smart water pump automation">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ DOMAIN }}/" },
+    { "@type": "ListItem", "position": 2, "name": "WiFi Smart Water Pump Controller S1", "item": "{{ DOMAIN }}{{ url_with_lang('products', product_name='WiFi-Smart-Water-Pump-Controller-S1') }}" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does the Smart Pump Controller S1 automate water pumping?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The R1 integrates with the WiFi Water Level S1 sensor. When the water level drops to the configured Start Level, the pump turns on automatically. When it reaches the End Level, the pump turns off."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I monitor pump energy consumption?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the R1 provides estimated daily energy consumption in Wh, energy cost, and water cost analytics. You can configure power rating, energy cost per kWh, and water cost per m3."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What control modes does the R1 support?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The R1 supports ALGO 0 (simple on/off based on level thresholds) and ALGO 1 (advanced mode with minimum flow detection and blind area protection). It also supports scheduled hours-off and safe mode."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the R1 work without the S1 sensor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The R1 is designed to work with the WiFi Water Level S1 sensor for water level data. It uses the sensor readings to make automated pump decisions based on configured thresholds."
+      }
+    }
+  ]
+}
+</script>
+
 <script src="{{ url_for('static', filename='assets/js/templates/products-r1-page.js') }}" defer></script>
 
 {% endblock %}

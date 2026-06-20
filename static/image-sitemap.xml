@@ -1,5 +1,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://waterlevel.pro/products/WiFi-Smart-Water-Pump-Controller-S1</loc>
+    <image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/r1_face.png</image:loc>
+      <image:caption>WiFi Smart Water Pump Controller S1</image:caption>
+      <image:title>WiFi Smart Water Pump Controller S1</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/WiFi_Smart_Pump_Controller_S1.png</image:loc>
+      <image:caption>WiFi Smart Pump Controller S1 Product</image:caption>
+      <image:title>WiFi Smart Pump Controller S1 Product</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://waterlevel.pro/manuals/WiFi-Smart-Water-Pump-Controller-S1</loc>
+    <image:image>
+      <image:loc>https://waterlevel.pro/static/manuals/r1_face.png</image:loc>
+      <image:caption>WiFi Smart Pump Controller S1 Manual</image:caption>
+      <image:title>WiFi Smart Pump Controller S1 Manual</image:title>
+    </image:image>
+  </url>
 		
   <url>
     <loc>https://waterlevel.pro</loc>

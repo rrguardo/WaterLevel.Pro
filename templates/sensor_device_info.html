@@ -3,7 +3,32 @@
 {% block head %}
 <title>WiFi Water Level S1 - Live Device Dashboard | Water Level Pro</title>
 <meta name="description" content="Live water level monitoring dashboard for the WiFi Water Level S1 sensor. View real-time tank level, battery status, signal strength, and 24-hour history.">
+<meta name="keywords" content="live water level monitoring demo, WiFi water level sensor dashboard, real-time tank level monitoring, water level S1 live demo">
 <meta name="robots" content="index, follow">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ DOMAIN }}/" },
+    { "@type": "ListItem", "position": 2, "name": "WiFi Water Level S1 Demo", "item": "{{ DOMAIN }}/device_info?public_key=demo" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "WiFi Water Level S1 Live Dashboard",
+  "url": "{{ DOMAIN }}/device_info?public_key=demo",
+  "description": "Live real-time water level monitoring dashboard for the WiFi Water Level S1 sensor. Displays tank fill percentage, battery voltage, WiFi signal strength, and 24-hour history charts.",
+  "applicationCategory": "Monitoring Application",
+  "operatingSystem": "Web browser"
+}
+</script>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/sensor-device-info.css') }}" />
 
 <style>

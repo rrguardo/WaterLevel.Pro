@@ -3,7 +3,31 @@
 {% block head %}
 <title>WiFi Smart Water Pump Controller S1 - Live Dashboard | Water Level Pro</title>
 <meta name="description" content="Live dashboard for the WiFi Smart Water Pump Controller S1. Monitor pump status, water consumption, energy usage, and control settings remotely.">
+<meta name="keywords" content="smart pump controller live demo, WiFi pump control dashboard, water pump energy monitoring, smart water pump live demo">
 <meta name="robots" content="index, follow">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ DOMAIN }}/" },
+    { "@type": "ListItem", "position": 2, "name": "WiFi Smart Pump Controller S1 Demo", "item": "{{ DOMAIN }}/device_info?public_key=demorelay" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "WiFi Smart Water Pump Controller S1 Live Dashboard",
+  "url": "{{ DOMAIN }}/device_info?public_key=demorelay",
+  "description": "Live real-time dashboard for the WiFi Smart Water Pump Controller S1. Displays pump status, water consumption estimates, energy usage analytics, and relay control settings.",
+  "applicationCategory": "Monitoring Application",
+  "operatingSystem": "Web browser"
+}
+</script>
 
 <script src="{{ url_for('static', filename='assets/js/qrcode.min.js') }}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/relay-device-info.css') }}" />

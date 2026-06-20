@@ -75,6 +75,67 @@
 }
 </script>
 
+<meta name="keywords" content="how to install WiFi water level sensor, water level sensor setup guide, WiFi water level S1 installation, tank water level monitor setup">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ DOMAIN }}/" },
+    { "@type": "ListItem", "position": 2, "name": "WiFi Water Level S1 Manual", "item": "{{ DOMAIN }}{{ url_with_lang('manuals', product_name='WiFi-Water-Level-S1') }}" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "WiFi Water Level S1 Installation and Setup Guide",
+  "description": "Step-by-step instructions to install and set up the WiFi Water Level S1 sensor on your water tank.",
+  "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "0" },
+  "supply": [
+    "WiFi Water Level S1 device",
+    "Power source (solar module, USB-C charger, or power bank)",
+    "Drill with 11 mm bit",
+    "WiFi network with internet access"
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Check WiFi Coverage",
+      "text": "Ensure good 4GHz WiFi signal reaches the device area. Signal strength should remain between -30 dBm and -78 dBm."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Choose Power Supply",
+      "text": "Select a power source: Solar Power Module for wireless operation, USB-C phone charger for AC power, or USB-C power bank for battery operation."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Setup Device WiFi Connection",
+      "text": "Connect the device to power, search for the WaterLevelProSetup WiFi network, enter your local WiFi credentials through the captive portal."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Place Device on Water Tank",
+      "text": "Open mounting holes with an 11 mm drill, place the control unit on the tank, secure with threaded support screw, and connect internal sensor inside the tank."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "name": "Adjust Device Settings",
+      "text": "Create an account, add the device admin key, and configure Empty Level and Top Margin settings for accurate water level readings."
+    }
+  ]
+}
+</script>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/manuals-s1.css') }}" />
 {% endblock %}
 
