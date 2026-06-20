@@ -50,7 +50,6 @@ jobs:
           coverage report -m
           coverage xml
           coverage json -o coverage.json
-          coverage html
 
       - name: Upload coverage XML artifact
         if: always()
@@ -104,9 +103,4 @@ jobs:
           destination_dir: badges
           keep_files: true
 
-      - name: Upload coverage HTML artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: unit-coverage-html-py${{ matrix.python-version }}
-          path: htmlcov
+
