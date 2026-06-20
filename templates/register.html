@@ -2,6 +2,8 @@
 
 {% block head %}
 <title>{% trans %}User Register{% endtrans %}</title>
+<meta name="description" content="Create a Water Level Pro account to monitor your water tank level, manage smart pump controllers, and receive alerts.">
+<meta name="robots" content="noindex, follow">
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="{{ url_for('static', filename='assets/js/templates/recaptcha-form.js') }}" defer></script>
@@ -20,7 +22,7 @@
         <div class="card mb-0">
           <div class="card-body">
             <a href="{{ url_with_lang('index') }}" class="text-nowrap logo-img text-center d-block py-3 w-100">
-              <img src="{{ url_for('static', filename=SITE_LOGO_FILE) }}" width="180" alt="">
+              <img src="{{ url_for('static', filename=SITE_LOGO_FILE) }}" width="180" alt="Water Level Pro logo">
             </a>
             <h4 class="text-center mb-2">{% trans %}User Register{% endtrans %}</h4>
             <form action="{{ url_with_lang('register') }}" method="post"

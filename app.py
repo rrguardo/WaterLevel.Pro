@@ -51,12 +51,15 @@ def setup_logger():
 setup_logger()
 
 import db
+from mobile_api import mobile_api_bp
 app = Flask(__name__)
 app.config['SECRET_KEY'] = settings.APP_SEC_KEY
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=30)  # Example: 30 days
 app.config['SESSION_COOKIE_DURATION '] = timedelta(days=5)  # Example: 30 days
 app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 app.config['LANGUAGES'] = ['en', 'es', 'hi', 'zh']  # Supported languages
+
+app.register_blueprint(mobile_api_bp, url_prefix='/users-api-mobile')
 
 
 def normalize_language_code(lang_code):
@@ -194,6 +197,13 @@ login_manager.login_view = 'login'
 login_manager.login_message = _l("Please log in to access this page.")
 
 
+@login_manager.unauthorized_handler
+def unauthorized():
+    if request.path.startswith('/users-api-mobile/'):
+        return jsonify({"error": "Authentication required"}), 401
+    return redirect(url_for('login'))
+
+
 
 redis_client = redis.StrictRedis(
     host=settings.REDIS_HOST,
@@ -204,7 +214,7 @@ redis_client = redis.StrictRedis(
 
 DOMAIN = settings.APP_DOMAIN
 API_URL = settings.API_DOMAIN
-RELEASE_VERSION = "1.0.8"
+RELEASE_VERSION = "1.0.9"
 
 
 @app.context_processor
@@ -255,7 +265,36 @@ def utility_processor():
             return url_for(endpoint, **kwargs)
         # Add a prefix for non-default languages
         return url_for(endpoint, lang=lang, **kwargs)
-    return dict(url_with_lang=url_with_lang)
+
+    def hreflang_urls():
+        """Build hreflang link URLs for all supported languages based on current path.
+
+        Returns:
+            dict: Mapping of locale code to full URL for each supported language.
+        """
+        path = request.path
+        clean_path = path
+        for code in app.config['LANGUAGES']:
+            prefix = f'/{code}'
+            if clean_path == prefix:
+                clean_path = '/'
+                break
+            if clean_path.startswith(prefix + '/'):
+                clean_path = clean_path[len(prefix):]
+                break
+        if not clean_path.startswith('/'):
+            clean_path = '/' + clean_path
+
+        result = {}
+        for code in app.config['LANGUAGES']:
+            if code == app.config['BABEL_DEFAULT_LOCALE']:
+                result[code] = f"{DOMAIN}{clean_path}"
+            else:
+                result[code] = f"{DOMAIN}/{code}{clean_path}"
+        result['x-default'] = f"{DOMAIN}{clean_path}"
+        return result
+
+    return dict(url_with_lang=url_with_lang, hreflang_urls=hreflang_urls)
 
 
 # Load user callback function required by Flask-Login
@@ -1509,8 +1548,6 @@ def products(product_name, lang='en'):
     template = "products/s1.html".lower()
     if product_name.lower() == 'WiFi-Water-Level-S1'.lower():
         template = "products/s1.html"
-    elif product_name.lower() == 'WiFi-Water-Level-S2'.lower():
-        return redirect("/products/WiFi-Water-Level-S1")
     elif product_name.lower() == 'Solar-Power-Module-P1'.lower():
         return redirect("/products/WiFi-Water-Level-S1")
     elif product_name.lower() == 'WiFi-Smart-Water-Pump-Controller-S1'.lower():
@@ -1534,8 +1571,6 @@ def manuals(product_name, lang='en'):
     template = "manuals/s1.html".lower()
     if product_name.lower() == 'WiFi-Water-Level-S1'.lower():
         template = "manuals/s1.html"
-    elif product_name.lower() == 'WiFi-Water-Level-S2'.lower():
-        return redirect("/products/WiFi-Water-Level-S1")
     elif product_name.lower() == 'Solar-Power-Module-P1'.lower():
         return redirect("/products/WiFi-Water-Level-S1")
     elif product_name.lower() == 'WiFi-Smart-Water-Pump-Controller-S1'.lower():

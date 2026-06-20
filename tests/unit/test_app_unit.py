@@ -360,7 +360,7 @@ class AppUnitTestCase(unittest.TestCase):
         response_ipn = self.client.get("/ipn-routes-83")
 
         self.assertEqual(200, response_products.status_code)
-        self.assertIn(response_products_redirect.status_code, {301, 302})
+        self.assertEqual(200, response_products_redirect.status_code)
         self.assertEqual(200, response_manuals.status_code)
         self.assertEqual(410, response_ipn.status_code)
 

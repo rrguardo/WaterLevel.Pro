@@ -2,6 +2,41 @@
 
 All notable changes to this project are documented in this file.
 
+## v1.0.9 - 2026-06-20
+
+### Added
+- Mobile user API blueprint (`mobile_api.py`) at `/users-api-mobile`:
+  - `POST /login` — email/password auth with reCAPTCHA, returns session cookie.
+  - `POST /register` — user registration with email validation and confirmation.
+  - `GET /me` — current authenticated user info.
+  - `POST /logout` — session termination.
+  - `GET /devices` — user's linked devices.
+  - `GET /settings` / `PUT /settings` — user settings key-value store.
+  - JSON 401 response for unauthenticated mobile API requests (no HTML redirect).
+- SEO canonical `<link rel="canonical">` tag on every page via `base2.html`.
+- SEO `hreflang` tags (en/es/hi/zh + x-default) for multilingual search engine indexing.
+- SEO meta descriptions (English) on 14 templates that previously lacked them.
+- SEO `noindex` directive on auth-gated pages (login, register, devices, settings, admin, contact, confirm flows).
+- SEO title + meta description on public device demo pages (`sensor_device_info.html`, `relay_device_info.html`).
+- `hreflang_urls()` context processor helper for computing language-alternate URLs from any route.
+
+### Changed
+- S2 product removed (retired): `templates/products/s2.html`, `templates/manuals/s2.html`, and associated CSS deleted.
+- S2 route branches removed from `products()` and `manuals()` in `app.py` (visitors see S1 as graceful fallback).
+- Login/register logo images now have proper `alt="Water Level Pro logo"` instead of empty alt.
+- Test updated: `/products/WiFi-Water-Level-S2` now returns 200 (S1 fallback) instead of redirect.
+
+### Internationalization
+- No new translation strings added; all SEO descriptions are English-only to avoid `.po` catalog churn.
+
+### Testing
+- Unit tests extended for mobile API endpoints (`tests/unit/test_mobile_api_unit.py`).
+- All 36 existing app unit tests pass.
+
+### Release Metadata
+- Web `app.py` release version: `1.0.9`
+- API `api.py` release version: `1.0.9`
+
 ## v1.0.8 - 2026-03-14
 
 ### Added

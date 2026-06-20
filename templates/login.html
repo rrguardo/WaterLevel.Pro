@@ -2,6 +2,8 @@
 
 {% block head %}
 <title>{% trans %}User Login{% endtrans %}</title>
+<meta name="description" content="Log in to your Water Level Pro account to manage your WiFi water level sensors and smart pump controllers.">
+<meta name="robots" content="noindex, follow">
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="{{ url_for('static', filename='assets/js/templates/recaptcha-form.js') }}" defer></script>
@@ -19,7 +21,7 @@
         <div class="card mb-0">
           <div class="card-body">
             <a href="{{ url_with_lang('index') }}" class="text-nowrap logo-img text-center d-block py-3 w-100">
-              <img src="{{ url_for('static', filename=SITE_LOGO_FILE) }}" width="180" alt="">
+              <img src="{{ url_for('static', filename=SITE_LOGO_FILE) }}" width="180" alt="Water Level Pro logo">
             </a>
             <h4 class="text-center">{% trans %}User Login{% endtrans %}</h4>
             <form action="{{ url_with_lang('login') }}" method="post" data-recaptcha-form="true"

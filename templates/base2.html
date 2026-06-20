@@ -19,6 +19,14 @@
   {% endif %}
   {% endif %}
 
+  <link rel="canonical" href="{{ hreflang_urls()['x-default'] }}" />
+{% set _hreflang = hreflang_urls() %}
+  <link rel="alternate" hreflang="en" href="{{ _hreflang['en'] }}" />
+  <link rel="alternate" hreflang="es" href="{{ _hreflang['es'] }}" />
+  <link rel="alternate" hreflang="hi" href="{{ _hreflang['hi'] }}" />
+  <link rel="alternate" hreflang="zh" href="{{ _hreflang['zh'] }}" />
+  <link rel="alternate" hreflang="x-default" href="{{ _hreflang['x-default'] }}" />
+
   <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='logos/favicon.png') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/styles.min.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templates/base2-layout.css') }}" />
