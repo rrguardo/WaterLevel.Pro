@@ -223,7 +223,19 @@
 
             </div>
           </div>
-
+          <div class="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">
+            <div class="d-flex">
+              <div class="unlimited-access-title me-3">
+                <h6 class="fw-semibold fs-3 mb-6 link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                  <i class="ti ti-device-mobile"></i> Mobile App
+                </h6>
+                <p class="fs-2 px-2">{% trans %}Native Flutter app for monitoring and control{% endtrans %}</p>
+                <a href="https://github.com/rrguardo/WaterLevelProMobile" target="_blank" class="btn btn-sm btn-dark fs-2 fw-semibold lh-sm mt-1">
+                  <i class="ti ti-brand-github"></i> {% trans %}Get the App{% endtrans %}
+                </a>
+              </div>
+            </div>
+          </div>
 
         </nav>
         <!-- End Sidebar navigation -->
@@ -301,6 +313,7 @@
       <footer class="container-fluid py-3 text-center text-muted small">
         Open-source base project: <a href="https://waterlevel.pro" target="_blank" rel="noopener">waterlevel.pro</a> ·
         Source: <a href="https://github.com/rrguardo/WaterLevel.Pro" target="_blank" rel="noopener">github.com/rrguardo/WaterLevel.Pro</a> ·
+        Mobile App: <a href="https://github.com/rrguardo/WaterLevelProMobile" target="_blank" rel="noopener">Flutter App</a> ·
         Release: <span class="fw-semibold">v{{ RELEASE_VERSION }}</span>
       </footer>
     {% endif %}

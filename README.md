@@ -94,6 +94,22 @@ Notes:
   linked sensor or no recent sensor sample).
 - Daily aggregation currently uses UTC day boundaries in DB.
 
+### Mobile App (Flutter)
+
+The official native mobile application for WaterLevel.Pro, built with Flutter:
+
+- [WaterLevelProMobile on GitHub](https://github.com/rrguardo/WaterLevelProMobile)
+
+Features:
+- **Native authentication** with login/register and reCAPTCHA v2 integration
+- **Device list** view for all registered sensors (S1) and relays (R1)
+- **Sensor details** with animated water level charts and real-time telemetry (distance, voltage, WiFi signal)
+- **Relay control** — remote pump on/off toggle with real-time status
+- **Live polling** for up-to-date hardware telemetry
+- **Self-hosted ready** — configure API URL in `lib/constants.dart` to point to your own server
+
+Available for Android, iOS, Linux, macOS, Windows, and Web.
+
 ### Platform/runtime features
 
 - Dockerized deployment with Nginx host-based routing (web + API subdomain split)

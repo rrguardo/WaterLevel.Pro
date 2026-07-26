@@ -108,7 +108,7 @@
       "name": "Can I monitor water level remotely from my phone?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, the S1 sends water level data over WiFi to the Water Level Pro web app. You can check your tank level from anywhere using a cellphone, tablet, or computer with internet access."
+        "text": "Yes, the S1 sends water level data over WiFi to the Water Level Pro platform. You can check your tank level from anywhere using our native mobile app, cellphone browser, tablet, or computer with internet access."
       }
     },
     {
@@ -189,7 +189,7 @@
         {% trans %}
         <li class="list-group-item list-group-item-action list-group-item-success active">
             <b>Measures water levels in tanks with centimeter precision</b><br>
-            Obtain water level measurements of tanks or reservoirs on your phone without needing to be near the device.
+            Obtain water level measurements of tanks or reservoirs on your phone or mobile app without needing to be near the device.
         </li>
         <li class="list-group-item list-group-item-action list-group-item-primary">
             <b>Wi-Fi Wireless Water Level Sensor</b><br>
@@ -227,8 +227,8 @@
         {% endtrans %}
         <li class="list-group-item list-group-item-action list-group-item-primary">
             {% trans %}
-            <b>Responsive Web App for Water Level Monitoring</b>
-            <br>Monitor your water level from anywhere using your cellphone, tablet, laptop, or PC.
+            <b>Responsive Web App + Native Mobile App</b>
+            <br>Monitor your water level from anywhere using our native mobile app, cellphone browser, tablet, laptop, or PC.
             {% endtrans %}
 
             <div class="text-center my-2">
@@ -236,6 +236,7 @@
                   <img src="{{ url_for('static', filename='prod_img/tab.png') }}" class="img-fluid" alt="Web app tablet view for S1" title="WiFi Water Level S1 - Tablet Web App">
                  <br>
                  <a class="btn btn-sm btn-success ms-4" href="/device_info?public_key=demo">{% trans %}View Live Demo Web App{% endtrans %}</a>
+                 <a class="btn btn-sm btn-dark ms-1" href="https://github.com/rrguardo/WaterLevelProMobile" target="_blank"><i class="ti ti-brand-github"></i> {% trans %}Native Mobile App{% endtrans %}</a>
             </div>
         </li>
         <li class="list-group-item list-group-item-action list-group-item-success active ">
