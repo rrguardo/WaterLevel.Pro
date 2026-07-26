@@ -30,8 +30,9 @@ SEO keywords: IoT water level monitoring, smart water pump controller, Flask bac
 - [What this server-side includes today](#what-this-server-side-includes-today)
    - [Web UI features (`app.py`)](#web-ui-features-apppy)
    - [Device/API service features (`api.py`)](#deviceapi-service-features-apipy)
-   - [Relay consumption stats (R1 + linked S1)](#relay-consumption-stats-r1--linked-s1)
-   - [Platform/runtime features](#platformruntime-features)
+    - [Relay consumption stats (R1 + linked S1)](#relay-consumption-stats-r1--linked-s1)
+    - [Mobile App (Flutter)](#mobile-app-flutter)
+    - [Platform/runtime features](#platformruntime-features)
 - [Project structure](#project-structure)
 - [Quick start (local Python)](#quick-start-local-python)
 - [Quick start (Docker)](#quick-start-docker)
@@ -109,6 +110,11 @@ Features:
 - **Self-hosted ready** — configure API URL in `lib/constants.dart` to point to your own server
 
 Available for Android, iOS, Linux, macOS, Windows, and Web.
+
+<p align="center">
+   <img src="https://waterlevel.pro/static/prod_img/mobile_app1.png" alt="WaterLevel.Pro Mobile App - Sensor Details" width="250" />
+   <img src="https://waterlevel.pro/static/prod_img/mobile_app4.png" alt="WaterLevel.Pro Mobile App - Device Widget" width="250" />
+</p>
 
 ### Platform/runtime features
 
