@@ -10,12 +10,14 @@ unit_tests:
   variables:
     REDIS_HOST: "127.0.0.1"
     REDIS_PORT: "6379"
+    COVERAGE_CORE: "sysmon"
+    COVERAGE_NO_CTRACER: "1"
   parallel:
     matrix:
-      - PYTHON_IMAGE: ["python:3.14", "python:3.15-rc"]
+      - PYTHON_IMAGE: ["python:3.14", "python:3.15"]
   before_script:
     - python -m pip install --upgrade pip
-    - python -m pip install -r requirements.txt coverage
+    - python -m pip install --no-binary coverage -r requirements.txt coverage
     # Install and start redis-server locally so tests can connect to 127.0.0.1
     - apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y redis-server
     - redis-server --save "" --appendonly no --daemonize yes || true
