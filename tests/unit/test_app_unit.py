@@ -356,11 +356,13 @@ class AppUnitTestCase(unittest.TestCase):
     def test_products_manuals_and_ipn_routes(self):
         response_products = self.client.get("/products/WiFi-Water-Level-S1")
         response_products_redirect = self.client.get("/products/WiFi-Water-Level-S2")
+        response_r1_product = self.client.get("/products/WiFi-Smart-Water-Pump-Controller-S1")
         response_manuals = self.client.get("/manuals/WiFi-Smart-Water-Pump-Controller-S1")
         response_ipn = self.client.get("/ipn-routes-83")
 
         self.assertEqual(200, response_products.status_code)
         self.assertEqual(200, response_products_redirect.status_code)
+        self.assertEqual(200, response_r1_product.status_code)
         self.assertEqual(200, response_manuals.status_code)
         self.assertEqual(410, response_ipn.status_code)
 
