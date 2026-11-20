@@ -50,7 +50,7 @@ services:
     command: ["/bin/sh", "/app/docker/cron-entrypoint.sh"]
 
   nginx:
-    image: nginx:1.27-alpine
+    image: nginx:1.30-alpine
     restart: unless-stopped
     depends_on:
       - app
