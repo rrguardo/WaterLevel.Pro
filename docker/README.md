@@ -111,6 +111,50 @@ To apply cron schedule changes from `ext_conf/crontab.ini`, recreate the `cron` 
 
 - `docker compose -f docker/docker-compose.yml up -d --build cron`
 
+## Production on a VPS with system nginx (this deployment)
+
+The VPS runs a system nginx that owns `:80`/`:443`, so the container must not
+bind those ports. Use the override file:
+
+- `docker compose -f docker/docker-compose.yml -f docker/docker-compose.vps-proxy.yml up -d`
+
+That publishes `127.0.0.1:8080 -> 80` and `127.0.0.1:8443 -> 443`. Never merge
+those ports into `docker-compose.yml`: the default file must keep `80:80`/`443:443`
+for standalone/local use. Traffic path: Cloudflare → host nginx `:80`/stream
+`:443` → `127.0.0.1:8080`/`:8443` → this stack.
+
+Rules that avoid self-inflicted outages:
+
+- **nginx image is pinned in `docker-compose.yml`.** It is `nginx:1.30-alpine`
+  since 2026-11 (fixes the Nov-2026 CVE batch incl. CVE-2026-118899). The
+  `1.27-alpine` tag is EOL/frozen since Apr 2025 — never downgrade to it. To
+  bump: change the tag, `docker compose pull nginx`, then
+  `docker compose up -d --no-deps nginx` (a few seconds of downtime, no DB impact).
+- **The crontab is baked into the image.** `docker/cron-entrypoint.sh` runs
+  `crontab /app/ext_conf/crontab.ini`; that path is not mounted, so editing the
+  host copy does nothing until the image is rebuilt/recreated. Recreate with
+  `docker compose up -d --force-recreate cron` after a rebuild.
+- **Daily report jobs need rotated logs.** The crontab lines guard on
+  `wlp_web_access.log.1` / `wlp_api_access.log.1`; without rotation they never
+  run. Install `docker/logrotate-wlp-nginx.conf` (see below).
+- **TLS at the origin is a Cloudflare Origin CA cert** (15-year, in
+  `ext_conf/docker/certs/`). Let's Encrypt/certbot is not needed and must not be
+  re-enabled for `waterlevel.pro`.
+- **systemd unit**: `waterlevel-pro.service` on the VPS points at
+  `/usr/local/bin/docker-compose` and is intentionally **disabled** — every
+  container is `restart: unless-stopped`, so dockerd restores them at boot.
+
+### Log rotation and Docker log caps
+
+- nginx access/error logs live in the `wlp_nginx_logs` volume. Install on the host:
+  - `cp docker/logrotate-wlp-nginx.conf /etc/logrotate.d/wlp-nginx-logs`
+  - `logrotate -d /etc/logrotate.d/wlp-nginx-logs` (dry-run)
+  - `copytruncate` is used, so no container restart/signal is required.
+- Docker `json-file` logs are unlimited when there is no `/etc/docker/daemon.json`.
+  Cap them per service with the logging override (requires recreating containers):
+  - `docker compose -f docker/docker-compose.yml -f docker/docker-compose.logging.yml up -d`
+  - or add a `logging:` block to `docker-compose.yml` / `daemon.json` permanently.
+
 ## Local resync helper
 
 For local development changes (code or `.env`) without destroying volumes, use:

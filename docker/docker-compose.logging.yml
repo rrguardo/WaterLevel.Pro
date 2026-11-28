@@ -1,0 +1,31 @@
+# Caps Docker's json-file logs (unlimited by default when there is no
+# /etc/docker/daemon.json). Requires recreating the containers:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.logging.yml up -d
+#
+# Combine with the VPS override when both apply.
+services:
+  app:
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+  cron:
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+  nginx:
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+  goaccess:
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

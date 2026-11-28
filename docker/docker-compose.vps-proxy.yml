@@ -1,0 +1,12 @@
+# Override for hosts where the system nginx owns :80/:443 (e.g. the VPS with
+# Cloudflare in front). Use it *in addition to* docker-compose.yml:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.vps-proxy.yml up -d
+#
+# Do NOT merge these ports into docker-compose.yml: the default file must keep
+# binding 80/443 for standalone/local use.
+services:
+  nginx:
+    ports:
+      - "127.0.0.1:8080:80"
+      - "127.0.0.1:8443:443"
