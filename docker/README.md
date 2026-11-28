@@ -117,6 +117,8 @@ The VPS runs a system nginx that owns `:80`/`:443`, so the container must not
 bind those ports. Use the override file:
 
 - `docker compose -f docker/docker-compose.yml -f docker/docker-compose.vps-proxy.yml up -d`
+  (`ports: !override` in that file replaces the base 80/443 bindings; Compose
+  appends lists otherwise — requires Compose >= 2.24.4)
 
 That publishes `127.0.0.1:8080 -> 80` and `127.0.0.1:8443 -> 443`. Never merge
 those ports into `docker-compose.yml`: the default file must keep `80:80`/`443:443`

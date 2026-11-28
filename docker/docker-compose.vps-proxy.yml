@@ -3,10 +3,14 @@
 #
 #   docker compose -f docker-compose.yml -f docker-compose.vps-proxy.yml up -d
 #
+# `!override` is mandatory: Compose merges `ports` lists by appending, so
+# without it the container would publish BOTH 80/443 and 8080/8443 and fail
+# because the host nginx already owns 80/443 (requires Compose >= 2.24.4).
+#
 # Do NOT merge these ports into docker-compose.yml: the default file must keep
 # binding 80/443 for standalone/local use.
 services:
   nginx:
-    ports:
+    ports: !override
       - "127.0.0.1:8080:80"
       - "127.0.0.1:8443:443"
